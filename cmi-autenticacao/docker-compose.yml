@@ -10,7 +10,7 @@ services:
       MONGO_INITDB_DATABASE: cmi
       MONGO_INITDB_ROOT_USERNAME: mongocmi
       MONGO_INITDB_ROOT_PASSWORD: MongoCmi@123
-      MONGO_INITDB_HOST: mongo-cmi.servicos.com.br
+      MONGO_INITDB_HOST: localhost
     tty: true
     restart: unless-stopped
     ports:
@@ -39,7 +39,7 @@ services:
       - ./:/app
     environment:
       TZ: America/Sao_Paulo
-      BD_URL: mongodb://mongo-cmi.servicos.com.br:27017/cmi
+      BD_URL: mongodb://localhost:27017/cmi
       BD_USER: mongocmi
       BD_PWD: MongoCmi@123
       API_PORT: 3000

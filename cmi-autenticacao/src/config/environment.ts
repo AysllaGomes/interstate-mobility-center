@@ -52,7 +52,7 @@ export const environment: IEnvironment = {
     proxyUse: process.env.proxy_use || "false",
   },
   db: {
-    url: process.env.BD_URL || "mongodb://mongo-cmi.servicos.com.br:27017/cmi",
+    url: process.env.BD_URL || "mongodb://localhost:27017/cmi",
     user: process.env.BD_USER || "mongocmi",
     pwd: process.env.BD_PWD || "MongoCmi@123",
   },
