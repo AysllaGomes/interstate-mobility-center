@@ -18,7 +18,7 @@
     "debug": "tsc && node --inspect=9229 dist/server.js",
     "lint": "node_modules/.bin/tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix",
     "start": "tsc && node dist/server.js",
-    "develop": "node_modules/.bin/nodemon --legacy-watch --delay 1 --inspect=0.0.0.0:9229 ./src/server.ts",
+    "develop": "node_modules/.bin/nodemon --legacy-watch --delay 1 --inspect=0.0.0.0:9229 ./src/server.js",
     "test": "jest --logHeapUsage --runInBand --detectOpenHandles --forceExit",
     "unitTest": "jest --testPathPattern=ut.test\\.ts$",
     "integrationTest": "jest --testPathPattern=it.test\\.ts$ --detectOpenHandles --forceExit"

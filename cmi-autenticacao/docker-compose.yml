@@ -30,8 +30,8 @@ services:
       - "3000:3000"
       - "9229:9229"
     build:
-      context: ./
-      dockerfile: ./Dockerfile
+      context: .
+      dockerfile: Dockerfile
     command: "npm run develop"
     depends_on:
       - mongo
