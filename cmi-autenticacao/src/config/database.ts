@@ -7,9 +7,7 @@ class Database {
   static async conectar(): Promise<number> {
     try {
       await mongoose
-        .connect(environment.db.url, {
-          user: environment.db.user,
-          pass: environment.db.pwd,
+        .connect(environment.db.uri, {
           useNewUrlParser: true,
           useUnifiedTopology: true,
           useFindAndModify: false,

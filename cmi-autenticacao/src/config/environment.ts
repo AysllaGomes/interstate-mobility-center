@@ -15,9 +15,7 @@ export interface IEnvironment {
     proxyUse: string;
   };
   db: {
-    pwd: string;
-    url: string;
-    user: string;
+    uri: string;
   };
   wappa: {
     host?: string,
@@ -52,9 +50,7 @@ export const environment: IEnvironment = {
     proxyUse: process.env.proxy_use || "false",
   },
   db: {
-    url: process.env.BD_URL || "mongodb://localhost:27017/cmi",
-    user: process.env.BD_USER || "mongocmi",
-    pwd: process.env.BD_PWD || "MongoCmi@123",
+    uri: process.env.BD_URI || "mongodb+srv://mongocmi:n1E8DxRjR4INjLws@cmi.q6k96.mongodb.net/test",
   },
   wappa: {
     host: process.env.WAPPA_HOST || "https://qa-clientintegration.wappa.in",
