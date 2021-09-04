@@ -9,7 +9,7 @@ import {theme} from "./App.style";
 
 export default function App() {
   return (
-      // <RegisterScreen></RegisterScreen>
+       // <RegisterScreen></RegisterScreen>
 
   <PaperProvider theme={theme}>
   <Login></Login>

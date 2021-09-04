@@ -11,7 +11,7 @@ const Login = () => {
                     <Card.Title title="Mobility Center" titleStyle={loginStyle.cardTitle}></Card.Title>
                     <Card.Content>
                         <TextInput label="User" keyboardType="email-address"></TextInput>
-                        <TextInput label="Password" secureTextEntry="True"></TextInput>
+                        <TextInput label="Password" secureTextEntry={true}></TextInput>
                         <Button uppercase={false} style={loginStyle.cardButton}>Esqueceu email/password?</Button>
                         <Button mode="contained" style={loginStyle.cardButton}>Login</Button>
                         <Button style={loginStyle.cardButton}>Register</Button>
