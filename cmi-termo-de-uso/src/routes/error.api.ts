@@ -1,9 +1,9 @@
 import express from "express";
-import { environment } from "../config/environment";
-import { listErroNegocio } from "../errors/erro.negocial";
 import { ApiRouter } from "./api.router";
 import { ErroPadrao } from "../errors/erro";
 import { listErroSQL } from "../errors/erro.sql";
+import { environment } from "../config/environment";
+import { listErroNegocio } from "../errors/erro.negocial";
 
 /**
  * @swagger

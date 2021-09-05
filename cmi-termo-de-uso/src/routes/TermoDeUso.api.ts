@@ -54,7 +54,7 @@ export class TermoDeUsoApi extends ApiRouter {
       /**
        * @swagger
        *   /termoDeUso/detalhar:
-       *   post:
+       *   get:
        *     description: Realiza o detalhamento do termo a partir de um número de versão informado.
        *     summary: EndPoint que realiza detalhamento do termo a partir de um número de versão informado.
        *     tags:
@@ -72,7 +72,7 @@ export class TermoDeUsoApi extends ApiRouter {
        *         schema:
        *             $ref: '#/definitions/TermoDeUso'
        */
-      server.post(`${this.path}/detalhar`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
+      server.get(`${this.path}/detalhar`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
         try {
           if (request.body.versao) {
             return response.json(await this.controller.detalharTermoDeUso(request.body));

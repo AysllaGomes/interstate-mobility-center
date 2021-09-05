@@ -1,6 +1,6 @@
 import express from "express";
-import { environment } from "../config/environment";
 import { ApiRouter } from "./api.router";
+import { environment } from "../config/environment";
 
 export class MainApi extends ApiRouter {
   public active(): boolean {

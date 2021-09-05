@@ -15,7 +15,6 @@ const app = express();
 
 const rotasPostVerificadas: Array<string> = [
   "/termoDeUso/aberturaTermoDeUso",
-  "/termoDeUso/detalhar",
   "/termoDeUso/verificaSituacaoVigencia",
 ];
 
