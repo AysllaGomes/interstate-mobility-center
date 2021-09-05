@@ -7,6 +7,7 @@ app.listen(environment.app.port, async () => {
   if (app) {
     logger.info(`${environment.app.name} inicializado e rodando na porta: ${environment.app.port}`, app.locals.name);
 
+    logger.info("Iniciando conexão com Mongo DB...");
     await Database.conectar();
   }
 });
