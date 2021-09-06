@@ -31,7 +31,7 @@ export const environment: IEnvironment = {
     proxyUse: process.env.proxy_use || "false",
   },
   db: {
-    uri: process.env.BD_URI || "mongodb+srv://mongocmi:n1E8DxRjR4INjLws@cmi.q6k96.mongodb.net/test",
+    uri: process.env.BD_URI || "mongodb+srv://mongocmi:n1E8DxRjR4INjLws@cmi.q6k96.mongodb.net/cmi",
   },
   isValid() {
     return true;

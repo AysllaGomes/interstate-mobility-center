@@ -7,7 +7,7 @@ services:
     image: mongo
     container_name: termo-de-uso-mongodb
     environment:
-      MONGO_INITDB_URI: "mongodb+srv://mongocmi:n1E8DxRjR4INjLws@cmi.q6k96.mongodb.net/test"
+      MONGO_INITDB_URI: "mongodb+srv://mongocmi:n1E8DxRjR4INjLws@cmi.q6k96.mongodb.net/cmi"
     tty: true
     restart: unless-stopped
     ports:
