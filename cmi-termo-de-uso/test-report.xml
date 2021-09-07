@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testExecutions version="1">
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-termo-de-uso\spec\test\unit\TermoDeUsoService\AberturaTermoDeUso.ut.test.ts">
+    <testCase name="Teste da TermoDeUsoService - aberturaTermoDeUso Teste do método aberturaTermoDeUso" duration="42"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-termo-de-uso\spec\test\unit\TermoDeUsoService\AberturaTermoDeUsoErroDeValidacao.ut.test.ts">
+    <testCase name="Teste da TermoDeUsoService - aberturaTermoDeUso com erro de validação Teste do método aberturaTermoDeUso com erro de validação" duration="17"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-termo-de-uso\spec\test\unit\TermoDeUsoService\DetalharTermoDeUso.ut.test.ts">
+    <testCase name="Teste da TermoDeUsoService - detalharTermoDeUso Teste do método detalharTermoDeUso" duration="15"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-termo-de-uso\spec\test\unit\TermoDeUsoService\AberturaTermoDeUsoNaoAchandoOTermo.ut.test.ts">
+    <testCase name="Teste da TermoDeUsoService - aberturaTermoDeUso - não achando o termo Teste do método aberturaTermoDeUso - não achando o termo" duration="10"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-termo-de-uso\spec\test\unit\TermoDeUsoService\DetalharTermoDeUsoNaoAchandoOTermo.ut.test.ts">
+    <testCase name="Teste da TermoDeUsoService - detalharTermoDeUso - não achando o termo Teste do método detalharTermoDeUso - não achando o termo" duration="9"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-termo-de-uso\spec\test\unit\TermoDeUsoService\DetalharTermoDeUsoErroDeValidacao.ut.test.ts">
+    <testCase name="Teste da TermoDeUsoService - detalharTermoDeUso com erro de validação Teste do método detalharTermoDeUso com erro de validação" duration="11"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-termo-de-uso\spec\test\unit\TermoDeUsoService\IncrementaNumeroVersaoTermoDeUso.ut.test.ts">
+    <testCase name="Teste da TermoDeUsoService - incrementaNumeroVersaoTermoDeUso Teste do método incrementaNumeroVersaoTermoDeUso" duration="3"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-termo-de-uso\spec\test\unit\TermoDeUsoService\VerificaSeExisteSituacaoVigenteNoTermoDeUsoNaoAchandoOTermo.ut.test.ts">
+    <testCase name="Teste da TermoDeUsoService - verificaSeExisteSituacaoVigenteNoTermoDeUso Teste do método verificaSeExisteSituacaoVigenteNoTermoDeUso - não achando o termo" duration="3"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-termo-de-uso\spec\test\unit\TermoDeUsoService\VerificaSeExisteSituacaoVigenteNoTermoDeUso.ut.test.ts">
+    <testCase name="Teste da TermoDeUsoService - verificaSeExisteSituacaoVigenteNoTermoDeUso Teste do método verificaSeExisteSituacaoVigenteNoTermoDeUso" duration="3"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-termo-de-uso\spec\test\unit\Middlewares\VerificaConexaoMongo.ut.test.ts">
+    <testCase name="Teste do middleware que tenta a conexão com o mongo Teste MOCK do método verificaConexaoMongoMiddleware" duration="2"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-termo-de-uso\spec\test\unit\Database\VerificaConexao.ut.test.ts">
+    <testCase name="Teste do serviço que retorna o estado da conexão com o bd Teste MOCK do método verificaConexao" duration="1"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-termo-de-uso\spec\test\unit\Database\ConectarRetornandoComErro.ut.test.ts">
+    <testCase name="Teste do serviço que se conecta ao bd Teste MOCK do método conectar - retornando erro" duration="3"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-termo-de-uso\spec\test\unit\ServiceValidator\ValidaDetalharTermoDeUso.ut.test.ts">
+    <testCase name="Teste da ServiceValidator - validaDetalharTermoDeUso Teste do método validaDetalharTermoDeUso" duration="8"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-termo-de-uso\spec\test\unit\ServiceValidator\ValidaAberturaTermoDeUso.ut.test.ts">
+    <testCase name="Teste da ServiceValidator - validaAberturaTermoDeUso Teste do método validaAberturaTermoDeUso" duration="8"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-termo-de-uso\spec\test\unit\Database\Conectar.ut.test.ts">
+    <testCase name="Teste do serviço que se conecta ao bd Teste MOCK do método conectar" duration="2"/>
+  </file>
+</testExecutions>

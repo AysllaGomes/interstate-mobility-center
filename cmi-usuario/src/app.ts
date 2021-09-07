@@ -4,10 +4,9 @@ import { logger } from "./util/logger";
 import { DocsApi } from "./routes/docs.api";
 import { MainApi } from "./routes/main.api";
 import { ErrorApi } from "./routes/error.api";
+import { environment } from "./config/environment";
 import { handleError } from "./util/error.handler";
-import { verificaConexaoMongoMiddleware } from "./util/middleware";
-import { environment } from "../../cmi-termo-de-uso/src/config/environment";
-import { mergePatchBodyParser, middlewareForLog } from "../../cmi-termo-de-uso/src/util/middleware";
+import { mergePatchBodyParser, middlewareForLog, verificaConexaoMongoMiddleware } from "./util/middleware";
 
 const getApiControllers = (): (ErrorApi | MainApi | DocsApi)[] => [
   new ErrorApi(), new MainApi(), new DocsApi(),

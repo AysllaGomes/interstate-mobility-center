@@ -4,18 +4,20 @@ import { logger } from "./util/logger";
 import { DocsApi } from "./routes/docs.api";
 import { MainApi } from "./routes/main.api";
 import { ErrorApi } from "./routes/error.api";
+import { environment } from "./config/environment";
 import { handleError } from "./util/error.handler";
-import { verificaConexaoMongoMiddleware } from "./util/middleware";
-import { environment } from "../../cmi-termo-de-uso/src/config/environment";
-import { mergePatchBodyParser, middlewareForLog } from "../../cmi-termo-de-uso/src/util/middleware";
+import { TermoDeUsoApi } from "./routes/TermoDeUso.api";
+import { mergePatchBodyParser, middlewareForLog, verificaConexaoMongoMiddleware } from "./util/middleware";
 
-const getApiControllers = (): (ErrorApi | MainApi | DocsApi)[] => [
-  new ErrorApi(), new MainApi(), new DocsApi(),
+const getApiControllers = (): (ErrorApi | MainApi | DocsApi | TermoDeUsoApi)[] => [
+  new ErrorApi(), new MainApi(), new DocsApi(), new TermoDeUsoApi(),
 ];
 
 const app = express();
 
 const rotasPostVerificadas: Array<string> = [
+  "/termoDeUso/aberturaTermoDeUso",
+  "/termoDeUso/verificaSituacaoVigencia",
 ];
 
 rotasPostVerificadas.forEach((nomeDaRota: string) => {
