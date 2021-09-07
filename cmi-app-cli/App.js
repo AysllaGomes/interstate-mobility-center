@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 import Login from "./src/login/Login";
 import {RegisterScreen} from "./src/register/register.screen";
 import {theme} from "./App.style";
+import AppNavigator from "./src/navigation/navigator";
 
 
 
@@ -12,7 +13,7 @@ export default function App() {
        // <RegisterScreen></RegisterScreen>
 
   <PaperProvider theme={theme}>
-  <Login></Login>
+    <AppNavigator></AppNavigator>
   </PaperProvider>
   );
 }
