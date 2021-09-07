@@ -4,17 +4,19 @@ import { logger } from "./util/logger";
 import { DocsApi } from "./routes/docs.api";
 import { MainApi } from "./routes/main.api";
 import { ErrorApi } from "./routes/error.api";
+import { UsuarioApi } from "./routes/Usuario.api";
 import { environment } from "./config/environment";
 import { handleError } from "./util/error.handler";
 import { mergePatchBodyParser, middlewareForLog, verificaConexaoMongoMiddleware } from "./util/middleware";
 
-const getApiControllers = (): (ErrorApi | MainApi | DocsApi)[] => [
-  new ErrorApi(), new MainApi(), new DocsApi(),
+const getApiControllers = (): (ErrorApi | MainApi | DocsApi | UsuarioApi)[] => [
+  new ErrorApi(), new MainApi(), new DocsApi(), new UsuarioApi(),
 ];
 
 const app = express();
 
 const rotasPostVerificadas: Array<string> = [
+  "/usuario/cadastro",
 ];
 
 rotasPostVerificadas.forEach((nomeDaRota: string) => {
