@@ -15,3 +15,4 @@ export const registerStyle = StyleSheet.create({
         marginRight: 0
     }
 });
+
