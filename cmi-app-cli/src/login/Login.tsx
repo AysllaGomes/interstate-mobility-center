@@ -3,7 +3,6 @@ import {SafeAreaView, View, Text} from "react-native";
 import {Button, Card, TextInput} from "react-native-paper";
 import {loginStyle} from "./login.style";
 import { useValidation } from 'react-native-form-validator';
-import {registerStyle} from "../register/register.style";
 interface LoginScreenProps {
     navigation: any;
 }
@@ -11,6 +10,8 @@ const Login = (props: LoginScreenProps) => {
 
     const signUp = () => props.navigation.navigate("Home")
     const register = () => props.navigation.navigate("Register")
+    const resetPassword = () => props.navigation.navigate("ResetPassword")
+
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -60,7 +61,7 @@ const Login = (props: LoginScreenProps) => {
                                     onTextInput={validaEmail}
                                     value={email}
                                 />
-                                {isFieldInError('email') ? <Text style={registerStyle.errorText}>{getErrorsInField("email")[0]}</Text> : null}
+                                {isFieldInError('email') ? <Text style={loginStyle.errorText}>{getErrorsInField("email")[0]}</Text> : null}
 
                                 <TextInput
                                     label="Password"
@@ -69,9 +70,9 @@ const Login = (props: LoginScreenProps) => {
                                     onTextInput={validaPassword}
                                     value={password}
                                 />
-                                {isFieldInError('password') ? <Text style={registerStyle.errorText}>{getErrorsInField("password")[0]}</Text> : null}
+                                {isFieldInError('password') ? <Text style={loginStyle.errorText}>{getErrorsInField("password")[0]}</Text> : null}
 
-                                <Button uppercase={false} style={loginStyle.cardButton}>Esqueceu email/password?</Button>
+                                <Button onPress={resetPassword} uppercase={false} style={loginStyle.cardButton}>Esqueceu email/password?</Button>
                                 <Button onPress={() => (validaEmail() && validaPassword())? signUp() : null} mode="contained" style={loginStyle.cardButton}>Login</Button>
                                 <Button onPress={register} style={loginStyle.cardButton}>Register</Button>
                             </Card.Content>
