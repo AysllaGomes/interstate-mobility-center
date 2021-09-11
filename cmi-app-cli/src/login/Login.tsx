@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import {Alert, SafeAreaView, View, Text} from "react-native";
+import React, {useState} from 'react';
+import {SafeAreaView, View, Text} from "react-native";
 import {Button, Card, TextInput} from "react-native-paper";
 import {loginStyle} from "./login.style";
 import { useValidation } from 'react-native-form-validator';
+import {registerStyle} from "../register/register.style";
 interface LoginScreenProps {
     navigation: any;
 }
@@ -14,16 +15,34 @@ const Login = (props: LoginScreenProps) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const { validate, isFieldInError } =
+    const messages = {
+        en: {
+            required: "Necessário preencher",
+            email: "Não é um email",
+            hasUpperCase: "Deve conter pelo menos uma letra maiúscula",
+            hasLowerCase: "Deve conter pelo menos uma letra minuscula",
+            minlength: `Deve conter pelo menos 6 carácteres`,
+            maxlength: "Deve conter no máximo 20 carácteres ",
+            hasNumber: "Deve conter um número"
+        }
+    }
+
+    const { validate, isFieldInError, getErrorsInField } =
         useValidation({
             state: { email, password },
+            messages: messages
         });
 
-    const validar = () => {
+    const validaEmail = () => {
         return validate({
-            email: { email: true, required: true },
-            password: { minlength: 3, maxlength: 7, required: true }
-        });
+            email: {required: true, email: true}
+        })
+    }
+
+    const validaPassword = () => {
+        return validate({
+            password: { required: true, minlength: 6, hasUpperCase: true, hasLowerCase: true, maxlength: 20, hasNumber:true}
+        })
     }
 
     return (
@@ -38,19 +57,22 @@ const Login = (props: LoginScreenProps) => {
                                     label="User"
                                     keyboardType="email-address"
                                     onChangeText={setEmail}
+                                    onTextInput={validaEmail}
                                     value={email}
                                 />
-                                {isFieldInError('email') ? (<Text style={loginStyle.errorText}>Preencha o campo corretamente!</Text>) : null}
+                                {isFieldInError('email') ? <Text style={registerStyle.errorText}>{getErrorsInField("email")[0]}</Text> : null}
+
                                 <TextInput
                                     label="Password"
                                     secureTextEntry={true}
                                     onChangeText={setPassword}
+                                    onTextInput={validaPassword}
                                     value={password}
                                 />
-                                {(isFieldInError('password')) ? (<Text style={loginStyle.errorText}>Preencha o campo corretamente!</Text>) : null}
+                                {isFieldInError('password') ? <Text style={registerStyle.errorText}>{getErrorsInField("password")[0]}</Text> : null}
 
                                 <Button uppercase={false} style={loginStyle.cardButton}>Esqueceu email/password?</Button>
-                                <Button onPress={() => validar() == true ? signUp() : null} mode="contained" style={loginStyle.cardButton}>Login</Button>
+                                <Button onPress={() => (validaEmail() && validaPassword())? signUp() : null} mode="contained" style={loginStyle.cardButton}>Login</Button>
                                 <Button onPress={register} style={loginStyle.cardButton}>Register</Button>
                             </Card.Content>
                         </Card>
