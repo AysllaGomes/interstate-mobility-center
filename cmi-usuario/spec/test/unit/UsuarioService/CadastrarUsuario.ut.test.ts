@@ -29,7 +29,6 @@ describe("Teste da UsuarioService - cadastrarUsuario", () => {
     if (result) {
       expect(result.nome).toEqual(usuario.nome);
       expect(result.email).toEqual(usuario.email);
-      expect(result.dataDeNascimento).toEqual(usuario.dataDeNascimento);
       expect(result.numeroTelefoneCelular).toEqual(usuario.numeroTelefoneCelular);
     }
   });

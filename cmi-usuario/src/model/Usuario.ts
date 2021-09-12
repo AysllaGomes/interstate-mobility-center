@@ -6,7 +6,7 @@ export interface IUsuario extends Document {
     rg: string;
     cpf: string;
     email: string;
-    dataDeNascimento: string;
+    dataDeNascimento: Date;
     certidaoDeNascimento: string;
     numeroTelefoneCelular: string;
     termosDeUso?: ITermosDeUso;
@@ -36,6 +36,7 @@ export interface IUsuario extends Document {
  *         type: string
  *       dataDeNascimento:
  *         type: string
+ *         format: date-time
  *       numeroTelefoneCelular:
  *         type: string
  *       tsCriacao:
@@ -65,7 +66,7 @@ const UsuarioSchema: Schema = new Schema({
     required: true,
   },
   dataDeNascimento: {
-    type: String,
+    type: Date,
     required: true,
   },
   numeroTelefoneCelular: {

@@ -22,7 +22,7 @@ export class UsuarioService {
       return new UsuarioModel({
         nome: body.nome,
         email: body.email,
-        dataDeNascimento: body.dataDeNascimento,
+        dataDeNascimento: new Date(body.dataDeNascimento),
         numeroTelefoneCelular: body.numeroTelefoneCelular,
         tsCriacao: new Date(),
       }).save();

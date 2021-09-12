@@ -1,4 +1,5 @@
 import { setTagSpan, traceable } from "jaeger-tracer-decorator";
+import { IUsuario } from "../model/Usuario";
 import { UsuarioService } from "../services/Usuario.service";
 import { ICadastroPassageiro } from "../model/interfaces/CadastroPassageiro";
 
@@ -13,7 +14,7 @@ export class UsuarioController {
       this.service = service;
     }
 
-    public async cadastrarUsuario(body: ICadastroPassageiro): Promise<ICadastroPassageiro> {
+    public async cadastrarUsuario(body: ICadastroPassageiro): Promise<IUsuario> {
       return this.service.cadastrarUsuario(body);
     }
 }
