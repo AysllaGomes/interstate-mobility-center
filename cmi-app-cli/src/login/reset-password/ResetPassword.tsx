@@ -3,6 +3,8 @@ import {SafeAreaView, View, Text} from "react-native";
 import {Button, Card, TextInput} from "react-native-paper";
 import { useValidation } from 'react-native-form-validator';
 import {resetPasswordStyle} from "./ResetPassword.style";
+import {HeaderComponent} from "../../components/header/header.component";
+
 interface LoginScreenProps {
     navigation: any;
 }
@@ -16,10 +18,10 @@ const ResetPassword = (props: LoginScreenProps) => {
     const messages = {
         en: {
             required: "Necessário preencher",
-            email: "Não é um email",
+            email: "E-mail inválido!",
             hasUpperCase: "Deve conter pelo menos uma letra maiúscula",
             hasLowerCase: "Deve conter pelo menos uma letra minuscula",
-            minlength: `Deve conter pelo menos 6 carácteres`,
+            minlength: "Deve conter pelo menos 6 carácteres",
             maxlength: "Deve conter no máximo 20 carácteres ",
             hasNumber: "Deve conter um número"
         }
@@ -46,6 +48,8 @@ const ResetPassword = (props: LoginScreenProps) => {
     return (
         <SafeAreaView style={resetPasswordStyle.content}>
             <View style={resetPasswordStyle.view}>
+                <HeaderComponent title="Reset Password" navigation={props.navigation}/>
+
                 <Card>
                     <Card.Title title="Mobility Center" titleStyle={resetPasswordStyle.cardTitle}>
                     </Card.Title>

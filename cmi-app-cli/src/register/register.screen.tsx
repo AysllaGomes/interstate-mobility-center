@@ -4,6 +4,7 @@ import { Button, TextInput} from "react-native-paper";
 import {registerStyle} from "./register.style";
 import {HeaderComponent} from "../components/header/header.component";
 import { useValidation } from 'react-native-form-validator';
+import Login from "../login/Login";
 
 interface LoginScreenProps {
     navigation: any;
@@ -29,7 +30,7 @@ export const RegisterScreen = (props: LoginScreenProps) => {
             numbers: "Use somente números",
             hasUpperCase: "Deve conter pelo menos uma letra maiúscula",
             hasLowerCase: "Deve conter pelo menos uma letra minuscula",
-            minlength: `Deve conter pelo menos 6 carácteres`,
+            minlength: "Deve conter pelo menos 6 carácteres",
             maxlength: "Deve conter no máximo 20 carácteres ",
             hasNumber: "Deve conter um número"
         }
@@ -74,7 +75,7 @@ export const RegisterScreen = (props: LoginScreenProps) => {
         return (
             <SafeAreaView>
                 <ScrollView>
-                    <HeaderComponent title="Register"/>
+                    <HeaderComponent title="Register" navigation={props.navigation}/>
                     <View style={registerStyle.content}>
                             <TextInput
                                 label="Nome Completo"

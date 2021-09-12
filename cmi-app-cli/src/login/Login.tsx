@@ -22,7 +22,7 @@ const Login = (props: LoginScreenProps) => {
             email: "Não é um email",
             hasUpperCase: "Deve conter pelo menos uma letra maiúscula",
             hasLowerCase: "Deve conter pelo menos uma letra minuscula",
-            minlength: `Deve conter pelo menos 6 carácteres`,
+            minlength: "Deve conter pelo menos 6 carácteres",
             maxlength: "Deve conter no máximo 20 carácteres ",
             hasNumber: "Deve conter um número"
         }
