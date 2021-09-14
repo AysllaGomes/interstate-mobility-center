@@ -13,5 +13,12 @@ export const registerStyle = StyleSheet.create({
         margin: 15,
         marginLeft: 0,
         marginRight: 0
+    },
+    errorText: {
+        color: "#ff0000"
+    },
+    dateComponent: {
+        width: 350,
     }
 });
+
