@@ -8,6 +8,7 @@ import {
 } from "../errors/erro.negocial";
 import {
   ErroSQL,
+  ERRO_SQL_AO_SALVAR_USUARIO,
   ERRO_SQL_EMAIL_INFORMADO_DO_USUARIO_NAO_ENCONTRADO,
 } from "../errors/erro.sql";
 import { retornarErroValidacao } from "../util/utils";
@@ -26,13 +27,8 @@ export class UsuarioService {
     const resultadoRepeticoes = await UsuarioService.existeRepeticoesProibidas(body);
 
     if (!resultadoRepeticoes) {
-      return new UsuarioModel({
-        nome: body.nome,
-        email: body.email,
-        dataDeNascimento: new Date(body.dataDeNascimento),
-        numeroTelefoneCelular: body.numeroTelefoneCelular,
-        tsCriacao: new Date(),
-      }).save();
+      const usuario = this.formataUsuario(body);
+      return this.salvarUsuario(usuario);
     }
 
     throw new ErroNegocial(...ERRO_NEGOCIAL_REGISTRO_REPETIDO);
@@ -50,6 +46,36 @@ export class UsuarioService {
   public static async emailCadastrado(email: string): Promise<boolean> {
     const passageiroModel = await UsuarioModel.find({ email });
     return passageiroModel.length !== 0;
+  }
+
+  public formataUsuario(body: ICadastroUsuario): IUsuario {
+    return new UsuarioModel({
+      nome: body.nome,
+      email: body.email,
+      dataDeNascimento: new Date(body.dataDeNascimento),
+      numeroTelefoneCelular: body.numeroTelefoneCelular,
+      tsCriacao: new Date(),
+    });
+  }
+
+  public async salvarUsuario(usuario: IUsuario): Promise<IUsuario> {
+    try {
+      logger.debug("Salvando usuário...");
+      return new UsuarioModel(usuario).save();
+    } catch (error) {
+      logger.error(`
+        ERRO no MS "${environment.app.name}", método "salvarUsuario".
+        <'ERRO NEGOCIAL'>
+          message:  Não foi possível salvar o usuário, na base de dados...
+        Parâmetros da requisição:
+          NOME: ${usuario.nome},
+          E-MAIL: ${usuario.email},
+          DATA DE NASCIMENTO: ${usuario.dataDeNascimento},
+          CELULAR: ${usuario.numeroTelefoneCelular},
+      `);
+
+      throw new ErroSQL(...ERRO_SQL_AO_SALVAR_USUARIO);
+    }
   }
 
   public async detalharUsuario(body: IDetalharUsuario): Promise<IUsuario | undefined> {
