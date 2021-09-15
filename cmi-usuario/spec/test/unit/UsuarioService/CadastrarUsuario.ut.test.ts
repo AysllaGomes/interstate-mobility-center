@@ -2,7 +2,7 @@ import mockingoose from "mockingoose";
 import { jaegerTracer } from "../utils/funcoes/JaegerTracer";
 import UsuarioModel, { IUsuario } from "../../../../src/model/Usuario";
 import { UsuarioService } from "../../../../src/services/Usuario.service";
-import { ICadastroPassageiro } from "../../../../src/model/interfaces/CadastroPassageiro";
+import { ICadastroUsuario } from "../../../../src/model/interfaces/CadastroUsuario";
 
 beforeAll(() => jaegerTracer);
 
@@ -12,7 +12,7 @@ describe("Teste da UsuarioService - cadastrarUsuario", () => {
   });
 
   // eslint-disable-next-line @typescript-eslint/no-var-requires,global-require
-  const body: ICadastroPassageiro = require("../utils/jsons/cadastrarUsuario.json");
+  const body: ICadastroUsuario = require("../utils/jsons/cadastrarUsuario.json");
 
   // eslint-disable-next-line @typescript-eslint/no-var-requires,global-require
   const usuario: IUsuario = require("../utils/jsons/usuarioCadastrado.json");

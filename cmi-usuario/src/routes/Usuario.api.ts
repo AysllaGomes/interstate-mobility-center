@@ -48,27 +48,27 @@ export class UsuarioApi extends ApiRouter {
         } catch (error) { next(error); }
       });
 
-      // /**
-      //   * @swagger
-      //   *   /usuario/detalhar:
-      //   *   get:
-      //   *     description: Realiza o detalhamento do usuário a partir de um e-mail informado.
-      //   *     summary: EndPoint que realiza detalhamento do usuário a partir de um e-mail informado.
-      //   *     tags:
-      //   *       - Usuário
-      //   *     parameters:
-      //   *      - in: body
-      //   *        name: IDetalharUsuario
-      //   *        description: Um objeto do tipo IDetalharUsuario
-      //   *        required: true
-      //   *        schema:
-      //   *          $ref: '#/definitions/IDetalharUsuario'
-      //   *     responses:
-      //   *       200:
-      //   *         description: Lista de resposta que contem todos os objetos que foram retornados pela consulta no banco de dados
-      //   *         schema:
-      //   *             $ref: '#/definitions/Usuario'
-      //   */
+      /**
+        * @swagger
+        *   /usuario/detalhar:
+        *   get:
+        *     description: Realiza o detalhamento do usuário a partir de um e-mail informado.
+        *     summary: EndPoint que realiza detalhamento do usuário a partir de um e-mail informado.
+        *     tags:
+        *       - Usuário
+        *     parameters:
+        *      - in: body
+        *        name: IDetalharUsuario
+        *        description: Um objeto do tipo IDetalharUsuario
+        *        required: true
+        *        schema:
+        *          $ref: '#/definitions/IDetalharUsuario'
+        *     responses:
+        *       200:
+        *         description: Lista de resposta que contem todos os objetos que foram retornados pela consulta no banco de dados
+        *         schema:
+        *             $ref: '#/definitions/Usuario'
+        */
       server.get(`${this.path}/detalhar`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
         try {
           if (request.body.email) {

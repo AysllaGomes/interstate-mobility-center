@@ -14,7 +14,9 @@ export class ErroSQL extends ErroPadrao {
 }
 
 export const ERRO_NA_CONEXAO_COM_O_MONGODB: [string, string] = ["999", "Ocorreu um erro, não foi possível se conectar ao o MongoDB."];
+export const ERRO_SQL_EMAIL_INFORMADO_DO_USUARIO_NAO_ENCONTRADO: [string, string] = ["998", "Não foi encontrado nenhum usuário, verifique os filtros usados."];
 
 export const listErroSQL = [
   new ErroSQL(...ERRO_NA_CONEXAO_COM_O_MONGODB),
+  new ErroSQL(...ERRO_SQL_EMAIL_INFORMADO_DO_USUARIO_NAO_ENCONTRADO),
 ];

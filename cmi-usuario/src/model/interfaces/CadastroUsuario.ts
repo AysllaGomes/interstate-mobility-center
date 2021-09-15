@@ -3,7 +3,7 @@
  * @swagger
  *
  * definitions:
- *   ICadastroPassageiro:
+ *   ICadastroUsuario:
  *     type: object
  *     required:
  *       - nome
@@ -21,13 +21,13 @@
  *         type: string
  *     example:
  *      {
- *          nome: "Ayslla Caroline Prates Gomes",
- *          email: "ayslla.gomes@outlook.com",
- *          dataDeNascimento: "16-12-1998",
- *          numeroTelefoneCelular: "61982072218",
+ *          nome: "Some Chick",
+ *          email: "some_chick@example.com",
+ *          dataDeNascimento: "01-01-1990",
+ *          numeroTelefoneCelular: "99999999999",
  *      }
  */
-export interface ICadastroPassageiro {
+export interface ICadastroUsuario {
   nome: string;
   email: string;
   dataDeNascimento: string;
