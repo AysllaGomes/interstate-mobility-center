@@ -47,11 +47,11 @@ export interface IUsuario extends Document {
  *     example:
  *      {
  *         _id: "6137e55a3faa33026260185e",
- *         nome: "Reisson Ramos Silva",
- *         email: "reisson.ramos@outlook.com",
- *         dataDeNascimento: "24-02-1999",
- *         numeroTelefoneCelular: "6199366676",
- *         tsCriacao: "2021-09-07T22:19:06.988Z",
+ *         nome: "Some Chick",
+ *         email: "some_chick@example.com",
+ *         dataDeNascimento: "1990-01-01T02:00:00.000Z",
+ *         numeroTelefoneCelular: "99999999999",
+ *         tsCriacao: "2021-09-15T21:57:49.871Z",
  *         __v: 0
  *      }
  */
