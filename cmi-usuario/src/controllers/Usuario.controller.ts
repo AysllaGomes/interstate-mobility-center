@@ -8,13 +8,12 @@ import { IDetalharUsuario } from "../model/interfaces/DetalharUsuario";
 @traceable()
 export class UsuarioController {
     @setTagSpan("UsuarioController")
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private tagParaTracer: any;
 
     private service: UsuarioService;
 
-    constructor({ service = new UsuarioService() }) {
-      this.service = service;
-    }
+    constructor({ service = new UsuarioService() }) { this.service = service; }
 
     public async cadastrarUsuario(body: ICadastroUsuario): Promise<IUsuario> {
       return this.service.cadastrarUsuario(body);
