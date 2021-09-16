@@ -3,7 +3,6 @@ import {Provider as PaperProvider} from "react-native-paper";
 import { StyleSheet } from 'react-native';
 import {theme} from "./App.style";
 import AppNavigator from "./src/navigation/navigator";
-import ResetPassword from "./src/login/reset-password/ResetPassword";
 
 
 
@@ -12,7 +11,6 @@ export default function App() {
           <PaperProvider theme={theme}>
             <AppNavigator></AppNavigator>
           </PaperProvider>
-      // <ResetPassword></ResetPassword>
   );
 }
 
