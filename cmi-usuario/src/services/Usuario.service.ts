@@ -78,12 +78,12 @@ export class UsuarioService {
     }
   }
 
-  public async detalharUsuario(body: IDetalharUsuario): Promise<IUsuario | undefined> {
+  public async detalharUsuario(body: IDetalharUsuario): Promise<IUsuario | ErroSQL> {
     try {
       const resultadoValidacao = this.serviceValidator.validaDetalharUsuario(body);
       retornarErroValidacao(resultadoValidacao, ERRO_NEGOCIAL_NA_VALIDACAO);
 
-      logger.debug(`Buscando dados do usuário do seguinte e-mail: '${body.email}'...`);
+      logger.debug(`Buscando dados do usuário do seguinte e-mail: '${body.email}'`);
       const usuario: IUsuario | null = await UsuarioModel.findOne({ email: body.email });
 
       if (usuario) { return usuario; }

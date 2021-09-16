@@ -1,5 +1,6 @@
 import { setTagSpan, traceable } from "jaeger-tracer-decorator";
 import { IUsuario } from "../model/Usuario";
+import { ErroSQL } from "../errors/erro.sql";
 import { UsuarioService } from "../services/Usuario.service";
 import { ICadastroUsuario } from "../model/interfaces/CadastroUsuario";
 import { IDetalharUsuario } from "../model/interfaces/DetalharUsuario";
@@ -19,7 +20,7 @@ export class UsuarioController {
       return this.service.cadastrarUsuario(body);
     }
 
-    public async detalharUsuario(body: IDetalharUsuario): Promise<IUsuario | undefined> {
+    public async detalharUsuario(body: IDetalharUsuario): Promise<IUsuario | ErroSQL> {
       return this.service.detalharUsuario(body);
     }
 }

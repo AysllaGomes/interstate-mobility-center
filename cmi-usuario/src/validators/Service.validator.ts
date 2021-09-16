@@ -1,8 +1,8 @@
 import { messages } from "joi-translation-pt-br";
 import Joi, { ObjectSchema, ValidationResult } from "@hapi/joi";
 import { logger } from "../util/logger";
-import { IDetalharUsuario } from "../model/interfaces/DetalharUsuario";
 import { ICadastroUsuario } from "../model/interfaces/CadastroUsuario";
+import { IDetalharUsuario } from "../model/interfaces/DetalharUsuario";
 
 export class ServiceValidator {
   public validaCadastroUsuario(body: ICadastroUsuario): ValidationResult {
@@ -19,7 +19,7 @@ export class ServiceValidator {
   }
 
   public validaDetalharUsuario(body: IDetalharUsuario): ValidationResult {
-    logger.debug("Validando detalhar do usuário...");
+    logger.debug("Validando os dados enviados para detalhamento do usuário...");
 
     const schema: ObjectSchema<IDetalharUsuario> = Joi.object({
       email: Joi.string().required(),
