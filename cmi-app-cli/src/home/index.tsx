@@ -5,13 +5,17 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {indexStyle} from "./index.style";
 import results from "./results";
 import TravelList from "../components/home/travelList";
+import {loginStyle} from "../login/login.style";
 
-interface LoginScreenProps {
-    navigation: any;
+interface HomeScreenProps {
+    navigation: any,
+    page: null
 }
 
+const HomeScreen = (props: HomeScreenProps) => {
+    const toTravelPackage = () => props.navigation.navigate("Package")
 
-const HomeScreen = () => {
+
     const [searchText, setSearchText] = useState('');
     const [list, setList] = useState(results)
 
@@ -43,7 +47,7 @@ const HomeScreen = () => {
                     />
                 </TouchableOpacity>
             </View>
-            <FlatList data={list} renderItem={({item}) => <TravelList data={item} />}
+            <FlatList data={list} renderItem={({item}) => <TravelList navigation={props.navigation} data={item}  />}
                       keyExtractor={(item) => item.id}
             />
 

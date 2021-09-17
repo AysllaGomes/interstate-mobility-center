@@ -5,7 +5,7 @@ import Login from "../login/Login";
 import HomeScreen from "../home";
 import {RegisterScreen} from "../register/register.screen";
 import ResetPassword from "../login/reset-password/ResetPassword";
-
+import Package from "../travelPackage/package";
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +17,7 @@ const AppNavigator = () => (
             <Stack.Screen name="ResetPassword" component={ResetPassword}/>
             <Stack.Screen name="Register" component={RegisterScreen}/>
             <Stack.Screen name="Home" component={HomeScreen}/>
+            <Stack.Screen name="Package" component={Package}/>
         </Stack.Navigator>
     </NavigationContainer>
 )

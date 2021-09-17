@@ -2,9 +2,10 @@ import {Image, Text, TouchableOpacity, View} from "react-native";
 import React from "react";
 import {StyleSheet} from "react-native-web";
 
-const TravelList = ({ data }) => {
+const TravelList = ( { data, navigation } ) => {
+    const toTravelPackage = () => navigation.navigate("Package", {data: data})
     return(
-        <TouchableOpacity> 
+        <TouchableOpacity onPress={() => toTravelPackage()}>
             <Image source={data.image} />
             <View>
                 <Text> {data.id}</Text>

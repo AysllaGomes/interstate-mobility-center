@@ -7,7 +7,8 @@ import { useValidation } from 'react-native-form-validator';
 import Login from "../login/Login";
 
 interface LoginScreenProps {
-    navigation: any;
+    navigation: any,
+    page: string
 }
 
 
@@ -75,7 +76,7 @@ export const RegisterScreen = (props: LoginScreenProps) => {
         return (
             <SafeAreaView>
                 <ScrollView>
-                    <HeaderComponent title="Register" navigation={props.navigation}/>
+                    <HeaderComponent title="Register" navigation={props.navigation} page="Login"/>
                     <View style={registerStyle.content}>
                             <TextInput
                                 label="Nome Completo"

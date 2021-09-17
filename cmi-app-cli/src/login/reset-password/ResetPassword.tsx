@@ -48,7 +48,7 @@ const ResetPassword = (props: LoginScreenProps) => {
     return (
         <SafeAreaView style={resetPasswordStyle.content}>
             <View style={resetPasswordStyle.view}>
-                <HeaderComponent title="Reset Password" navigation={props.navigation}/>
+                <HeaderComponent title="Reset Password" navigation={props.navigation} page="Login"/>
 
                 <Card>
                     <Card.Title title="Mobility Center" titleStyle={resetPasswordStyle.cardTitle}>
