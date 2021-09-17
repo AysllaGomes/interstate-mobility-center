@@ -18,7 +18,7 @@ const Login = (props: LoginScreenProps) => {
 
     const messages = {
         en: {
-            required: "Necessário preencher",
+            required: "Campo obrigatório",
             email: "Não é um email",
             hasUpperCase: "Deve conter pelo menos uma letra maiúscula",
             hasLowerCase: "Deve conter pelo menos uma letra minuscula",
