@@ -3,9 +3,11 @@ import {SafeAreaView, View, Text} from "react-native";
 import {Button, Card, TextInput} from "react-native-paper";
 import {loginStyle} from "./login.style";
 import { useValidation } from 'react-native-form-validator';
+
 interface LoginScreenProps {
     navigation: any;
 }
+
 const Login = (props: LoginScreenProps) => {
 
     const signUp = () => props.navigation.navigate("Home")
