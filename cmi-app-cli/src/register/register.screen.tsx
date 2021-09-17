@@ -1,18 +1,30 @@
 import React, {useState} from "react";
-import {SafeAreaView, ScrollView, Text, View} from "react-native";
 import { Button, TextInput} from "react-native-paper";
-import {registerStyle} from "./register.style";
-import {HeaderComponent} from "../components/header/header.component";
+import { SafeAreaView, ScrollView, Text, View } from "react-native";
+import { registerStyle } from "./register.style";
 import { useValidation } from 'react-native-form-validator';
-import Login from "../login/Login";
+import { HeaderComponent } from "../components/header/header.component";
 
 interface LoginScreenProps {
-    navigation: any,
+    navigation: any, // @todo nunca aceitável
     page: string
 }
 
-
 export const RegisterScreen = (props: LoginScreenProps) => {
+    /**
+     * @todo Ettore arrume!!!
+     *
+     * melhorar utilizando a máscara, e ao submeter ao formulário, deve ser enviado sem a máscara
+     * exemplo: (61) 9 8207-2218
+     * envio para o back-end --> 61982072218
+     *
+     * getErrorsInField('nomeDoAtributo')[0] não deve ser assim :)
+     *
+     * formalize o form em uma única construção
+     * melhora na validação, sendo que cada campo tem uma forma esperada
+     * alteração na troca de mensagem validação
+     */
+
     const register = () => props.navigation.navigate("Home")
 
         const [name, setName] = useState('')
@@ -55,7 +67,7 @@ export const RegisterScreen = (props: LoginScreenProps) => {
     }
     const validaPhoneNumber = () => {
         return validate({ // Fazer funcao validar quantidade numeros telefone
-            phoneNumber: {required: true, numbers: true, minlength: 6}
+            phoneNumber: { required: true, numbers: true, minlength: 11 }
         })
     }
     const validaBirthDate = () => {
@@ -131,7 +143,6 @@ export const RegisterScreen = (props: LoginScreenProps) => {
                                 onTextInput={validaConfPassword}
                             />
                            {isFieldInError('confPassword') ? <Text style={registerStyle.errorText}>{getErrorsInField("confPassword")[0]}</Text> : null}
-
 
                         <Button onPress={() => (validaNome() && validaEmail() && validaPhoneNumber() && validaBirthDate() && validaPassword() && validaConfPassword()) ? register() : null}  mode="contained" style={registerStyle.button}>Register</Button>
                     </View>

@@ -1,11 +1,9 @@
-import React, {Component, useEffect, useState} from "react";
-import {SafeAreaView, ScrollView, Text, View, FlatList, Image, TouchableOpacity, StatusBar} from "react-native";
-import {Button, TextInput} from "react-native-paper";
+import React, {useEffect, useState} from "react";
+import { SafeAreaView, View, FlatList, TouchableOpacity, StatusBar } from "react-native";
+import { TextInput } from "react-native-paper";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import {indexStyle} from "./index.style";
 import results from "./results";
 import TravelList from "../components/home/travelList";
-import {loginStyle} from "../login/login.style";
 
 interface HomeScreenProps {
     navigation: any,
