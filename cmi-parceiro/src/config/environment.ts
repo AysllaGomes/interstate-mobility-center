@@ -19,10 +19,10 @@ export interface IEnvironment {
 
 export const environment: IEnvironment = {
   app: {
-    name: process.env.npm_package_name || "cmi-viagem",
-    nameUnderscore: (process.env.npm_package_name || "").split("-").join("_") || "cmi-viagem".split("-").join("_"),
+    name: process.env.npm_package_name || "cmi-parceiro",
+    nameUnderscore: (process.env.npm_package_name || "").split("-").join("_") || "cmi-parceiro".split("-").join("_"),
     version: process.env.npm_package_version || "?.?.?",
-    description: process.env.npm_package_description || "cmi-viagem in node with expressjs",
+    description: process.env.npm_package_description || "cmi-parceiro in node with expressjs",
     host: process.env.APP_HOST || "localhost:3000",
     env: process.env.NODE_ENV || "local",
     port: convertNumber(process.env.API_PORT, 3000),

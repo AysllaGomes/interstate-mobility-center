@@ -19,10 +19,10 @@ export interface IEnvironment {
 
 export const environment: IEnvironment = {
   app: {
-    name: process.env.npm_package_name || "cmi-autenticacao",
-    nameUnderscore: (process.env.npm_package_name || "").split("-").join("_") || "cmi-autenticacao".split("-").join("_"),
+    name: process.env.npm_package_name || "cmi-log",
+    nameUnderscore: (process.env.npm_package_name || "").split("-").join("_") || "cmi-log".split("-").join("_"),
     version: process.env.npm_package_version || "?.?.?",
-    description: process.env.npm_package_description || "cmi-autenticacao in node with expressjs",
+    description: process.env.npm_package_description || "cmi-log in node with expressjs",
     host: process.env.APP_HOST || "localhost:3000",
     env: process.env.NODE_ENV || "local",
     port: convertNumber(process.env.API_PORT, 3000),
