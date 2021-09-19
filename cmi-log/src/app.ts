@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { logger } from "./util/logger";
+import { LogApi } from "./routes/Log.api";
 import { DocsApi } from "./routes/docs.api";
 import { MainApi } from "./routes/main.api";
 import { ErrorApi } from "./routes/error.api";
@@ -8,8 +9,8 @@ import { environment } from "./config/environment";
 import { handleError } from "./util/error.handler";
 import { mergePatchBodyParser, middlewareForLog, verificaConexaoMongoMiddleware } from "./util/middleware";
 
-const getApiControllers = (): (ErrorApi | MainApi | DocsApi)[] => [
-  new ErrorApi(), new MainApi(), new DocsApi(),
+const getApiControllers = (): (ErrorApi | MainApi | DocsApi | LogApi)[] => [
+  new ErrorApi(), new MainApi(), new DocsApi(), new LogApi(),
 ];
 
 const app = express();
