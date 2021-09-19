@@ -1,0 +1,47 @@
+{
+  "0": {
+    "category": {
+      "id": "pop99",
+      "name": "99POP",
+      "description": "Carro particular",
+      "eta": 5
+    },
+    "estimate": {
+      "lowerFare": 3.33,
+      "upperFare": 5.55,
+      "currencyCode": "R$",
+      "fareText": "R$3.33",
+      "fareTextComplement": "ou mais"
+    }
+  },
+  "1": {
+    "category": {
+      "id": "turbo-taxi",
+      "name": "99TAXI",
+      "description": "Táxi 99",
+      "eta": 6
+    },
+    "estimate": {
+      "lowerFare": 3.33,
+      "upperFare": 7.77,
+      "currencyCode": "R$",
+      "fareText": "R$3.33",
+      "fareTextComplement": "ou mais"
+    }
+  },
+  "2": {
+    "category": {
+      "id": "regular-taxi",
+      "name": "Táxi Comum",
+      "description": "Tarifa cheia",
+      "eta": 6
+    },
+    "estimate": {
+      "lowerFare": 3.33,
+      "upperFare": 9.99,
+      "currencyCode": "R$",
+      "fareText": "R$3.33",
+      "fareTextComplement": "ou mais"
+    }
+  }
+}

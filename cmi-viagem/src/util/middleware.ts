@@ -3,8 +3,10 @@ import { middlewareTracer } from "jaeger-tracer-decorator";
 import { v1 as uuidv1 } from "uuid";
 import { logger } from "./logger";
 import Database from "../config/database";
+import { environment } from "../config/environment";
 import { ConexaoMongoEnum } from "../model/enums/ConexaoMongo.enum";
 import { ERRO_NA_CONEXAO_COM_O_MONGODB, ErroSQL } from "../errors/erro.sql";
+import VariaveisDeAmbienteModel, { IVariaveisDeAmbiente } from "../model/VariaveisDeAmbiente";
 
 export const endpointForMiddleware = (path: string): boolean => (path !== "/metrics")
   && (path !== "/info")
@@ -75,3 +77,36 @@ export const verificaConexaoMongoMiddleware = (async (req: Request, res: Respons
 
   next();
 });
+
+export async function nockTestes(): Promise<boolean> {
+  try {
+    if (process.env.NODE_ENV === "test") return true;
+
+    const result = await VariaveisDeAmbienteModel.find();
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // @ts-ignore
+    return result[0].habilitaNock.MSViagem || false;
+  } catch (err) {
+    return false;
+  }
+}
+
+export async function variaveisDeAmbienteNock(): Promise<IVariaveisDeAmbiente | null> {
+  try {
+    return await VariaveisDeAmbienteModel.findOne({ codigoVariavel: "nock" });
+  } catch (err) {
+    logger.error(`
+        ERRO no MS "${environment.app.name}", método "variaveisDeAmbienteNock".
+        <'ERRO'>
+          message: ERRO ao buscar as variaveis de ambiente.
+        Parâmetros da requisição:
+          USADO NO FIND: { codigoVariavel: "nock" }
+        Resposta:
+        <'ERRO NEGOCIAL'>
+          sqlcode: ${err.code}
+          message: ${err.message}.
+      `);
+    return null;
+  }
+}

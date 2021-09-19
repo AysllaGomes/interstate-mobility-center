@@ -14,6 +14,10 @@ export interface IEnvironment {
   db: {
     uri: string;
   };
+  parceiros: {
+    host: string;
+    logo: string;
+  };
   isValid: () => boolean;
 }
 
@@ -30,6 +34,10 @@ export const environment: IEnvironment = {
   },
   db: {
     uri: process.env.BD_URI || "mongodb+srv://mongocmi:n1E8DxRjR4INjLws@cmi.q6k96.mongodb.net/cmi",
+  },
+  parceiros: {
+    host: process.env.PARCEIRO_HOST || "https://qa-clientintegration.nock.in",
+    logo: process.env.LOGO_PARCEIRO || "https://avatars.githubusercontent.com/u/17545810?s=280&v=4",
   },
   isValid() {
     return true;
