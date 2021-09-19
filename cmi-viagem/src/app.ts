@@ -12,11 +12,12 @@ import { DocsApi } from "./routes/docs.api";
 import { MainApi } from "./routes/main.api";
 import { executaNocks } from "./nocks/Nock";
 import { ErrorApi } from "./routes/error.api";
+import { CotacaoApi } from "./routes/Cotacao.api";
 import { environment } from "./config/environment";
 import { handleError } from "./util/error.handler";
 
-const getApiControllers = (): (ErrorApi | MainApi | DocsApi)[] => [
-  new ErrorApi(), new MainApi(), new DocsApi(),
+const getApiControllers = (): (ErrorApi | MainApi | DocsApi | CotacaoApi)[] => [
+  new ErrorApi(), new MainApi(), new DocsApi(), new CotacaoApi(),
 ];
 
 const app = express();
