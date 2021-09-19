@@ -15,6 +15,15 @@ e este projeto é aderente ao [Versionamento Semântico](http://semver.org/spec/
     #### Security - in case of vulnerabilities.
 -->
 
+## [1.0.0-rc1] - 2020-09-19
+### Added
+- Criação do swagger [@AysllaGomes](https://github.com/AysllaGomes).
+- Ajustando estrutura de pastas dos testes [@AysllaGomes](https://github.com/AysllaGomes).
+- Criação da estrutura de conexão com o banco de dados [@AysllaGomes](https://github.com/AysllaGomes).
+- Criação da estrutura de reconexão com o banco de dados [@AysllaGomes](https://github.com/AysllaGomes).
+- Criação do endpoint que vai gerenciar os logs recebidos do APP [@AysllaGomes](https://github.com/AysllaGomes).
+- Criação dos testes do endpoint que vai gerenciar os logs recebidos do APP [@AysllaGomes](https://github.com/AysllaGomes).
+
 ## [1.0.0] - 2020-09-18
 ### Added
 - Criação do projeto [@AysllaGomes](https://github.com/AysllaGomes)
