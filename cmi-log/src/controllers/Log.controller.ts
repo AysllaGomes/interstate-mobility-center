@@ -1,6 +1,6 @@
 import { setTagSpan, traceable } from "jaeger-tracer-decorator";
 import { LogService } from "../services/Log.service";
-import { ILogMobilidade } from "../model/LogMobilidade";
+import { ILog } from "../model/Log";
 import { IInputLogMobilidade } from "../model/interfaces/InputLogMobilidade";
 
 @traceable()
@@ -15,7 +15,7 @@ export class LogController {
       this.service = service;
     }
 
-    public async gerenciaLog(body: Array<IInputLogMobilidade>): Promise<Array<ILogMobilidade>> {
+    public async gerenciaLog(body: Array<IInputLogMobilidade>): Promise<Array<ILog>> {
       return this.service.gerenciaLog(body);
     }
 }

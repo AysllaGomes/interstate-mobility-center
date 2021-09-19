@@ -4,8 +4,7 @@ import { IProcesso } from "./interfaces/Processo";
 import { TipoApiEnum } from "./enums/TipoApi.enum";
 import { PlataformaEnum } from "./enums/Plataforma.enum";
 
-export interface ILogMobilidade extends Document {
-
+export interface ILog extends Document {
     tsDeRegistroDoLog: Date;
     categoria: CategoriaEnum;
     processo: IProcesso;
@@ -76,7 +75,7 @@ export interface ILogMobilidade extends Document {
  *      ]
  */
 
-const LogMobilidadeSchema: Schema = new Schema({
+const LogSchema: Schema = new Schema({
   tsDeRegistroDoLog: {
     type: Date,
     required: true,
@@ -107,4 +106,4 @@ const LogMobilidadeSchema: Schema = new Schema({
   },
 });
 
-export default mongoose.model<ILogMobilidade>("LogMobilidade", LogMobilidadeSchema, "logMobilidade");
+export default mongoose.model<ILog>("Log", LogSchema, "log");

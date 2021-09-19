@@ -1,4 +1,4 @@
-import LogMobilidadeModel, { ILogMobilidade } from "../model/LogMobilidade";
+import LogMobilidadeModel, { ILog } from "../model/Log";
 import {
   ErroSQL,
   ERRO_AO_SALVAR_REGISTRO_DE_LOG,
@@ -13,7 +13,7 @@ import { IInputLogMobilidade } from "../model/interfaces/InputLogMobilidade";
 export class LogService {
   private serviceValidator = new ServiceValidator();
 
-  public async gerenciaLog(input: Array<IInputLogMobilidade>): Promise<Array<ILogMobilidade>> {
+  public async gerenciaLog(input: Array<IInputLogMobilidade>): Promise<Array<ILog>> {
     logger.debug("Salvando registros de log no banco de dados...");
 
     return Promise.all(
@@ -26,7 +26,7 @@ export class LogService {
     );
   }
 
-  public async salvaLogNoBancoDeDados(body: IInputLogMobilidade): Promise<ILogMobilidade> {
+  public async salvaLogNoBancoDeDados(body: IInputLogMobilidade): Promise<ILog> {
     try {
       const result = new LogMobilidadeModel({
         tsDeRegistroDoLog: new Date(),

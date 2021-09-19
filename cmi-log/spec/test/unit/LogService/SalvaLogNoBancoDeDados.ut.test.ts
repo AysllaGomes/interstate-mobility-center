@@ -5,7 +5,7 @@ import { TipoApiEnum } from "../../../../src/model/enums/TipoApi.enum";
 import { CategoriaEnum } from "../../../../src/model/enums/Categoria.enum";
 import { PlataformaEnum } from "../../../../src/model/enums/Plataforma.enum";
 import { TipoProcessoEnum } from "../../../../src/model/enums/TipoProcesso.enum";
-import LogMobilidadeModel, { ILogMobilidade } from "../../../../src/model/LogMobilidade";
+import LogMobilidadeModel, { ILog } from "../../../../src/model/Log";
 import { IInputLogMobilidade } from "../../../../src/model/interfaces/InputLogMobilidade";
 
 beforeAll(() => jaegerTracer);
@@ -31,7 +31,7 @@ describe("Teste da LogService - salvaLogNoBancoDeDados", () => {
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
   // @ts-ignore
-  const retorno: ILogMobilidade = {
+  const retorno: ILog = {
     _id: "60e35438f311f20784b33f34",
     tsDeRegistroDoLog: new Date("2021-07-05T18:49:28.209Z"),
     categoria: CategoriaEnum.CONSUMO_API,
