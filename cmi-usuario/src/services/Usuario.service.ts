@@ -25,6 +25,7 @@ import { IDetalharUsuario } from "../model/interfaces/DetalharUsuario";
 import { IInputTermoDeUsoApi } from "../model/interfaces/InputTermoDeUsoApi";
 import { IDadosDoDispositivo } from "../model/interfaces/DadosDoDispositivo";
 import { IRetornoUpdateUsuarioModel } from "../model/interfaces/RetornoUpdateUsuarioModel";
+import { IRetornoPassageiroAssinaturaTermoDeUso } from "../model/interfaces/RetornoPassageiroAssinaturaTermoDeUso";
 
 export class UsuarioService {
   private serviceValidator = new ServiceValidator();
@@ -170,5 +171,23 @@ export class UsuarioService {
 
       throw new ErroSQL(...ERRO_AO_ATUALIZAR_TERMO_DE_USO_USUARIO).formatMessage(error.message);
     }
+  }
+
+  public async usuarioAssinaturaTermoDeUso(codigoMCI: string): Promise<IRetornoPassageiroAssinaturaTermoDeUso> {
+    const termoDeUsoVigente: ITermoDeUso = await TermoDeUsoService.retornaTermoDeUsoSituacaoVigente();
+    const usuario: IUsuario | ErroSQL = await this.retornaDadosUsuario(codigoMCI);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // @ts-ignore
+    const objTermoDeUso: ITermosDeUso = usuario.termosDeUso.find(
+      // eslint-disable-next-line no-underscore-dangle
+      (termosVinculados: ITermosDeUso) => termosVinculados.idTermoDeUso === termoDeUsoVigente._id,
+    );
+
+    return {
+      assinado: !!objTermoDeUso,
+      versao: termoDeUsoVigente.versao,
+      conteudo: termoDeUsoVigente.conteudo,
+    };
   }
 }

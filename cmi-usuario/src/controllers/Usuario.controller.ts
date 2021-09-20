@@ -8,6 +8,7 @@ import { IDetalharUsuario } from "../model/interfaces/DetalharUsuario";
 import { IInputTermoDeUsoApi } from "../model/interfaces/InputTermoDeUsoApi";
 import { IDadosDoDispositivo } from "../model/interfaces/DadosDoDispositivo";
 import { IRetornoUpdateUsuarioModel } from "../model/interfaces/RetornoUpdateUsuarioModel";
+import { IRetornoPassageiroAssinaturaTermoDeUso } from "../model/interfaces/RetornoPassageiroAssinaturaTermoDeUso";
 
 @traceable()
 export class UsuarioController {
@@ -33,5 +34,9 @@ export class UsuarioController {
       coordenadas: ICoordenadas,
     ): Promise<IRetornoUpdateUsuarioModel> {
       return this.service.assinaturaTermoDeUso(body, dadosDoDispositivo, coordenadas);
+    }
+
+    public async usuarioAssinaturaTermoDeUso(idUsuario: string): Promise<IRetornoPassageiroAssinaturaTermoDeUso> {
+      return this.service.usuarioAssinaturaTermoDeUso(idUsuario);
     }
 }

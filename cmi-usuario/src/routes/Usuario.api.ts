@@ -7,6 +7,7 @@ import { ApiRouter } from "./api.router";
 import { ICoordenadas } from "../model/interfaces/Coordenadas";
 import { UsuarioController } from "../controllers/Usuario.controller";
 import { IDadosDoDispositivo } from "../model/interfaces/DadosDoDispositivo";
+import { IRetornoPassageiroAssinaturaTermoDeUso } from "../model/interfaces/RetornoPassageiroAssinaturaTermoDeUso";
 
 export class UsuarioApi extends ApiRouter {
     private readonly path: string;
@@ -122,6 +123,43 @@ export class UsuarioApi extends ApiRouter {
           };
 
           return response.json(await this.controller.assinaturaTermoDeUso(request.body, dadosDoDispositivo, coordenadas));
+        } catch (error) { next(error); }
+      });
+
+      /**
+       * @swagger
+       *   /usuario/consultaAssinaturaTermoUsuario:
+       *   get:
+       *     description: Realiza uma consulta a partir do id do usuário informado no body da requisição para verificar se há o termo de uso vinculado.
+       *     summary: EndPoint que realiza uma consulta a partir do id do usuário informado no body da requisição para verificar se há o termo de uso vinculado.
+       *     tags:
+       *       - Usuário
+       *     parameters:
+       *      - in: body
+       *        name: IConsultaAssinaturaTermoUsuario
+       *        required: true
+       *        schema:
+       *          $ref: '#/definitions/IConsultaAssinaturaTermoUsuario'
+       *     responses:
+       *       200:
+       *         description: Retorno dos dados to Termo para o usuário informado
+       *         schema:
+       *             $ref: '#/definitions/IRetornoPassageiroAssinaturaTermoDeUso'
+       */
+      server.get(`${this.path}/consultaAssinaturaTermoUsuario`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
+        try {
+          if (request.body.idUsuario) {
+            const result: IRetornoPassageiroAssinaturaTermoDeUso = await this.controller.usuarioAssinaturaTermoDeUso(request.body);
+
+            return response.json(
+              {
+                assinado: result?.assinado,
+                versao: result?.versao,
+                conteudo: `<html><body><p>${result?.conteudo}</p></body></html>`,
+              },
+            );
+          }
+          next(new ErroNegocial(...ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS).formatMessage("idUsuario"));
         } catch (error) { next(error); }
       });
     }
