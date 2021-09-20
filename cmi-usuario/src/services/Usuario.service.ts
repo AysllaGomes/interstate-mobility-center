@@ -9,13 +9,22 @@ import {
 import {
   ErroSQL,
   ERRO_SQL_AO_SALVAR_USUARIO,
+  ERRO_SQL_BUSCA_DADOS_USUARIO,
+  ERRO_AO_ATUALIZAR_TERMO_DE_USO_USUARIO,
   ERRO_SQL_EMAIL_INFORMADO_DO_USUARIO_NAO_ENCONTRADO,
 } from "../errors/erro.sql";
+import { ITermoDeUso } from "../model/TermoDeUso";
 import { retornarErroValidacao } from "../util/utils";
+import { TermoDeUsoService } from "./TermoDeUso.service";
 import UsuarioModel, { IUsuario } from "../model/Usuario";
+import { ICoordenadas } from "../model/interfaces/Coordenadas";
+import { ITermosDeUso } from "../model/interfaces/TermosDeUso";
 import { ServiceValidator } from "../validators/Service.validator";
 import { ICadastroUsuario } from "../model/interfaces/CadastroUsuario";
 import { IDetalharUsuario } from "../model/interfaces/DetalharUsuario";
+import { IInputTermoDeUsoApi } from "../model/interfaces/InputTermoDeUsoApi";
+import { IDadosDoDispositivo } from "../model/interfaces/DadosDoDispositivo";
+import { IRetornoUpdateUsuarioModel } from "../model/interfaces/RetornoUpdateUsuarioModel";
 
 export class UsuarioService {
   private serviceValidator = new ServiceValidator();
@@ -99,6 +108,67 @@ export class UsuarioService {
       `);
 
       throw new ErroSQL(...ERRO_SQL_EMAIL_INFORMADO_DO_USUARIO_NAO_ENCONTRADO);
+    }
+  }
+
+  public async retornaDadosUsuario(idUsuario: string): Promise<IUsuario | ErroSQL> {
+    try {
+      logger.info(`Realizando consulta para pegar dados do usuário: ${idUsuario}...`);
+      const usuario: IUsuario | null = await UsuarioModel.findById(idUsuario);
+
+      if (usuario) return usuario;
+
+      logger.debug(`Não foi encontrado o ID: ${idUsuario}, na base de dados...`);
+      throw new ErroSQL(...ERRO_SQL_BUSCA_DADOS_USUARIO).formatMessage(idUsuario);
+    } catch (error) {
+      logger.error(`
+        ERRO no MS "${environment.app.name}", método "retornaDadosUsuario".
+        <'ERRO'>
+          message: Não foi encontrado o ID do Usuário: ${idUsuario}, na base de dados...
+        Parâmetros da requisição:
+          ID: ${idUsuario}
+      `);
+      throw new ErroSQL(...ERRO_SQL_BUSCA_DADOS_USUARIO).formatMessage(idUsuario);
+    }
+  }
+
+  public async assinaturaTermoDeUso(body: IInputTermoDeUsoApi, dadosDoDispositivo: IDadosDoDispositivo, coordenadas: ICoordenadas): Promise<IRetornoUpdateUsuarioModel> {
+    await this.retornaDadosUsuario(body.idUsuario);
+    const termoDeUsoVigente: ITermoDeUso = await TermoDeUsoService.retornaTermoDeUsoSituacaoVigente();
+
+    // eslint-disable-next-line no-underscore-dangle
+    const termoDeUso = this.formataDadosTermoDeUso(termoDeUsoVigente._id, dadosDoDispositivo, coordenadas);
+
+    return this.salvaTermoDeUso(body.idUsuario, termoDeUso);
+  }
+
+  public formataDadosTermoDeUso(idTermoUso: string, dadosDoDispositivo: IDadosDoDispositivo, coordenadas: ICoordenadas): ITermosDeUso {
+    return {
+      idTermoDeUso: idTermoUso,
+      coordenadasUsuario: coordenadas,
+      tsDataDeAceite: new Date(),
+      dadosDispositivo: dadosDoDispositivo,
+    };
+  }
+
+  public async salvaTermoDeUso(idUsuario: string, termoDeUso: ITermosDeUso): Promise<IRetornoUpdateUsuarioModel> {
+    try {
+      logger.debug("Atualizando os dados do passageiro com a propriedade Termo de Uso...");
+
+      return UsuarioModel.updateOne(
+        { _id: idUsuario },
+        { termosDeUso: termoDeUso },
+        { upsert: true },
+        (error: Error, document: IUsuario) => document,
+      );
+    } catch (error) {
+      logger.error(`
+        ERRO no MS "${environment.app.name}", método "salvaTermoDeUso".
+        <'ERRO'>
+          message: Erro ao salvar os dados do termo de uso: ${error.message}.
+      `);
+
+      throw new ErroSQL(...ERRO_AO_ATUALIZAR_TERMO_DE_USO_USUARIO).formatMessage(error.message);
     }
   }
 }
