@@ -2,7 +2,7 @@
  * @swagger
  *
  * definitions:
- *   IRetornoUpdateModel:
+ *   IRetornoUpdateUsuarioModel:
  *     type: object
  *     required:
  *       - n

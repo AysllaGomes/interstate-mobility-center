@@ -1,24 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
-  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-usuario\spec\test\unit\UsuarioService\CadastrarUsuarioEmailRepetido.ut.test.ts">
-    <testCase name="Teste da UsuarioService - cadastrarUsuario - e-mail já cadastrado Teste do método emailCadastrado" duration="8"/>
-  </file>
   <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-usuario\spec\test\unit\UsuarioService\CadastrarUsuario.ut.test.ts">
-    <testCase name="Teste da UsuarioService - cadastrarUsuario Teste do método cadastrarUsuario" duration="56"/>
+    <testCase name="Teste da UsuarioService - cadastrarUsuario Teste do método cadastrarUsuario" duration="45"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-usuario\spec\test\unit\UsuarioService\retornaDadosUsuario.ut.test.ts">
+    <testCase name="Teste da UsuarioService - retornaDadosUsuario Teste do método retornaDadosUsuario" duration="4"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-usuario\spec\test\unit\UsuarioService\AssinaturaTermoDeUso.ut.test.ts">
+    <testCase name="Teste da PassageiroService - assinaturaTermoDeUso Teste do método assinaturaTermoDeUso" duration="4"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-usuario\spec\test\unit\UsuarioService\retornaDadosUsuarioErroNegocial.ut.test.ts">
+    <testCase name="Teste da UsuarioService - retornaDadosUsuarioErroNegocial Teste do método retornaDadosUsuario - Condição de não encontrar ID" duration="2"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-usuario\spec\test\unit\UsuarioService\AssinaturaTermoDeUsoErroRetornoDadosUsuario.ut.test.ts">
+    <testCase name="Teste da PassageiroService - assinaturaTermoDeUso com erro ao buscar o usuário mci informado Teste do método assinaturaTermoDeUso com erro ao buscar o usuário informado" duration="2"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-usuario\spec\test\unit\TermoDeUsoService\RetornaTermoDeUsoSituacaoVigente.ut.test.ts">
+    <testCase name="Teste do TermoDeUsoService Teste do método retornaTermoDeUsoSituacaoVigente" duration="2"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-usuario\spec\test\unit\TermoDeUsoService\RetornaTermoDeUsoSituacaoVigenteComErroNegocial.ut.test.ts">
+    <testCase name="Teste do TermoDeUsoService Teste do método retornaTermoDeUsoSituacaoVigente com erro negocial" duration="3"/>
   </file>
   <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-usuario\spec\test\unit\UsuarioService\CadastrarUsuarioErroDeValidacao.ut.test.ts">
-    <testCase name="Teste da UsuarioService - cadastrarUsuario com erro de validação Teste do método cadastrarUsuario com erro de validação" duration="16"/>
-  </file>
-  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-usuario\spec\test\unit\Database\VerificaConexao.ut.test.ts">
-    <testCase name="Teste do serviço que retorna o estado da conexão com o bd Teste MOCK do método verificaConexao" duration="2"/>
+    <testCase name="Teste da UsuarioService - cadastrarUsuario com erro de validação Teste do método cadastrarUsuario com erro de validação" duration="11"/>
   </file>
   <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-usuario\spec\test\unit\Middlewares\VerificaConexaoMongo.ut.test.ts">
-    <testCase name="Teste do middleware que tenta a conexão com o mongo Teste MOCK do método verificaConexaoMongoMiddleware" duration="3"/>
+    <testCase name="Teste do middleware que tenta a conexão com o mongo Teste MOCK do método verificaConexaoMongoMiddleware" duration="4"/>
   </file>
-  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-usuario\spec\test\unit\Database\Conectar.ut.test.ts">
-    <testCase name="Teste do serviço que se conecta ao bd Teste MOCK do método conectar" duration="3"/>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-usuario\spec\test\unit\UsuarioService\CadastrarUsuarioEmailRepetido.ut.test.ts">
+    <testCase name="Teste da UsuarioService - cadastrarUsuario - e-mail já cadastrado Teste do método emailCadastrado" duration="1"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-usuario\spec\test\unit\Database\VerificaConexao.ut.test.ts">
+    <testCase name="Teste do serviço que retorna o estado da conexão com o bd Teste MOCK do método verificaConexao" duration="1"/>
   </file>
   <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-usuario\spec\test\unit\Database\ConectarRetornandoComErro.ut.test.ts">
-    <testCase name="Teste do serviço que se conecta ao bd Teste MOCK do método conectar - retornando erro" duration="3"/>
+    <testCase name="Teste do serviço que se conecta ao bd Teste MOCK do método conectar - retornando erro" duration="2"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-usuario\spec\test\unit\Database\Conectar.ut.test.ts">
+    <testCase name="Teste do serviço que se conecta ao bd Teste MOCK do método conectar" duration="1"/>
   </file>
 </testExecutions>

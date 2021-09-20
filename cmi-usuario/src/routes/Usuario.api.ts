@@ -87,18 +87,23 @@ export class UsuarioApi extends ApiRouter {
         *     description: Realiza uma atualização nos dados do passageiro para adicionar termos de uso.
         *     summary: EndPoint que realiza uma atualização nos dados do passageiro para adicionar termos de uso.
         *     tags:
-        *       - Passageiro
+        *       - Usuário
         *     parameters:
         *      - in: headers
         *        name: Headers
         *        required: true
         *        schema:
-        *          $ref: '#/definitions/IDadosDoDispositivo&Coordenadas&MCI'
+        *          $ref: '#/definitions/IDadosDoDispositivo'
+        *      - in: body
+        *        name: Body
+        *        required: true
+        *        schema:
+        *          $ref: '#/definitions/IInputTermoDeUsoApi'
         *     responses:
         *       200:
         *         description: Lista de retorno dos dados atualizados
         *         schema:
-        *             $ref: '#/definitions/IRetornoUpdateModel'
+        *             $ref: '#/definitions/IRetornoUpdateUsuarioModel'
         */
       server.post(`${this.path}/assinaturaTermoDeUso`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
         try {
@@ -113,7 +118,7 @@ export class UsuarioApi extends ApiRouter {
           const coordenadas: ICoordenadas = {
             // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
             // @ts-ignore
-            posicaoUsuarioCMU: [Number(request.headers["current-position"]?.split(/\s*,\s*/)[0]), Number(request.headers["current-position"]?.split(/\s*,\s*/)[1])],
+            posicaoUsuario: [Number(request.headers["current-position"]?.split(/\s*,\s*/)[0]), Number(request.headers["current-position"]?.split(/\s*,\s*/)[1])],
           };
 
           return response.json(await this.controller.assinaturaTermoDeUso(request.body, dadosDoDispositivo, coordenadas));
