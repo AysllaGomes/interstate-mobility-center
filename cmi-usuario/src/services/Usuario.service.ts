@@ -173,9 +173,9 @@ export class UsuarioService {
     }
   }
 
-  public async usuarioAssinaturaTermoDeUso(codigoMCI: string): Promise<IRetornoPassageiroAssinaturaTermoDeUso> {
+  public async usuarioAssinaturaTermoDeUso(idUsuario: string): Promise<IRetornoPassageiroAssinaturaTermoDeUso> {
     const termoDeUsoVigente: ITermoDeUso = await TermoDeUsoService.retornaTermoDeUsoSituacaoVigente();
-    const usuario: IUsuario | ErroSQL = await this.retornaDadosUsuario(codigoMCI);
+    const usuario: IUsuario | ErroSQL = await this.retornaDadosUsuario(idUsuario);
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
