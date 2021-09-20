@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import {StatusBar, StyleSheet} from "react-native";
 import {theme} from "../../App.style";
 
 export const indexStyle = StyleSheet.create({
