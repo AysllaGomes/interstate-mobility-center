@@ -1,18 +1,30 @@
 import React, {useEffect, useState} from "react";
-import { SafeAreaView, View, FlatList, TouchableOpacity, StatusBar } from "react-native";
+import {SafeAreaView, View, FlatList, TouchableOpacity, StatusBar, Text, Image} from "react-native";
 import { TextInput } from "react-native-paper";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import results from "./results";
-import TravelList from "../components/home/travelList";
+import {indexStyle} from "./index.style";
 
 interface HomeScreenProps {
     navigation: any,
     page: null
 }
 
+const TravelListItem = ({ data, navigation } ) => {
+    const toTravelPackage = () => navigation.navigate("Package", {data: data})
+    return(
+        <TouchableOpacity onPress={() => toTravelPackage()}>
+            <Image  style={indexStyle.images} source={data.image} />
+            <View>
+                <Text> {data.id}</Text>
+                <Text> {data.title}</Text>
+            </View>
+        </TouchableOpacity>
+    );
+}
+
 const HomeScreen = (props: HomeScreenProps) => {
     const toTravelPackage = () => props.navigation.navigate("Package")
-
 
     const [searchText, setSearchText] = useState('');
     const [list, setList] = useState(results)
@@ -28,7 +40,6 @@ const HomeScreen = (props: HomeScreenProps) => {
     }, [searchText]);
 
     const handleOrderClick = () => {};
-
     return(
         <SafeAreaView>
             <View>
@@ -45,10 +56,9 @@ const HomeScreen = (props: HomeScreenProps) => {
                     />
                 </TouchableOpacity>
             </View>
-            <FlatList data={list} renderItem={({item}) => <TravelList navigation={props.navigation} data={item}  />}
+            <FlatList data={list} renderItem={({item}) => <TravelListItem navigation={props.navigation} data={item}  />}
                       keyExtractor={(item) => item.id}
             />
-
             <StatusBar />
         </SafeAreaView>
     );

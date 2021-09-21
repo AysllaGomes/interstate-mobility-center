@@ -10,20 +10,15 @@ interface LoginScreenProps {
 }
 const ResetPassword = (props: LoginScreenProps) => {
 
-    const signUp = () => props.navigation.navigate("Home")
+    const send = () => props.navigation.navigate("Home")
 
     const [email, setEmail] = useState('')
     const [password] = useState('')
 
     const messages = {
         en: {
-            required: "Necessário preencher",
-            email: "E-mail inválido!",
-            hasUpperCase: "Deve conter pelo menos uma letra maiúscula",
-            hasLowerCase: "Deve conter pelo menos uma letra minuscula",
-            minlength: "Deve conter pelo menos 6 carácteres",
-            maxlength: "Deve conter no máximo 20 carácteres ",
-            hasNumber: "Deve conter um número"
+            required: "Campo obrigatório não preenchido",
+            email: "Favor informar um e-mail válido"
         }
     }
 
@@ -36,12 +31,6 @@ const ResetPassword = (props: LoginScreenProps) => {
     const validaEmail = () => {
         return validate({
             email: {required: true, email: true}
-        })
-    }
-
-    const validaPassword = () => {
-        return validate({
-            password: { required: true, minlength: 6, hasUpperCase: true, hasLowerCase: true, maxlength: 20, hasNumber:true}
         })
     }
 
@@ -64,7 +53,7 @@ const ResetPassword = (props: LoginScreenProps) => {
                         />
                         {isFieldInError('email') ? <Text style={resetPasswordStyle.errorText}>{getErrorsInField("email")[0]}</Text> : null}
 
-                        <Button onPress={() => (validaEmail() && validaPassword())? signUp() : null} mode="contained" style={resetPasswordStyle.cardButton}>Enviar</Button>
+                        <Button onPress={() => (validaEmail())? send() : null} mode="contained" style={resetPasswordStyle.cardButton}>Enviar</Button>
                     </Card.Content>
                 </Card>
             </View>

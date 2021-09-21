@@ -36,9 +36,9 @@ export const RegisterScreen = (props: LoginScreenProps) => {
 
     const messages = {
         en: {
-            equalPassword: "As senhas são diferentes",
-            required: "Necessário preencher",
-            email: "Não é um email",
+            equalPassword: "Os campos não coincidem",
+            required: "Campo obrigatório não preenchido",
+            email: "Favor informar um e-mail válido",
             date: "O formato deve ser: ",
             numbers: "Use somente números",
             hasUpperCase: "Deve conter pelo menos uma letra maiúscula",

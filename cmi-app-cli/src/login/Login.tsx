@@ -20,13 +20,8 @@ const Login = (props: LoginScreenProps) => {
 
     const messages = {
         en: {
-            required: "Campo obrigatório",
-            email: "Não é um email",
-            hasUpperCase: "Deve conter pelo menos uma letra maiúscula",
-            hasLowerCase: "Deve conter pelo menos uma letra minuscula",
-            minlength: "Deve conter pelo menos 6 carácteres",
-            maxlength: "Deve conter no máximo 20 carácteres ",
-            hasNumber: "Deve conter um número"
+            required: "Campo obrigatório não preenchido",
+            email: "Favor informar um e-mail válido"
         }
     }
 
@@ -44,7 +39,7 @@ const Login = (props: LoginScreenProps) => {
 
     const validaPassword = () => {
         return validate({
-            password: { required: true, minlength: 6, hasUpperCase: true, hasLowerCase: true, maxlength: 20, hasNumber:true}
+            password: { required: true}
         })
     }
 
