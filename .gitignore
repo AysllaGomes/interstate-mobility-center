@@ -17,6 +17,10 @@
 /log
 /libs
 
+# expo
+.expo
+.expo-shared
+
 # Database Local
 
 /bd_Data
