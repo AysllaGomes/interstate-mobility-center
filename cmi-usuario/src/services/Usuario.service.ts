@@ -25,9 +25,8 @@ import { IDetalharUsuario } from "../model/interfaces/DetalharUsuario";
 import { IInputTermoDeUsoApi } from "../model/interfaces/InputTermoDeUsoApi";
 import { IDadosDoDispositivo } from "../model/interfaces/DadosDoDispositivo";
 import { IRetornoUpdateUsuarioModel } from "../model/interfaces/RetornoUpdateUsuarioModel";
-import { IRetornoPassageiroAssinaturaTermoDeUso } from "../model/interfaces/RetornoPassageiroAssinaturaTermoDeUso";
 import { IUsuarioAssinaturaTermoDeUso } from "../model/interfaces/UsuarioAssinaturaTermoDeUso";
-import { IRetornoDadosUsuario } from "../model/interfaces/RetornoDadosUsuario";
+import { IRetornoPassageiroAssinaturaTermoDeUso } from "../model/interfaces/RetornoPassageiroAssinaturaTermoDeUso";
 
 export class UsuarioService {
   private serviceValidator = new ServiceValidator();
@@ -181,8 +180,6 @@ export class UsuarioService {
     const termoDeUsoVigente: ITermoDeUso = await TermoDeUsoService.retornaTermoDeUsoSituacaoVigente();
 
     const usuario = await this.retornaDadosUsuario(body.idUsuario);
-
-    console.log("usuario", usuario);
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
