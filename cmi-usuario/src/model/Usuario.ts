@@ -32,6 +32,8 @@ export interface IUsuario extends Document {
  *         type: string
  *       nome:
  *         type: string
+ *       cpf:
+ *         type: string
  *       email:
  *         type: string
  *       dataDeNascimento:

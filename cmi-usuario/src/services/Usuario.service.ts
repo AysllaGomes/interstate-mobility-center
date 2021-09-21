@@ -4,7 +4,7 @@ import {
   ErroNegocial,
   ERRO_NEGOCIAL_NA_VALIDACAO,
   ERRO_NEGOCIAL_EMAIL_REPETIDO,
-  ERRO_NEGOCIAL_REGISTRO_REPETIDO,
+  ERRO_NEGOCIAL_REGISTRO_REPETIDO, ERRO_NEGOCIAL_CPF_REPETIDO,
 } from "../errors/erro.negocial";
 import {
   ErroSQL,
@@ -51,16 +51,27 @@ export class UsuarioService {
       throw new ErroNegocial(...ERRO_NEGOCIAL_EMAIL_REPETIDO);
     }
 
+    const cpfCadastrado = await UsuarioService.cpfCadastrado(passageiroCadastro.cpf);
+    if (cpfCadastrado) {
+      throw new ErroNegocial(...ERRO_NEGOCIAL_CPF_REPETIDO);
+    }
+
     return false;
   }
 
   public static async emailCadastrado(email: string): Promise<boolean> {
-    const passageiroModel = await UsuarioModel.find({ email });
-    return passageiroModel.length !== 0;
+    const usuarioModel = await UsuarioModel.find({ email });
+    return usuarioModel.length !== 0;
+  }
+
+  public static async cpfCadastrado(cpf: string): Promise<boolean> {
+    const usuarioModel = await UsuarioModel.find({ cpf });
+    return usuarioModel.length !== 0;
   }
 
   public formataUsuario(body: ICadastroUsuario): IUsuario {
     return new UsuarioModel({
+      cpf: body.cpf,
       nome: body.nome,
       email: body.email,
       dataDeNascimento: new Date(body.dataDeNascimento),
