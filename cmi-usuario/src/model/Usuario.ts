@@ -9,7 +9,7 @@ export interface IUsuario extends Document {
     dataDeNascimento: Date;
     certidaoDeNascimento: string;
     numeroTelefoneCelular: string;
-    termosDeUso?: ITermosDeUso;
+    termosDeUso?: Array<ITermosDeUso>;
     tsCriacao: Date;
 }
 
@@ -86,7 +86,7 @@ const UsuarioSchema: Schema = new Schema({
     required: false,
   },
   termosDeUso: {
-    type: Object,
+    type: Array,
     required: false,
   },
   tsCriacao: {

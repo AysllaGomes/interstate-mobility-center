@@ -136,10 +136,10 @@ export class UsuarioApi extends ApiRouter {
        *       - Usuário
        *     parameters:
        *      - in: body
-       *        name: IConsultaAssinaturaTermoUsuario
+       *        name: IUsuarioAssinaturaTermoDeUso
        *        required: true
        *        schema:
-       *          $ref: '#/definitions/IConsultaAssinaturaTermoUsuario'
+       *          $ref: '#/definitions/IUsuarioAssinaturaTermoDeUso'
        *     responses:
        *       200:
        *         description: Retorno dos dados to Termo para o usuário informado

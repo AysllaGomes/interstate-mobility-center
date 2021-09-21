@@ -26,6 +26,8 @@ import { IInputTermoDeUsoApi } from "../model/interfaces/InputTermoDeUsoApi";
 import { IDadosDoDispositivo } from "../model/interfaces/DadosDoDispositivo";
 import { IRetornoUpdateUsuarioModel } from "../model/interfaces/RetornoUpdateUsuarioModel";
 import { IRetornoPassageiroAssinaturaTermoDeUso } from "../model/interfaces/RetornoPassageiroAssinaturaTermoDeUso";
+import { IUsuarioAssinaturaTermoDeUso } from "../model/interfaces/UsuarioAssinaturaTermoDeUso";
+import { IRetornoDadosUsuario } from "../model/interfaces/RetornoDadosUsuario";
 
 export class UsuarioService {
   private serviceValidator = new ServiceValidator();
@@ -112,10 +114,10 @@ export class UsuarioService {
     }
   }
 
-  public async retornaDadosUsuario(idUsuario: string): Promise<IUsuario | ErroSQL> {
+  public async retornaDadosUsuario(idUsuario: string): Promise<IUsuario | null> {
     try {
       logger.info(`Realizando consulta para pegar dados do usuário: ${idUsuario}...`);
-      const usuario: IUsuario | null = await UsuarioModel.findById(idUsuario);
+      const usuario = await UsuarioModel.findById(idUsuario);
 
       if (usuario) return usuario;
 
@@ -143,16 +145,18 @@ export class UsuarioService {
     return this.salvaTermoDeUso(body.idUsuario, termoDeUso);
   }
 
-  public formataDadosTermoDeUso(idTermoUso: string, dadosDoDispositivo: IDadosDoDispositivo, coordenadas: ICoordenadas): ITermosDeUso {
-    return {
-      idTermoDeUso: idTermoUso,
-      coordenadasUsuario: coordenadas,
-      tsDataDeAceite: new Date(),
-      dadosDispositivo: dadosDoDispositivo,
-    };
+  public formataDadosTermoDeUso(idTermoUso: string, dadosDoDispositivo: IDadosDoDispositivo, coordenadas: ICoordenadas): Array<ITermosDeUso> {
+    return [
+      {
+        idTermoDeUso: idTermoUso,
+        coordenadasUsuario: coordenadas,
+        tsDataDeAceite: new Date(),
+        dadosDispositivo: dadosDoDispositivo,
+      },
+    ];
   }
 
-  public async salvaTermoDeUso(idUsuario: string, termoDeUso: ITermosDeUso): Promise<IRetornoUpdateUsuarioModel> {
+  public async salvaTermoDeUso(idUsuario: string, termoDeUso: ITermosDeUso[]): Promise<IRetornoUpdateUsuarioModel> {
     try {
       logger.debug("Atualizando os dados do passageiro com a propriedade Termo de Uso...");
 
@@ -173,9 +177,12 @@ export class UsuarioService {
     }
   }
 
-  public async usuarioAssinaturaTermoDeUso(idUsuario: string): Promise<IRetornoPassageiroAssinaturaTermoDeUso> {
+  public async usuarioAssinaturaTermoDeUso(body: IUsuarioAssinaturaTermoDeUso): Promise<IRetornoPassageiroAssinaturaTermoDeUso> {
     const termoDeUsoVigente: ITermoDeUso = await TermoDeUsoService.retornaTermoDeUsoSituacaoVigente();
-    const usuario: IUsuario | ErroSQL = await this.retornaDadosUsuario(idUsuario);
+
+    const usuario = await this.retornaDadosUsuario(body.idUsuario);
+
+    console.log("usuario", usuario);
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
