@@ -1,5 +1,6 @@
 {
   "nome": "Nome",
+  "cpf": "01080747141",
   "email": "email@example.com",
   "dataDeNascimento": "01-01-2000",
   "numeroTelefoneCelular": "99999999999"
