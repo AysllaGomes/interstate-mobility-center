@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testExecutions version="1">
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-contrato\spec\test\unit\Middlewares\VerificaConexaoMongo.ut.test.ts">
+    <testCase name="Teste do middleware que tenta a conexão com o mongo Teste MOCK do método verificaConexaoMongoMiddleware" duration="9"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-contrato\spec\test\unit\Database\ConectarRetornandoComErro.ut.test.ts">
+    <testCase name="Teste do serviço que se conecta ao bd Teste MOCK do método conectar - retornando erro" duration="1"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-contrato\spec\test\unit\Database\Conectar.ut.test.ts">
+    <testCase name="Teste do serviço que se conecta ao bd Teste MOCK do método conectar" duration="2"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-contrato\spec\test\unit\Database\VerificaConexao.ut.test.ts">
+    <testCase name="Teste do serviço que retorna o estado da conexão com o bd Teste MOCK do método verificaConexao" duration="1"/>
+  </file>
+</testExecutions>
