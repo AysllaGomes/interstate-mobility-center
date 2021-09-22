@@ -1,12 +1,16 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, View, Text} from "react-native";
 import {Button, Card, TextInput} from "react-native-paper";
 import {loginStyle} from "./login.style";
 import { useValidation } from 'react-native-form-validator';
+import firebase from "../firebase/firebaseconfig";
+
+
 
 interface LoginScreenProps {
     navigation: any;
 }
+
 
 const Login = (props: LoginScreenProps) => {
 
@@ -17,6 +21,27 @@ const Login = (props: LoginScreenProps) => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+
+    let provider = new firebase.auth.GoogleAuthProvider();
+
+    const LoginWithGoogle = () => {
+        firebase.auth().signInWithRedirect(provider);
+    }
+
+const LoginFirebase = () => {
+    firebase.auth().signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            // Signed in
+            var user = userCredential.user;
+            console.log(user)
+            props.navigation.navigate("Home")
+            // ...
+        })
+        .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+        });
+    }
 
     const messages = {
         en: {
@@ -69,9 +94,9 @@ const Login = (props: LoginScreenProps) => {
                                 />
                                 {isFieldInError('password') ? <Text style={loginStyle.errorText}>{getErrorsInField("password")[0]}</Text> : null}
 
-                                <Button onPress={resetPassword} uppercase={false} style={loginStyle.cardButton}>Esqueceu email/password?</Button>
-                                <Button onPress={() => (validaEmail() && validaPassword())? signUp() : null} mode="contained" style={loginStyle.cardButton}>Login</Button>
+                                <Button onPress={() => (validaEmail() && validaPassword())? LoginFirebase() : null} mode="contained" style={loginStyle.cardButton}>Login</Button>
                                 <Button onPress={register} style={loginStyle.cardButton}>Register</Button>
+                                <Button onPress={resetPassword} uppercase={false} style={loginStyle.cardButton}>Esqueceu email/password?</Button>
                             </Card.Content>
                         </Card>
                     </View>
