@@ -12,7 +12,7 @@ import { IRetornoUpdateUsuarioModel } from "../../../../src/model/interfaces/Ret
 
 beforeAll(() => jaegerTracer);
 
-describe("Teste da PassageiroService - assinaturaTermoDeUso", () => {
+describe("Teste da UsuarioService - assinaturaTermoDeUso", () => {
   afterEach(() => { jest.resetAllMocks(); });
 
   // eslint-disable-next-line @typescript-eslint/no-var-requires,global-require

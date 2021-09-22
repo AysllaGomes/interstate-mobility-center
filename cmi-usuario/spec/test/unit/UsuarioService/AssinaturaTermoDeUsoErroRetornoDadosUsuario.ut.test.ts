@@ -9,7 +9,7 @@ import { IInputTermoDeUsoApi } from "../../../../src/model/interfaces/InputTermo
 
 beforeAll(() => jaegerTracer);
 
-describe("Teste da PassageiroService - assinaturaTermoDeUso com erro ao buscar o usuário mci informado", () => {
+describe("Teste da UsuarioService - assinaturaTermoDeUso com erro ao buscar o usuário mci informado", () => {
   afterEach(() => {
     jest.resetAllMocks();
   });
