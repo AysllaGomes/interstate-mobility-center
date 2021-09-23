@@ -4,6 +4,7 @@ import { SafeAreaView, ScrollView, Text, View } from "react-native";
 import { registerStyle } from "./register.style";
 import { useValidation } from 'react-native-form-validator';
 import { HeaderComponent } from "../components/header/header.component";
+import firebase from "../firebase/firebaseconfig";
 
 interface LoginScreenProps {
     navigation: any, // @todo nunca aceitável
@@ -25,7 +26,7 @@ export const RegisterScreen = (props: LoginScreenProps) => {
      * alteração na troca de mensagem validação
      */
 
-    const register = () => props.navigation.navigate("Home")
+    // const register = () => props.navigation.navigate("Home")
 
         const [name, setName] = useState('')
         const [email, setEmail] = useState('')
@@ -33,6 +34,22 @@ export const RegisterScreen = (props: LoginScreenProps) => {
         const [phoneNumber, setPhoneNumber] = useState('')
         const [password, setPassword] = useState('')
         const [confPassword, setConfPassword] = useState('')
+
+    const RegisterWithFirebase = () => {
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                // Signed in
+                var user = userCredential.user;
+
+                props.navigation.navigate("Home", {idUser: user.uid})
+                // ...
+            })
+            .catch((error) => {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // ..
+            });
+    }
 
     const messages = {
         en: {
@@ -144,7 +161,7 @@ export const RegisterScreen = (props: LoginScreenProps) => {
                             />
                            {isFieldInError('confPassword') ? <Text style={registerStyle.errorText}>{getErrorsInField("confPassword")[0]}</Text> : null}
 
-                        <Button onPress={() => (validaNome() && validaEmail() && validaPhoneNumber() && validaBirthDate() && validaPassword() && validaConfPassword()) ? register() : null}  mode="contained" style={registerStyle.button}>Register</Button>
+                        <Button onPress={() => (validaNome() && validaEmail() && validaPhoneNumber() && validaBirthDate() && validaPassword() && validaConfPassword()) ? RegisterWithFirebase() : null}  mode="contained" style={registerStyle.button}>Register</Button>
                     </View>
                 </ScrollView>
             </SafeAreaView>
