@@ -18,6 +18,7 @@ export interface IVariaveisDeAmbiente extends Document {
   codigoVariavel : string;
   habilitaNock?: INocksMS;
   sequencialNumeroVersaoTermoDeUso: number;
+  sequencialNumeroDeIdentificacaoContrato: number;
 }
 
 const VariaveisDeAmbienteSchema: Schema = new Schema({
@@ -28,6 +29,10 @@ const VariaveisDeAmbienteSchema: Schema = new Schema({
   habilitaNock: {
     type: Object,
     required: false,
+  },
+  sequencialNumeroDeIdentificacaoContrato: {
+    type: Number,
+    required: true,
   },
   sequencialNumeroVersaoTermoDeUso: {
     type: Number,
