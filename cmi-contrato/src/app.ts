@@ -6,15 +6,17 @@ import { MainApi } from "./routes/main.api";
 import { ErrorApi } from "./routes/error.api";
 import { environment } from "./config/environment";
 import { handleError } from "./util/error.handler";
+import { ContratoApi } from "./routes/Contrato.api";
 import { mergePatchBodyParser, middlewareForLog, verificaConexaoMongoMiddleware } from "./util/middleware";
 
-const getApiControllers = (): (ErrorApi | MainApi | DocsApi)[] => [
-  new ErrorApi(), new MainApi(), new DocsApi(),
+const getApiControllers = (): (ErrorApi | MainApi | DocsApi | ContratoApi)[] => [
+  new ErrorApi(), new MainApi(), new DocsApi(), new ContratoApi(),
 ];
 
 const app = express();
 
 const rotasPostVerificadas: Array<string> = [
+  "/contrato/abertura",
 ];
 
 rotasPostVerificadas.forEach((nomeDaRota: string) => {
