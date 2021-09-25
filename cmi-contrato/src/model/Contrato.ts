@@ -5,7 +5,7 @@ import { IPeriodoDeVigencia } from "./interfaces/PeriodoDeVigencia";
 import { ModalidadeDeRecebimentoEnum } from "./enums/ModalidadeDeRecebimento.enum";
 import { EstadoContradoMobilidadeEnum } from "./enums/EstadoContradoMobilidade.enum";
 
-export interface IContratoMobilidade extends Document {
+export interface IContrato extends Document {
   _id: string;
   numeroDeIdentificacao: number;
   periodoDeVigencia: IPeriodoDeVigencia;
@@ -16,15 +16,15 @@ export interface IContratoMobilidade extends Document {
   agenciaResponsavelConducao: number;
   meioDePagamento: MeioDePagamentoEnum;
   modalidadeDeRecebimento: ModalidadeDeRecebimentoEnum;
-  dataCriacao: Date;
-  dataUltimaAtualizacao: Date;
+  tsCriacao: Date;
+  tsUltimaAtualizacao: Date;
 }
 
 /**
  * @swagger
  *
  * definitions:
- *   ContratoMobilidade:
+ *   Contrato:
  *     type: object
  *     required:
  *       - numeroDeIdentificacao
@@ -36,8 +36,8 @@ export interface IContratoMobilidade extends Document {
  *       - agenciaResponsavelConducao
  *       - meioDePagamento
  *       - modalidadeDeRecebimento
- *       - dataCriacao
- *       - dataUltimaAtualizacao
+ *       - tsCriacao
+ *       - tsUltimaAtualizacao
  *     properties:
  *       numeroDeIdentificacao:
  *         type: number
@@ -70,10 +70,12 @@ export interface IContratoMobilidade extends Document {
  *         enum:
  *         - Após o fechamento da fatura
  *         - Antes de cada viagem
- *       dataCriacao:
- *         type: date
- *       dataUltimaAtualizacao:
- *         type: date
+ *       tsCriacao:
+ *         type: string
+ *         format: date-time
+ *       tsUltimaAtualizacao:
+ *         type: string
+ *         format: date-time
  */
 
 const ContratoSchema: Schema = new Schema({
@@ -113,14 +115,14 @@ const ContratoSchema: Schema = new Schema({
     type: String,
     required: true,
   },
-  dataCriacao: {
+  tsCriacao: {
     type: Date,
     required: true,
   },
-  dataUltimaAtualizacao: {
+  tsUltimaAtualizacao: {
     type: Date,
     required: true,
   },
 });
 
-export default mongoose.model<IContratoMobilidade>("Contrato", ContratoSchema, "contrato");
+export default mongoose.model<IContrato>("Contrato", ContratoSchema, "contrato");

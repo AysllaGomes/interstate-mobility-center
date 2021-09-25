@@ -13,7 +13,7 @@ import { EstadoCentroDeCustoEnum } from "../enums/EstadoCentroDeCusto.enum";
  *       - nome
  *       - descricao
  *       - orcamento
- *       - dataUltimaAtualizacao
+ *       - tsUltimaAtualizacao
  *       - estado
  *       - dadosCobranca
  *     properties:
@@ -25,7 +25,7 @@ import { EstadoCentroDeCustoEnum } from "../enums/EstadoCentroDeCusto.enum";
  *         type: string
  *       orcamento:
  *         $ref: '#/definitions/OrcamentoCentroDeCusto'
- *       dataUltimaAtualizacao:
+ *       tsUltimaAtualizacao:
  *         type: string
  *         format: date-time
  *       estado:
@@ -45,7 +45,7 @@ import { EstadoCentroDeCustoEnum } from "../enums/EstadoCentroDeCusto.enum";
  *                periodicidade: "Mensal",
  *                valor: 2000
  *            },
- *            dataUltimaAtualizacao: "2021-01-04T16:53:07.520Z",
+ *            tsUltimaAtualizacao: "2021-01-04T16:53:07.520Z",
  *            estado: "Vigente",
  *            dadosCobranca: {
  *                agencia: 3333,
@@ -59,7 +59,7 @@ export interface ICentroDeCusto {
     nome: string;
     descricao: string;
     orcamento: IOrcamentoCentroDeCusto;
-    dataUltimaAtualizacao: Date;
+    tsUltimaAtualizacao: Date;
     estado: EstadoCentroDeCustoEnum;
     dadosCobranca: IDadosCobranca;
 }
