@@ -23,9 +23,9 @@ export const environment: IEnvironment = {
     nameUnderscore: (process.env.npm_package_name || "").split("-").join("_") || "cmi-fatura".split("-").join("_"),
     version: process.env.npm_package_version || "?.?.?",
     description: process.env.npm_package_description || "cmi-fatura in node with expressjs",
-    host: process.env.APP_HOST || "localhost:3004",
+    host: process.env.APP_HOST || "localhost:3006",
     env: process.env.NODE_ENV || "local",
-    port: convertNumber(process.env.API_PORT, 3004),
+    port: convertNumber(process.env.API_PORT, 3006),
     logLevel: process.env.LOG_LEVEL ? process.env.LOG_LEVEL.toLowerCase() : "debug",
   },
   db: {
