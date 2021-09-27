@@ -1,10 +1,12 @@
-import React, {useState} from "react";
+import React from "react";
 import { Button, TextInput} from "react-native-paper";
 import { SafeAreaView, ScrollView, Text, View } from "react-native";
 import { registerStyle } from "./register.style";
-import { useValidation } from 'react-native-form-validator';
 import { HeaderComponent } from "../components/header/header.component";
 import firebase from "../firebase/firebaseconfig";
+import createUser from "./register.service";
+import { Formik } from 'formik';
+import {registerForm} from "./register.form";
 
 interface LoginScreenProps {
     navigation: any, // @todo nunca aceitável
@@ -19,150 +21,148 @@ export const RegisterScreen = (props: LoginScreenProps) => {
      * exemplo: (61) 9 8207-2218
      * envio para o back-end --> 61982072218
      *
-     * getErrorsInField('nomeDoAtributo')[0] não deve ser assim :)
-     *
-     * formalize o form em uma única construção
-     * melhora na validação, sendo que cada campo tem uma forma esperada
-     * alteração na troca de mensagem validação
      */
 
-    // const register = () => props.navigation.navigate("Home")
-
-        const [name, setName] = useState('')
-        const [email, setEmail] = useState('')
-        const [birthDate, setBirthDate] = useState('')
-        const [phoneNumber, setPhoneNumber] = useState('')
-        const [password, setPassword] = useState('')
-        const [confPassword, setConfPassword] = useState('')
-
-    const RegisterWithFirebase = () => {
+    const RegisterWithFirebase = (email: string, password: string) => {
         firebase.auth().createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 // Signed in
-                var user = userCredential.user;
-
-                props.navigation.navigate("Home", {idUser: user.uid})
+                return userCredential.user;
                 // ...
             })
             .catch((error) => {
                 var errorCode = error.code;
                 var errorMessage = error.message;
-                // ..
             });
+
+        return null;
     }
 
-    const messages = {
-        en: {
-            equalPassword: "Os campos não coincidem",
-            required: "Campo obrigatório não preenchido",
-            email: "Favor informar um e-mail válido",
-            date: "O formato deve ser: ",
-            numbers: "Use somente números",
-            hasUpperCase: "Deve conter pelo menos uma letra maiúscula",
-            hasLowerCase: "Deve conter pelo menos uma letra minuscula",
-            minlength: "Deve conter pelo menos 6 carácteres",
-            maxlength: "Deve conter no máximo 20 carácteres ",
-            hasNumber: "Deve conter um número"
+    // const validaPassword = (password) => {
+    //     let errorPassword;
+    //     if (!password) {
+    //         errorPassword = 'Campo obrigatório!';
+    //     }
+    //     else if (/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/.test(password)) {
+    //         errorPassword = 'Favor informar um e-mail válido';
+    //     }
+    //     return errorPassword;
+    // };
+
+
+    const registerUser = async (values) => {
+        let user = RegisterWithFirebase(values.email, values.password)
+
+        if (user == null) {
+            return console.log("Error with Firebase Register")
+        }
+        if (createUser(values) != null) {
+            return console.log("Error with Mongo Register")
+        }else{
+            props.navigation.navigate("Home")
         }
     }
 
-    const { validate, isFieldInError, getErrorsInField } =
-        useValidation({
-            state: { name, email, birthDate, phoneNumber, password, confPassword },
-            messages: messages
-        });
-
-  const validaNome = () => {
-        return validate({
-            name: { required: true, minlength: 3 }
-        })
-    }
-    const validaEmail = () => {
-        return validate({
-            email: {required: true, email: true}
-        })
-    }
-    const validaPhoneNumber = () => {
-        return validate({ // Fazer funcao validar quantidade numeros telefone
-            phoneNumber: { required: true, numbers: true, minlength: 11 }
-        })
-    }
-    const validaBirthDate = () => {
-        return validate({
-            birthDate: {required: true, date: true}
-        })
-    }
-    const validaPassword = () => {
-        return validate({
-            password: { required: true, minlength: 6, hasUpperCase: true, hasLowerCase: true, maxlength: 20, hasNumber:true, equalPassword: confPassword  }
-        })
-    }
-    const validaConfPassword = () => {
-        return validate({
-            confPassword: { required: true, minlength: 6, hasUpperCase: true, hasLowerCase: true, maxlength: 20,hasNumber:true, equalPassword: password }
-        })
-    }
         return (
             <SafeAreaView>
                 <ScrollView>
                     <HeaderComponent title="Register" navigation={props.navigation} page="Login"/>
-                    <View style={registerStyle.content}>
-                            <TextInput
-                                label="Nome Completo"
-                                placeholder="Nome"
-                                onChangeText={setName}
-                                value={name}
-                                onTextInput={validaNome}
-                            />
-                             {isFieldInError('name') ? <Text style={registerStyle.errorText}>{getErrorsInField("name")[0]}</Text> : null}
-                            <TextInput
-                                label="E-mail"
-                                onChangeText={setEmail}
-                                value={email}
-                                onTextInput={validaEmail}
-                            />
-                              {isFieldInError('email') ? <Text style={registerStyle.errorText}>{getErrorsInField("email")[0]}</Text> : null}
-                            <TextInput
-                                label="Phone number"
-                                keyboardType="phone-pad"
-                                onChangeText={setPhoneNumber}
-                                value={phoneNumber}
-                                onTextInput={validaPhoneNumber}
-                            />
-                             {isFieldInError('phoneNumber') ? <Text style={registerStyle.errorText}>{getErrorsInField("phoneNumber")[0]}</Text> : null}
+                    <Formik initialValues={{name: '', email: '', phoneNumber: '', birthDate: '', password: '', ConfPassword: ''}}
+                            onSubmit={values => registerUser(values)}
+                            validationSchema={registerForm}>
+                        {({handleSubmit, handleChange, touched, setFieldTouched, handleBlur, errors, values}) => (
 
-                           <TextInput
-                                placeholder="dd/mm/aaa"
-                                label="Data nascimento"
-                                keyboardType="numeric"
-                                onChangeText={setBirthDate}
-                                value={birthDate}
-                                onTextInput={validaBirthDate}
-                           />
-                            {isFieldInError('birthDate') ? <Text style={registerStyle.errorText}>{getErrorsInField("birthDate")[0]}</Text> : null}
+                        <View style={registerStyle.content}>
+                                <>
+                                <TextInput
+                                        label="Nome Completo"
+                                        placeholder="Nome"
+                                        onChangeText={handleChange('name')}
+                                        onFocus={() => setFieldTouched('name')}
+                                        onBlur={handleBlur('name')}
+                                        value={values.name}
+                                />
+                                {
+                                    touched.name && errors.name ? <Text style={{color: "red" }}>
+                                        {errors.name}
+                                    </Text> : null
+                                }
 
-                        <TextInput
-                                placeholder="Password" secureTextEntry={true}
-                                right={<TextInput.Icon name="eye-off-outline"
-                                color={registerStyle.icon.color}/>}
-                                onChangeText={setPassword}
-                                onTextInput={validaPassword}
-                                value={password}
-                            />
-                            {isFieldInError('password') ? <Text style={registerStyle.errorText}>{getErrorsInField("password")[0]}</Text> : null}
+                                <TextInput
+                                    placeholder="Email"
+                                    label="User"
+                                    keyboardType="email-address"
+                                    onChangeText={handleChange('email')}
+                                    onFocus={() => setFieldTouched('email')}
+                                    onBlur={handleBlur('email')}
+                                    value={values.email}
+                                />
+                                {
+                                    touched.email && errors.email ? <Text style={{color: "red" }}>
+                                        {errors.email}
+                                    </Text> : null
+                                }
 
-                        <TextInput
-                                label="Confirm password"
-                                secureTextEntry={true} right={<TextInput.Icon name="eye-off-outline"
-                                color={registerStyle.icon.color}/>}
-                                onChangeText={setConfPassword}
-                                value={confPassword}
-                                onTextInput={validaConfPassword}
-                            />
-                           {isFieldInError('confPassword') ? <Text style={registerStyle.errorText}>{getErrorsInField("confPassword")[0]}</Text> : null}
-
-                        <Button onPress={() => (validaNome() && validaEmail() && validaPhoneNumber() && validaBirthDate() && validaPassword() && validaConfPassword()) ? RegisterWithFirebase() : null}  mode="contained" style={registerStyle.button}>Register</Button>
-                    </View>
+                                <TextInput
+                                        label="Phone number"
+                                        keyboardType="phone-pad"
+                                        onChangeText={handleChange('phoneNumber')}
+                                        onFocus={() => setFieldTouched('phoneNumber')}
+                                        onBlur={handleBlur('phoneNumber')}
+                                        value={values.phoneNumber}
+                                    />
+                                {
+                                    touched.phoneNumber && errors.phoneNumber ? <Text style={{color: "red" }}>
+                                        {errors.phoneNumber}
+                                    </Text> : null
+                                }
+                                   <TextInput
+                                        placeholder="dd/mm/aaa"
+                                        label="Data nascimento"
+                                        keyboardType="numeric"
+                                        onChangeText={handleChange('birthDate')}
+                                        onFocus={() => setFieldTouched('birthDate')}
+                                        onBlur={handleBlur('birthDate')}
+                                        value={values.birthDate}
+                                   />
+                                {
+                                    touched.birthDate && errors.birthDate ? <Text style={{color: "red" }}>
+                                        {errors.birthDate}
+                                    </Text> : null
+                                }
+                                <TextInput
+                                        placeholder="Password" secureTextEntry={true}
+                                        right={<TextInput.Icon name="eye-off-outline"
+                                        color={registerStyle.icon.color}/>}
+                                        onChangeText={handleChange('password')}
+                                        onFocus={() => setFieldTouched('password')}
+                                        onBlur={handleBlur('password')}
+                                        value={values.password}
+                                />
+                                {
+                                    touched.password && errors.password ? <Text style={{color: "red" }}>
+                                        {errors.password}
+                                    </Text> : null
+                                }
+                                <TextInput
+                                        label="Confirm password"
+                                        secureTextEntry={true} right={<TextInput.Icon name="eye-off-outline"
+                                        color={registerStyle.icon.color}/>}
+                                        onChangeText={handleChange('ConfPassword')}
+                                        onFocus={() => setFieldTouched('ConfPassword')}
+                                        onBlur={handleBlur('ConfPassword')}
+                                        value={values.ConfPassword}
+                                />
+                                {
+                                    touched.ConfPassword && errors.ConfPassword ? <Text style={{color: "red" }}>
+                                        {errors.ConfPassword}
+                                    </Text> : null
+                                }
+                                <Button onPress={handleSubmit}  mode="contained" style={registerStyle.button}>Register</Button>
+                                </>
+                            </View>
+                        )}
+                    </Formik>
                 </ScrollView>
             </SafeAreaView>
         );
