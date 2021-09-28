@@ -1,5 +1,4 @@
 import { IDadosCobranca } from "./DadosCobranca";
-import { IOrcamentoCentroDeCusto } from "./OrcamentoCentroDeCusto";
 import { EstadoCentroDeCustoEnum } from "../enums/EstadoCentroDeCusto.enum";
 
 /**
@@ -37,10 +36,6 @@ import { EstadoCentroDeCustoEnum } from "../enums/EstadoCentroDeCusto.enum";
  *            numeroIdentificacaoCentroCusto: 111,
  *            nome: "Nome de uma Matriz",
  *            descricao: "Descrição de uma Matriz muito incrível e de reputação excelente.",
- *            orcamento: {
- *                periodicidade: "Mensal",
- *                valor: 2000
- *            },
  *            estado: "Vigente",
  *            dadosCobranca: {
  *                agencia: 4444,
@@ -53,7 +48,6 @@ export interface IAberturaContratoCentroDeCusto {
   numeroIdentificacaoCentroCusto: number;
   nome: string;
   descricao: string;
-  orcamento: IOrcamentoCentroDeCusto;
   estado: EstadoCentroDeCustoEnum;
   dadosCobranca: IDadosCobranca;
 }

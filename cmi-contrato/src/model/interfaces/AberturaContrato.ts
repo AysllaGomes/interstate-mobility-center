@@ -33,10 +33,6 @@ import { IAberturaContratoCentroDeCusto } from "./AberturaContratoCentroDeCusto"
  *                numeroIdentificacaoCentroCusto: 111,
  *                nome: "Nome de uma Matriz",
  *                descricao: "Descrição de uma Matriz muito incrível e de reputação excelente.",
- *                orcamento: {
- *                    periodicidade: "Mensal",
- *                    valor: 2000
- *                },
  *                dataUltimaAtualizacao: "2021-09-25T09:40:00.000Z",
  *                estado: "Vigente",
  *                dadosCobranca: {

@@ -79,7 +79,6 @@ export class ContratoService {
           numeroDeIdentificacao: contrato.centroDeCusto[0].numeroIdentificacaoCentroCusto,
           nome: contrato.centroDeCusto[0].nome,
           descricao: contrato.centroDeCusto[0].descricao,
-          orcamento: contrato.centroDeCusto[0].orcamento,
           dataUltimaAtualizacao: new Date(),
           estado: contrato.centroDeCusto[0].estado,
           dadosCobranca: contrato.centroDeCusto[0].dadosCobranca,
