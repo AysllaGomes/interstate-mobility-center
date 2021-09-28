@@ -73,6 +73,7 @@ export class ContratoService {
       },
       estado: EstadoContradoMobilidadeEnum.VIGENTE,
       valorDoPercentualTotalDoContrato: contrato.valorDoPercentualTotalDoContrato,
+      // @todo melhorar a estruturação do centro de custo
       centrosDeCusto: [
         {
           numeroDeIdentificacao: contrato.centroDeCusto[0].numeroIdentificacaoCentroCusto,
