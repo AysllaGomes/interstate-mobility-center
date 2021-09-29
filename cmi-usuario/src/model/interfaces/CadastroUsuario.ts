@@ -25,7 +25,7 @@
  *          cpf: "99999999999",
  *          nome: "Some Chick",
  *          email: "some_chick@example.com",
- *          dataDeNascimento: "01-01-1990",
+ *          dataDeNascimento: "01/01/1990",
  *          numeroTelefoneCelular: "99999999999",
  *      }
  */

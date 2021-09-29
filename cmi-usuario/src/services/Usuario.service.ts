@@ -74,7 +74,7 @@ export class UsuarioService {
       cpf: body.cpf,
       nome: body.nome,
       email: body.email,
-      dataDeNascimento: new Date(body.dataDeNascimento),
+      dataDeNascimento: body.dataDeNascimento,
       numeroTelefoneCelular: body.numeroTelefoneCelular,
       tsCriacao: new Date(),
     });
