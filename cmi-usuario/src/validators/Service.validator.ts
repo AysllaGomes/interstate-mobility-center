@@ -30,7 +30,7 @@ export class ServiceValidator {
   }
 
   public static validarCPF(cpf: string, helpers: CustomHelpers): string | Joi.ErrorReport {
-    logger.debug("Validação de cpf...");
+    logger.debug(`Validação do CPF: ${cpf}...`);
     cpf = cpf.replace(/[\s.-]*/igm, "");
     if (
       !cpf
