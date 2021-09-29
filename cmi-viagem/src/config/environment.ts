@@ -14,6 +14,10 @@ export interface IEnvironment {
   db: {
     uri: string;
   };
+  parceiros: {
+    host: string;
+    logo: string;
+  };
   isValid: () => boolean;
 }
 
@@ -23,13 +27,17 @@ export const environment: IEnvironment = {
     nameUnderscore: (process.env.npm_package_name || "").split("-").join("_") || "cmi-viagem".split("-").join("_"),
     version: process.env.npm_package_version || "?.?.?",
     description: process.env.npm_package_description || "cmi-viagem in node with expressjs",
-    host: process.env.APP_HOST || "localhost:3000",
+    host: process.env.APP_HOST || "localhost:3002",
     env: process.env.NODE_ENV || "local",
-    port: convertNumber(process.env.API_PORT, 3000),
+    port: convertNumber(process.env.API_PORT, 3002),
     logLevel: process.env.LOG_LEVEL ? process.env.LOG_LEVEL.toLowerCase() : "debug",
   },
   db: {
     uri: process.env.BD_URI || "mongodb+srv://mongocmi:n1E8DxRjR4INjLws@cmi.q6k96.mongodb.net/cmi",
+  },
+  parceiros: {
+    host: process.env.PARCEIRO_HOST || "https://qa-clientintegration.nock.in",
+    logo: process.env.LOGO_PARCEIRO || "https://avatars.githubusercontent.com/u/17545810?s=280&v=4",
   },
   isValid() {
     return true;

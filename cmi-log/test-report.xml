@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-log\spec\test\unit\LogService\SalvaLogNoBancoDeDados.ut.test.ts">
+    <testCase name="Teste da LogService - salvaLogNoBancoDeDados Teste do método salvaLogNoBancoDeDados" duration="32"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-log\spec\test\unit\LogService\GerenciaLog.ut.test.ts">
+    <testCase name="Teste da LogService - gerenciaLog Teste do método gerenciaLog" duration="21"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-log\spec\test\unit\Validators\ServiceValidator.ut.test.ts">
+    <testCase name="Teste da LogServiceValidator - validaInputLogMobilidade Teste da validação do método validaInputLogMobilidade" duration="10"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-log\spec\test\unit\Database\VerificaConexao.ut.test.ts">
+    <testCase name="Teste do serviço que retorna o estado da conexão com o bd Teste MOCK do método verificaConexao" duration="1"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-log\spec\test\unit\LogController\GerenciaLog.ut.test.ts">
+    <testCase name="Teste MOCK do método da controller que gerencia o log Teste MOCK do método gerenciaLog" duration="2"/>
+  </file>
   <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-log\spec\test\unit\Middlewares\VerificaConexaoMongo.ut.test.ts">
-    <testCase name="Teste do middleware que tenta a conexão com o mongo Teste MOCK do método verificaConexaoMongoMiddleware" duration="10"/>
+    <testCase name="Teste do middleware que tenta a conexão com o mongo Teste MOCK do método verificaConexaoMongoMiddleware" duration="5"/>
   </file>
   <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-log\spec\test\unit\Database\ConectarRetornandoComErro.ut.test.ts">
     <testCase name="Teste do serviço que se conecta ao bd Teste MOCK do método conectar - retornando erro" duration="2"/>
   </file>
   <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-log\spec\test\unit\Database\Conectar.ut.test.ts">
-    <testCase name="Teste do serviço que se conecta ao bd Teste MOCK do método conectar" duration="4"/>
-  </file>
-  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-log\spec\test\unit\Database\VerificaConexao.ut.test.ts">
-    <testCase name="Teste do serviço que retorna o estado da conexão com o bd Teste MOCK do método verificaConexao" duration="1"/>
+    <testCase name="Teste do serviço que se conecta ao bd Teste MOCK do método conectar" duration="2"/>
   </file>
 </testExecutions>

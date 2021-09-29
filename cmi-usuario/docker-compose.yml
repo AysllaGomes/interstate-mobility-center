@@ -16,25 +16,6 @@ services:
       - cmi-usuario-net
 
   ###############################################################################
-  # CMI TERMO DE USO
-  ###############################################################################
-#  cmi-termo-de-uso:
-#    image: cmi-termo-de-uso
-#    container_name: usuario-termo-de-uso
-#    expose:
-#      - 3008
-#    depends_on:
-#      - mongo
-#    environment:
-#      MONGO_INITDB_URI: "mongodb+srv://mongocmi:n1E8DxRjR4INjLws@cmi.q6k96.mongodb.net/cmi"
-#    tty: true
-#    restart: unless-stopped
-#    ports:
-#      - "3008:3008"
-#    networks:
-#      - cmi-usuario-net
-
-  ###############################################################################
   # Api - Node Aplication
   ###############################################################################
   cmi-usuario:

@@ -6,10 +6,10 @@ export interface IUsuario extends Document {
     rg: string;
     cpf: string;
     email: string;
-    dataDeNascimento: Date;
+    dataDeNascimento: string;
     certidaoDeNascimento: string;
     numeroTelefoneCelular: string;
-    termosDeUso?: ITermosDeUso;
+    termosDeUso?: Array<ITermosDeUso>;
     tsCriacao: Date;
 }
 
@@ -32,6 +32,8 @@ export interface IUsuario extends Document {
  *         type: string
  *       nome:
  *         type: string
+ *       cpf:
+ *         type: string
  *       email:
  *         type: string
  *       dataDeNascimento:
@@ -49,7 +51,7 @@ export interface IUsuario extends Document {
  *         _id: "6137e55a3faa33026260185e",
  *         nome: "Some Chick",
  *         email: "some_chick@example.com",
- *         dataDeNascimento: "1990-01-01T02:00:00.000Z",
+ *         dataDeNascimento: "01/01/2000",
  *         numeroTelefoneCelular: "99999999999",
  *         tsCriacao: "2021-09-15T21:57:49.871Z",
  *         __v: 0
@@ -66,7 +68,7 @@ const UsuarioSchema: Schema = new Schema({
     required: true,
   },
   dataDeNascimento: {
-    type: Date,
+    type: String,
     required: true,
   },
   numeroTelefoneCelular: {
@@ -86,7 +88,7 @@ const UsuarioSchema: Schema = new Schema({
     required: false,
   },
   termosDeUso: {
-    type: Object,
+    type: Array,
     required: false,
   },
   tsCriacao: {

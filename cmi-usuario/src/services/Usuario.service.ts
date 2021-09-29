@@ -4,18 +4,29 @@ import {
   ErroNegocial,
   ERRO_NEGOCIAL_NA_VALIDACAO,
   ERRO_NEGOCIAL_EMAIL_REPETIDO,
-  ERRO_NEGOCIAL_REGISTRO_REPETIDO,
+  ERRO_NEGOCIAL_REGISTRO_REPETIDO, ERRO_NEGOCIAL_CPF_REPETIDO,
 } from "../errors/erro.negocial";
 import {
   ErroSQL,
   ERRO_SQL_AO_SALVAR_USUARIO,
+  ERRO_SQL_BUSCA_DADOS_USUARIO,
+  ERRO_AO_ATUALIZAR_TERMO_DE_USO_USUARIO,
   ERRO_SQL_EMAIL_INFORMADO_DO_USUARIO_NAO_ENCONTRADO,
 } from "../errors/erro.sql";
+import { ITermoDeUso } from "../model/TermoDeUso";
 import { retornarErroValidacao } from "../util/utils";
+import { TermoDeUsoService } from "./TermoDeUso.service";
 import UsuarioModel, { IUsuario } from "../model/Usuario";
+import { ICoordenadas } from "../model/interfaces/Coordenadas";
+import { ITermosDeUso } from "../model/interfaces/TermosDeUso";
 import { ServiceValidator } from "../validators/Service.validator";
 import { ICadastroUsuario } from "../model/interfaces/CadastroUsuario";
 import { IDetalharUsuario } from "../model/interfaces/DetalharUsuario";
+import { IInputTermoDeUsoApi } from "../model/interfaces/InputTermoDeUsoApi";
+import { IDadosDoDispositivo } from "../model/interfaces/DadosDoDispositivo";
+import { IRetornoUpdateUsuarioModel } from "../model/interfaces/RetornoUpdateUsuarioModel";
+import { IUsuarioAssinaturaTermoDeUso } from "../model/interfaces/UsuarioAssinaturaTermoDeUso";
+import { IRetornoPassageiroAssinaturaTermoDeUso } from "../model/interfaces/RetornoPassageiroAssinaturaTermoDeUso";
 
 export class UsuarioService {
   private serviceValidator = new ServiceValidator();
@@ -40,19 +51,30 @@ export class UsuarioService {
       throw new ErroNegocial(...ERRO_NEGOCIAL_EMAIL_REPETIDO);
     }
 
+    const cpfCadastrado = await UsuarioService.cpfCadastrado(passageiroCadastro.cpf);
+    if (cpfCadastrado) {
+      throw new ErroNegocial(...ERRO_NEGOCIAL_CPF_REPETIDO);
+    }
+
     return false;
   }
 
   public static async emailCadastrado(email: string): Promise<boolean> {
-    const passageiroModel = await UsuarioModel.find({ email });
-    return passageiroModel.length !== 0;
+    const usuarioModel = await UsuarioModel.find({ email });
+    return usuarioModel.length !== 0;
+  }
+
+  public static async cpfCadastrado(cpf: string): Promise<boolean> {
+    const usuarioModel = await UsuarioModel.find({ cpf });
+    return usuarioModel.length !== 0;
   }
 
   public formataUsuario(body: ICadastroUsuario): IUsuario {
     return new UsuarioModel({
+      cpf: body.cpf,
       nome: body.nome,
       email: body.email,
-      dataDeNascimento: new Date(body.dataDeNascimento),
+      dataDeNascimento: body.dataDeNascimento,
       numeroTelefoneCelular: body.numeroTelefoneCelular,
       tsCriacao: new Date(),
     });
@@ -100,5 +122,87 @@ export class UsuarioService {
 
       throw new ErroSQL(...ERRO_SQL_EMAIL_INFORMADO_DO_USUARIO_NAO_ENCONTRADO);
     }
+  }
+
+  public async retornaDadosUsuario(idUsuario: string): Promise<IUsuario | null> {
+    try {
+      logger.info(`Realizando consulta para pegar dados do usuário: ${idUsuario}...`);
+      const usuario = await UsuarioModel.findById(idUsuario);
+
+      if (usuario) return usuario;
+
+      logger.debug(`Não foi encontrado o ID: ${idUsuario}, na base de dados...`);
+      throw new ErroSQL(...ERRO_SQL_BUSCA_DADOS_USUARIO).formatMessage(idUsuario);
+    } catch (error) {
+      logger.error(`
+        ERRO no MS "${environment.app.name}", método "retornaDadosUsuario".
+        <'ERRO'>
+          message: Não foi encontrado o ID do Usuário: ${idUsuario}, na base de dados...
+        Parâmetros da requisição:
+          ID: ${idUsuario}
+      `);
+      throw new ErroSQL(...ERRO_SQL_BUSCA_DADOS_USUARIO).formatMessage(idUsuario);
+    }
+  }
+
+  public async assinaturaTermoDeUso(body: IInputTermoDeUsoApi, dadosDoDispositivo: IDadosDoDispositivo, coordenadas: ICoordenadas): Promise<IRetornoUpdateUsuarioModel> {
+    await this.retornaDadosUsuario(body.idUsuario);
+    const termoDeUsoVigente: ITermoDeUso = await TermoDeUsoService.retornaTermoDeUsoSituacaoVigente();
+
+    // eslint-disable-next-line no-underscore-dangle
+    const termoDeUso = this.formataDadosTermoDeUso(termoDeUsoVigente._id, dadosDoDispositivo, coordenadas);
+
+    return this.salvaTermoDeUso(body.idUsuario, termoDeUso);
+  }
+
+  public formataDadosTermoDeUso(idTermoUso: string, dadosDoDispositivo: IDadosDoDispositivo, coordenadas: ICoordenadas): Array<ITermosDeUso> {
+    return [
+      {
+        idTermoDeUso: idTermoUso,
+        coordenadasUsuario: coordenadas,
+        tsDataDeAceite: new Date(),
+        dadosDispositivo: dadosDoDispositivo,
+      },
+    ];
+  }
+
+  public async salvaTermoDeUso(idUsuario: string, termoDeUso: ITermosDeUso[]): Promise<IRetornoUpdateUsuarioModel> {
+    try {
+      logger.debug("Atualizando os dados do passageiro com a propriedade Termo de Uso...");
+
+      return UsuarioModel.updateOne(
+        { _id: idUsuario },
+        { termosDeUso: termoDeUso },
+        { upsert: true },
+        (error: Error, document: IUsuario) => document,
+      );
+    } catch (error) {
+      logger.error(`
+        ERRO no MS "${environment.app.name}", método "salvaTermoDeUso".
+        <'ERRO'>
+          message: Erro ao salvar os dados do termo de uso: ${error.message}.
+      `);
+
+      throw new ErroSQL(...ERRO_AO_ATUALIZAR_TERMO_DE_USO_USUARIO).formatMessage(error.message);
+    }
+  }
+
+  public async usuarioAssinaturaTermoDeUso(body: IUsuarioAssinaturaTermoDeUso): Promise<IRetornoPassageiroAssinaturaTermoDeUso> {
+    const termoDeUsoVigente: ITermoDeUso = await TermoDeUsoService.retornaTermoDeUsoSituacaoVigente();
+
+    const usuario = await this.retornaDadosUsuario(body.idUsuario);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // @ts-ignore
+    const objTermoDeUso: ITermosDeUso = usuario.termosDeUso.find(
+      // eslint-disable-next-line no-underscore-dangle
+      (termosVinculados: ITermosDeUso) => termosVinculados.idTermoDeUso === termoDeUsoVigente._id,
+    );
+
+    return {
+      assinado: !!objTermoDeUso,
+      versao: termoDeUsoVigente.versao,
+      conteudo: termoDeUsoVigente.conteudo,
+    };
   }
 }
