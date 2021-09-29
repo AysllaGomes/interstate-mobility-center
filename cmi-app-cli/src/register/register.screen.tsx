@@ -15,14 +15,6 @@ interface LoginScreenProps {
 }
 
 export const RegisterScreen = (props: LoginScreenProps) => {
-    /**
-     * @todo Ettore arrume!!!
-     *
-     * melhorar utilizando a máscara, e ao submeter ao formulário, deve ser enviado sem a máscara
-     * exemplo: (61) 9 8207-2218
-     * envio para o back-end --> 61982072218
-     *
-     */
 
     const RegisterWithFirebase = (email: string, password: string) => {
         firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -39,17 +31,6 @@ export const RegisterScreen = (props: LoginScreenProps) => {
 
         return null;
     }
-
-    // const validaPassword = (password) => {
-    //     let errorPassword;
-    //     if (!password) {
-    //         errorPassword = 'Campo obrigatório!';
-    //     }
-    //     else if (/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/.test(password)) {
-    //         errorPassword = 'Favor informar um e-mail válido';
-    //     }
-    //     return errorPassword;
-    // };
 
     const registerUser = async (values) => {
         let errorFirebase = RegisterWithFirebase(values.email, values.password)
@@ -74,15 +55,39 @@ export const RegisterScreen = (props: LoginScreenProps) => {
             props.navigation.navigate("Home")
     }
 
+    const maskDate = (value) => {
+        return value
+            .replace(/\D/g, "")
+            .replace(/(\d{2})(\d)/, "$1/$2")
+            .replace(/(\d{2})(\d)/, "$1/$2")
+            .replace(/(\d{4})(\d+?)$/, "$1");
+    };
+    const maskCPF = (value) => {
+        return value
+            .replace(/\D/g, "")
+            .replace(/(\d{3})(\d)/, "$1.$2")
+            .replace(/(\d{3})(\d)/, "$1.$2")
+            .replace(/(\d{3})(\d{1,2})/, "$1-$2")
+            .replace(/(-\d{2})\d+?$/, "$1");
+    };
+
+    const maskPhone = (value) => {
+        return value
+            .replace(/\D/g, "")
+            .replace(/(\d{2})(\d)/, "($1) $2")
+            .replace(/(\d{5})(\d)/, "$1-$2")
+            .replace(/(-\d{4})(\d+?)$/, "$1");
+    };
+
         return (
             <Root>
                 <SafeAreaView>
                     <ScrollView>
                     <HeaderComponent title="Register" navigation={props.navigation} page="Login"/>
-                    <Formik initialValues={{name: '', email: '', phoneNumber: '', birthDate: '', password: '', ConfPassword: ''}}
+                    <Formik initialValues={{name: '', email: '', phoneNumber: '', birthDate: '', password: '', ConfPassword: '', cpf: ''}}
                                 onSubmit={values => registerUser(values)}
                                 validationSchema={registerForm}>
-                            {({handleSubmit, handleChange, touched, setFieldTouched, handleBlur, errors, values}) => (
+                            {({handleSubmit, handleChange, touched, setFieldTouched, setFieldValue, handleBlur, errors, values}) => (
 
                             <View style={registerStyle.content}>
                                     <TextInput
@@ -114,10 +119,23 @@ export const RegisterScreen = (props: LoginScreenProps) => {
                                         </Text> : null
                                     }
 
+                                <TextInput
+                                    label="CPF"
+                                    placeholder="CPF"
+                                    onChangeText={(e) => setFieldValue('cpf', maskCPF(e))}
+                                    onFocus={() => setFieldTouched('cpf')}
+                                    onBlur={handleBlur('cpf')}
+                                    value={values.cpf}
+                                />
+                                {
+                                    touched.cpf && errors.cpf ? <Text style={{color: "red" }}>
+                                        {errors.cpf}
+                                    </Text> : null
+                                }
                                     <TextInput
                                             label="Phone number"
                                             keyboardType="phone-pad"
-                                            onChangeText={handleChange('phoneNumber')}
+                                            onChangeText={(e) => setFieldValue('phoneNumber', maskPhone(e))}
                                             onFocus={() => setFieldTouched('phoneNumber')}
                                             onBlur={handleBlur('phoneNumber')}
                                             value={values.phoneNumber}
@@ -127,15 +145,15 @@ export const RegisterScreen = (props: LoginScreenProps) => {
                                             {errors.phoneNumber}
                                         </Text> : null
                                     }
-                                       <TextInput
+                                        <TextInput
                                             placeholder="dd/mm/aaa"
                                             label="Data nascimento"
                                             keyboardType="numeric"
-                                            onChangeText={handleChange('birthDate')}
+                                            onChangeText={(e) => setFieldValue('birthDate', maskDate(e))}
                                             onFocus={() => setFieldTouched('birthDate')}
                                             onBlur={handleBlur('birthDate')}
                                             value={values.birthDate}
-                                       />
+                                        />
                                     {
                                         touched.birthDate && errors.birthDate ? <Text style={{color: "red" }}>
                                             {errors.birthDate}
