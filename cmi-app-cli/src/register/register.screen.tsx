@@ -1,13 +1,13 @@
 import React from "react";
 import { Button, TextInput} from "react-native-paper";
-import {SafeAreaView, ScrollView, Text, View, TouchableOpacity, ToastAndroid} from "react-native";
+import {SafeAreaView, ScrollView, Text, View} from "react-native";
 import { registerStyle } from "./register.style";
 import { HeaderComponent } from "../components/header/header.component";
 import firebase from "../firebase/firebaseconfig";
 import createUser from "./register.service";
 import { Formik } from 'formik';
 import {registerForm} from "./register.form";
-import { Popup, Root, Toast } from 'popup-ui'
+import { Root, Toast } from 'popup-ui'
 
 interface LoginScreenProps {
     navigation: any, // @todo nunca aceitável
@@ -18,15 +18,20 @@ export const RegisterScreen = (props: LoginScreenProps) => {
 
     const RegisterWithFirebase = (email: string, password: string) => {
         firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then((userCredential) => {
-                // Signed in
-                userCredential.user;
-                // ...
-            })
+            .then((userCredential) => { userCredential.user; })
             .catch((error) => {
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                return errorCode;
+                console.error(`
+                    ERRO no APP, método "RegisterWithFirebase".
+                    <'ERRO EXTERNO'>
+                      message:  Não foi possível salvar o usuário, na base do Firebase...
+                      CODE: ${error.code}
+                      MESSAGE RTN: ${error.message}
+                    Parâmetros da requisição:
+                      E-MAIL: ${email},
+                      PSWD: ${password}
+                `);
+
+                return error.code;
             });
 
         return null;
@@ -36,12 +41,12 @@ export const RegisterScreen = (props: LoginScreenProps) => {
         let errorFirebase = RegisterWithFirebase(values.email, values.password)
 
         if (errorFirebase != null) {
-            return console.log("Error with Firebase Register")
+            return console.error("Error with Firebase Register")
         }
 
         let errorMongo = await createUser(values)
 
-        console.log(errorMongo)
+        console.error(errorMongo)
 
         if (errorMongo.status != 200) {
 

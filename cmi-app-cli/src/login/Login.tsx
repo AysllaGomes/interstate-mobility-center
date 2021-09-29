@@ -17,16 +17,18 @@ const LoginFirebase = (email: string, password: string) => {
     firebase.auth().signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
             // Signed in
-            var user = userCredential.user;
-            console.log(user)
+            userCredential.user;
             props.navigation.navigate("Home")
-            // ...
         })
         .catch((error) => {
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            console.log((errorCode))
-            console.log((errorMessage))
+
+            /**
+            * Mudar o comportamento do console.error
+            */
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.error((errorCode))
+            console.error((errorMessage))
         });
     }
     return (
