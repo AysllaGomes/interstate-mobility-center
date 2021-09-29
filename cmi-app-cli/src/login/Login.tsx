@@ -1,34 +1,19 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {SafeAreaView, View, Text} from "react-native";
 import {Button, Card, TextInput} from "react-native-paper";
 import {loginStyle} from "./login.style";
-import { useValidation } from 'react-native-form-validator';
 import firebase from "../firebase/firebaseconfig";
-
-
-
+import { Formik } from 'formik';
+import {loginForm} from "./login.form";
 interface LoginScreenProps {
     navigation: any;
 }
 
-
 const Login = (props: LoginScreenProps) => {
-
-    const signUp = () => props.navigation.navigate("Home")
     const register = () => props.navigation.navigate("Register")
     const resetPassword = () => props.navigation.navigate("ResetPassword")
 
-
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-
-    let provider = new firebase.auth.GoogleAuthProvider();
-
-    const LoginWithGoogle = () => {
-        firebase.auth().signInWithRedirect(provider);
-    }
-
-const LoginFirebase = () => {
+const LoginFirebase = (email: string, password: string) => {
     firebase.auth().signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
             // Signed in
@@ -40,34 +25,10 @@ const LoginFirebase = () => {
         .catch((error) => {
             var errorCode = error.code;
             var errorMessage = error.message;
+            console.log((errorCode))
+            console.log((errorMessage))
         });
     }
-
-    const messages = {
-        en: {
-            required: "Campo obrigatório não preenchido",
-            email: "Favor informar um e-mail válido"
-        }
-    }
-
-    const { validate, isFieldInError, getErrorsInField } =
-        useValidation({
-            state: { email, password },
-            messages: messages
-        });
-
-    const validaEmail = () => {
-        return validate({
-            email: {required: true, email: true}
-        })
-    }
-
-    const validaPassword = () => {
-        return validate({
-            password: { required: true}
-        })
-    }
-
     return (
                 <SafeAreaView style={loginStyle.content}>
                     <View style={loginStyle.view}>
@@ -75,28 +36,45 @@ const LoginFirebase = () => {
                             <Card.Title title="Mobility Center" titleStyle={loginStyle.cardTitle}>
                             </Card.Title>
                             <Card.Content>
-                                <TextInput
-                                    placeholder="Email"
-                                    label="User"
-                                    keyboardType="email-address"
-                                    onChangeText={setEmail}
-                                    onTextInput={validaEmail}
-                                    value={email}
-                                />
-                                {isFieldInError('email') ? <Text style={loginStyle.errorText}>{getErrorsInField("email")[0]}</Text> : null}
+                                <Formik initialValues={{email: '', password:''}}
+                                        onSubmit={values => {LoginFirebase(values.email, values.password)}}
+                                        validationSchema={loginForm}>
+                                    {({handleSubmit, handleChange, touched, setFieldTouched, handleBlur, errors, values}) => (
+                                        <>
+                                            <TextInput
+                                                placeholder="Email"
+                                                label="User"
+                                                keyboardType="email-address"
+                                                onChangeText={handleChange('email')}
+                                                onFocus={() => setFieldTouched('email')}
+                                                onBlur={handleBlur('email')}
+                                                value={values.email}
+                                            />
+                                            {
+                                                touched.email && errors.email ? <Text style={{color: "red" }}>
+                                                    {errors.email}
+                                                </Text> : null
+                                            }
 
-                                <TextInput
-                                    label="Password"
-                                    secureTextEntry={true}
-                                    onChangeText={setPassword}
-                                    onTextInput={validaPassword}
-                                    value={password}
-                                />
-                                {isFieldInError('password') ? <Text style={loginStyle.errorText}>{getErrorsInField("password")[0]}</Text> : null}
-
-                                <Button onPress={() => (validaEmail() && validaPassword())? LoginFirebase() : null} mode="contained" style={loginStyle.cardButton}>Login</Button>
-                                <Button onPress={register} style={loginStyle.cardButton}>Register</Button>
-                                <Button onPress={resetPassword} uppercase={false} style={loginStyle.cardButton}>Esqueceu email/password?</Button>
+                                            <TextInput
+                                            label="Password"
+                                            secureTextEntry={true}
+                                            onChangeText={handleChange('password')}
+                                            onBlur={handleBlur('password')}
+                                            onFocus={() => setFieldTouched('password')}
+                                            value={values.password}
+                                            />
+                                            {
+                                                touched.password && errors.password ? <Text style={{color: "red"}}>
+                                                    {errors.password}
+                                                </Text> : null
+                                            }
+                                            <Button onPress={resetPassword} uppercase={false} disabled={values.email == ''} style={loginStyle.cardButton}>Esqueceu a senha?</Button>
+                                            <Button onPress={handleSubmit} mode="contained" style={loginStyle.cardButton}>Login</Button>
+                                            <Button onPress={register} style={loginStyle.cardButton}>Register</Button>
+                                        </>
+                                    )}
+                                </Formik>
                             </Card.Content>
                         </Card>
                     </View>
