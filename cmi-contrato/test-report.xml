@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-contrato\spec\test\unit\ServiceValidator\ValidaAberturaContrato.ut.test.ts">
+    <testCase name="Teste da ServiceValidator - validaAberturaContrato Teste do método validaAberturaContrato" duration="16"/>
+  </file>
   <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-contrato\spec\test\unit\Middlewares\VerificaConexaoMongo.ut.test.ts">
-    <testCase name="Teste do middleware que tenta a conexão com o mongo Teste MOCK do método verificaConexaoMongoMiddleware" duration="9"/>
+    <testCase name="Teste do middleware que tenta a conexão com o mongo Teste MOCK do método verificaConexaoMongoMiddleware" duration="7"/>
   </file>
-  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-contrato\spec\test\unit\Database\ConectarRetornandoComErro.ut.test.ts">
-    <testCase name="Teste do serviço que se conecta ao bd Teste MOCK do método conectar - retornando erro" duration="1"/>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-contrato\spec\test\unit\ContratoService\AberturaContratoErroDeValidacao.ut.test.ts">
+    <testCase name="Teste da ContratoService - abertura com erro de validação Teste do método abertura com erro de validação" duration="21"/>
   </file>
-  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-contrato\spec\test\unit\Database\Conectar.ut.test.ts">
-    <testCase name="Teste do serviço que se conecta ao bd Teste MOCK do método conectar" duration="2"/>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-contrato\spec\test\unit\ContratoService\AberturaContrato.ut.test.ts">
+    <testCase name="Teste da ContratoService - abertura Teste do método abertura" duration="39"/>
   </file>
   <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-contrato\spec\test\unit\Database\VerificaConexao.ut.test.ts">
-    <testCase name="Teste do serviço que retorna o estado da conexão com o bd Teste MOCK do método verificaConexao" duration="1"/>
+    <testCase name="Teste do serviço que retorna o estado da conexão com o bd Teste MOCK do método verificaConexao" duration="2"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-contrato\spec\test\unit\Database\ConectarRetornandoComErro.ut.test.ts">
+    <testCase name="Teste do serviço que se conecta ao bd Teste MOCK do método conectar - retornando erro" duration="2"/>
+  </file>
+  <file path="C:\Users\aysll\Área de Trabalho\Workspace\Projects\interstate-mobility-center\cmi-contrato\spec\test\unit\Database\Conectar.ut.test.ts">
+    <testCase name="Teste do serviço que se conecta ao bd Teste MOCK do método conectar" duration="1"/>
   </file>
 </testExecutions>

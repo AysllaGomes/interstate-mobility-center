@@ -1,0 +1,18 @@
+{
+  "_id" : "60c3bd685c11ec345b7b3499",
+  "codigoVariavel" : "nock",
+  "habilitaNock" : {
+    "MSAutentica" : true,
+    "MSPassageiro" : true,
+    "MSViagem" : true,
+    "cenarioDaViagem" : {
+      "cenario" : 1,
+      "cenariosDisponiveis" : {
+        "1" : "Viagem normal",
+        "2" : "Viagem com demora na contratação"
+      }
+    }
+  },
+  "sequencialNumeroDeIdentificacaoContrato" : 0,
+  "sequencialNumeroVersaoTermoDeUso" : 0
+}
