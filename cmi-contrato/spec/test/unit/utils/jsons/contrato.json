@@ -1,0 +1,30 @@
+{
+  "_id" : "615275cfae51bb002ea736d2",
+  "centrosDeCusto" : [
+    {
+      "numeroDeIdentificacao" : 111,
+      "nome" : "Nome de uma Matriz",
+      "descricao" : "Descrição de uma Matriz muito incrível e de reputação excelente.",
+      "dataUltimaAtualizacao" : "2021-09-28T01:54:23.903Z",
+      "estado" : "Vigente",
+      "dadosCobranca" : {
+        "agencia" : 4444,
+        "contaCorrente" : 55555
+      }
+    }
+  ],
+  "numeroDeIdentificacao" : 2,
+  "periodoDeVigencia" : {
+    "dataInicio" : "2021-09-25",
+    "dataFim" : "2022-09-25"
+  },
+  "estado" : "Vigente",
+  "valorDoPercentualTotalDoContrato" : 80,
+  "diaDoVencimentoDaFatura" : 20,
+  "agenciaResponsavelConducao" : 1234,
+  "meioDePagamento" : "Débito em conta corrente",
+  "modalidadeDeRecebimento" : "Após o fechamento da fatura",
+  "tsCriacao" : "2021-09-28T01:54:23.903Z",
+  "tsUltimaAtualizacao" : "2021-09-28T01:54:23.903Z",
+  "__v" : 0
+}

@@ -1,0 +1,20 @@
+{
+  "periodoDeVigencia": {
+    "dataInicio": "2021-09-25",
+    "dataFim": "2022-09-25"
+  },
+  "valorDoPercentualTotalDoContrato": 80,
+  "centroDeCusto": [
+    {
+      "numeroIdentificacaoCentroCusto": 111,
+      "nome": "Nome de uma Matriz",
+      "descricao": "Descrição de uma Matriz muito incrível e de reputação excelente.",
+      "estado": "Vigente",
+      "dadosCobranca": {
+        "agencia": 4444,
+        "contaCorrente": 55555
+      }
+    }
+  ],
+  "agenciaResponsavelConducao": 1234
+}
