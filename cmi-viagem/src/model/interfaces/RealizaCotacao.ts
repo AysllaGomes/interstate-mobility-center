@@ -1,5 +1,5 @@
 export interface IRealizaCotacao {
-    idUsuario: any;
+    idUsuario: string;
     latitudePosicao?: number;
     longitudePosicao?: number;
     latitudeOrigem: number;
