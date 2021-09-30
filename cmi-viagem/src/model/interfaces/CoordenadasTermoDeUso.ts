@@ -2,7 +2,7 @@
  * @swagger
  *
  * definitions:
- *   ICoordenadas:
+ *   ICoordenadasTermoDeUso:
  *     type: object
  *     required:
  *       - posicaoUsuario
