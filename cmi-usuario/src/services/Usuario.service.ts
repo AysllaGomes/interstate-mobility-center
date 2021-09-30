@@ -124,7 +124,7 @@ export class UsuarioService {
     }
   }
 
-  public async retornaDadosUsuario(idUsuario: string): Promise<IUsuario | null> {
+  public async retornaDadosUsuario(idUsuario: string): Promise<IUsuario | ErroSQL> {
     try {
       logger.info(`Realizando consulta para pegar dados do usuário: ${idUsuario}...`);
       const usuario = await UsuarioModel.findById(idUsuario);

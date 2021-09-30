@@ -40,4 +40,8 @@ export class UsuarioController {
     public async usuarioAssinaturaTermoDeUso(body: IUsuarioAssinaturaTermoDeUso): Promise<IRetornoPassageiroAssinaturaTermoDeUso> {
       return this.service.usuarioAssinaturaTermoDeUso(body);
     }
+
+    public async retornaDadosUsuario(idUsuario: string): Promise<IUsuario | ErroSQL> {
+      return this.service.retornaDadosUsuario(idUsuario);
+    }
 }

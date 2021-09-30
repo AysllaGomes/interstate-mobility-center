@@ -53,6 +53,7 @@ export interface IUsuario extends Document {
  *         email: "some_chick@example.com",
  *         dataDeNascimento: "01/01/2000",
  *         numeroTelefoneCelular: "99999999999",
+ *         termosDeUso: [],
  *         tsCriacao: "2021-09-15T21:57:49.871Z",
  *         __v: 0
  *      }

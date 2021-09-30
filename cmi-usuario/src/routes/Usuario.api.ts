@@ -162,5 +162,33 @@ export class UsuarioApi extends ApiRouter {
           next(new ErroNegocial(...ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS).formatMessage("idUsuario"));
         } catch (error) { next(error); }
       });
+
+      /**
+       * @swagger
+       *   /usuario/{idUsuario}:
+       *   get:
+       *     description: Realiza o detalhamento do usuário a partir do id informado.
+       *     summary: EndPoint que realiza detalhamento do usuário a partir do id informado.
+       *     tags:
+       *       - Usuário
+       *     parameters:
+       *      - name: "idUsuario"
+       *        in: "path"
+       *        required: true
+       *        type: "string"
+       *     responses:
+       *       200:
+       *         description: Lista de resposta que contem todos os objetos que foram retornados pela consulta no banco de dados
+       *         schema:
+       *             $ref: '#/definitions/Usuario'
+       */
+      server.get(`${this.path}/:idUsuario`, async (req: express.Request, resp: express.Response, next: express.NextFunction) => {
+        try {
+          if (req.params.idUsuario) {
+            return resp.json(await this.controller.retornaDadosUsuario(req.params.idUsuario.toString()));
+          }
+          next(new ErroNegocial(...ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS).formatMessage("idUsuario"));
+        } catch (error) { next(error); }
+      });
     }
 }
