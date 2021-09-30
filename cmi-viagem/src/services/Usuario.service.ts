@@ -14,7 +14,7 @@ export class UsuarioService {
 
       const result = await axios({
         method: "get",
-        url: `${environment.app.hostCMIUsuarioParceiro}/dados/usuario/${idUsuario}`,
+        url: `${environment.app.hostCMIUsuarioParceiro}/usuario/${idUsuario}`,
       });
 
       return result.data;
