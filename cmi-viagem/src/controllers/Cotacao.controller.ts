@@ -14,8 +14,7 @@ export class CotacaoController {
     this.service = service;
   }
 
-  public async retornaMelhorCotacao(req: IRealizaCotacao): Promise<any> {
-    return this.service.retornaMelhorCotacao(req);
+  public async retornaMelhorCotacao(body: IRealizaCotacao): Promise<any> {
+    return this.service.retornaMelhorCotacao(body);
   }
 }
-

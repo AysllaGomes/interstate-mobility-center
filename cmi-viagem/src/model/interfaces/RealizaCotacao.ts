@@ -1,11 +1,7 @@
 export interface IRealizaCotacao {
     idUsuario: string;
-    latitudePosicao?: number;
-    longitudePosicao?: number;
-    latitudeOrigem: number;
-    longitudeOrigem: number;
-    latitudeDestino: number;
-    longitudeDestino: number;
-    tituloOrigemViagem: string;
-    tituloDestinoViagem: string;
+    localOrigemViagem: string;
+    localDestinoViagem: string;
+    tsIdaViagem: Date;
+    tsVoltaViagem: Date;
 }
