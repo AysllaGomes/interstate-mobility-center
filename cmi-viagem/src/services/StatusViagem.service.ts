@@ -7,7 +7,7 @@ export class StatusViagemService {
     viagens.forEach((viagem) => {
       const objtUltimoStatus = viagem.statusViagem[viagem.statusViagem.length - 1];
       if (
-        objtUltimoStatus.statusViagem === StatusViagemEnum.FINALIZADO
+        objtUltimoStatus.statusViagem === StatusViagemEnum.FATURADO
           || objtUltimoStatus.statusViagem === StatusViagemEnum.NO_SHOW
           || objtUltimoStatus.statusViagem === StatusViagemEnum.CANCELADO_PASSAGEIRO
       ) {

@@ -5,7 +5,8 @@ export enum StatusViagemEnum {
   CONTRATANDO = "Contratando",
   NAO_CONTRATADO = "Não Contratado",
   CONTRATADO = "Contratado",
-  FINALIZADO = "Finalizado",
+  PRE_FATURADO = "Pré Faturado",
+  FATURADO = "Faturado",
   CANCELADO_PASSAGEIRO = "Cancelado Passageiro",
   SEM_HISTORICO_VIAGENS = "Sem Histórico de Viagens",
 }
