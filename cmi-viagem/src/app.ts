@@ -1,8 +1,6 @@
-import nock from "nock";
 import bodyParser from "body-parser";
-import express, { NextFunction } from "express";
+import express from "express";
 import {
-  nockTestes,
   middlewareForLog,
   mergePatchBodyParser,
   verificaConexaoMongoMiddleware,
@@ -10,7 +8,6 @@ import {
 import { logger } from "./util/logger";
 import { DocsApi } from "./routes/docs.api";
 import { MainApi } from "./routes/main.api";
-import { executaNocks } from "./nocks/Nock";
 import { ErrorApi } from "./routes/error.api";
 import { CotacaoApi } from "./routes/Cotacao.api";
 import { environment } from "./config/environment";
@@ -21,22 +18,6 @@ const getApiControllers = (): (ErrorApi | MainApi | DocsApi | CotacaoApi)[] => [
 ];
 
 const app = express();
-
-// if (environment.app.env !== "prod") {
-//   // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-//   // @ts-ignore
-//   app.use(async (req: Request, res: Response, next: NextFunction) => {
-//     if (await nockTestes()) {
-//       if (!nock.isActive()) nock.activate();
-//
-//       executaNocks();
-//     } else if (nock.isActive()) {
-//       nock.restore();
-//     }
-//
-//     next();
-//   });
-// }
 
 const rotasPostVerificadas: Array<string> = [
 ];
