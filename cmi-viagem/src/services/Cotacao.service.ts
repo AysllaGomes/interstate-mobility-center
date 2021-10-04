@@ -1,5 +1,6 @@
 import { logger } from "../util/logger";
 import { environment } from "../config/environment";
+import { retornarErroValidacao } from "../util/utils";
 import {
   ErroExterno,
   ERRO_EXTERNO_VIAGEM_EM_ANDAMENTO,
@@ -7,7 +8,7 @@ import {
 import {
   ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS,
 } from "../errors/erro.negocial";
-import { retornarErroValidacao } from "../util/utils";
+import { UsuarioService } from "./Usuario.service";
 import { ServiceValidator } from "../validators/Service.validator";
 import { IRealizaCotacao } from "../model/interfaces/RealizaCotacao";
 import { IRetornaCotacao } from "../model/interfaces/RetornaCotacao";
@@ -19,18 +20,26 @@ export class CotacaoService {
     const resultadoValidacao = this.serviceValidator.validarRetornaMelhorCotacao(body);
     retornarErroValidacao(resultadoValidacao, ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS);
 
-    if (!resultadoValidacao) {
-      return;
-    }
+    try {
+      const usuario = await UsuarioService.retornaDadosPassageiro(body.idUsuario);
 
-    logger.error(`
+      console.log("usuario", usuario);
+
+      return;
+    } catch (error) {
+      logger.error(`
       ERRO no MS "${environment.app.name}", método "retornaMelhorCotacao".
       <'ERRO'>
-        message: Houve um erro ao realizar a cotacao...
+        message: Houve um erro ao realizar a cotacao... \n ${error}
       Parâmetros da requisição:
-        REQ: ${body}
+        ID USUÁRIO: ${body.idUsuario},
+        ORIGEM: ${body.localOrigemViagem},
+        DESTINO: ${body.localDestinoViagem},
+        DATA IDA: ${body.tsIdaViagem},
+        DATA RETORNO: ${body.tsVoltaViagem}.
       `);
 
-    throw new ErroExterno(...ERRO_EXTERNO_VIAGEM_EM_ANDAMENTO).formatMessage();
+      throw new ErroExterno(...ERRO_EXTERNO_VIAGEM_EM_ANDAMENTO).formatMessage();
+    }
   }
 }

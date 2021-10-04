@@ -12,9 +12,7 @@ export class CotacaoApi extends ApiRouter {
     this.path = "/cotacao";
   }
 
-  public active(): boolean {
-    return true;
-  }
+  public active(): boolean { return true; }
 
   public async applyRoutes(server: express.Application): Promise<void> {
     /**
@@ -44,10 +42,8 @@ export class CotacaoApi extends ApiRouter {
      */
     server.post(this.path, async (req: express.Request, resp: express.Response, next: express.NextFunction) => {
       try {
-        resp.json(await this.controller.retornaMelhorCotacao(req.body));
-      } catch (error) {
-        next(error);
-      }
+        return resp.json(await this.controller.retornaMelhorCotacao(req.body));
+      } catch (error) { next(error); }
     });
   }
 }
