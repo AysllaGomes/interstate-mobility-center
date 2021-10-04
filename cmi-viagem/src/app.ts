@@ -22,21 +22,21 @@ const getApiControllers = (): (ErrorApi | MainApi | DocsApi | CotacaoApi)[] => [
 
 const app = express();
 
-if (environment.app.env !== "prod") {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-  // @ts-ignore
-  app.use(async (req: Request, res: Response, next: NextFunction) => {
-    if (await nockTestes()) {
-      if (!nock.isActive()) nock.activate();
-
-      executaNocks();
-    } else if (nock.isActive()) {
-      nock.restore();
-    }
-
-    next();
-  });
-}
+// if (environment.app.env !== "prod") {
+//   // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+//   // @ts-ignore
+//   app.use(async (req: Request, res: Response, next: NextFunction) => {
+//     if (await nockTestes()) {
+//       if (!nock.isActive()) nock.activate();
+//
+//       executaNocks();
+//     } else if (nock.isActive()) {
+//       nock.restore();
+//     }
+//
+//     next();
+//   });
+// }
 
 const rotasPostVerificadas: Array<string> = [
 ];
