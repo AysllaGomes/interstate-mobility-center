@@ -1,6 +1,9 @@
 import { logger } from "../util/logger";
 import { environment } from "../config/environment";
-import { retornarErroValidacao } from "../util/utils";
+import {
+  retornarErroValidacao,
+  formataValorPraDuasCasasDecimais,
+} from "../util/utils";
 import {
   ErroExterno,
   ERRO_EXTERNO_VIAGEM_EM_ANDAMENTO,
@@ -25,21 +28,51 @@ export class CotacaoService {
 
       console.log("usuario", usuario);
 
+      const cotacoes = await this.realizarCotacao(body);
+
+      console.log("cotacoes", cotacoes);
+
       return;
     } catch (error) {
       logger.error(`
-      ERRO no MS "${environment.app.name}", método "retornaMelhorCotacao".
-      <'ERRO'>
-        message: Houve um erro ao realizar a cotacao... \n ${error}
-      Parâmetros da requisição:
-        ID USUÁRIO: ${body.idUsuario},
-        ORIGEM: ${body.localOrigemViagem},
-        DESTINO: ${body.localDestinoViagem},
-        DATA IDA: ${body.tsIdaViagem},
-        DATA RETORNO: ${body.tsVoltaViagem}.
+        ERRO no MS "${environment.app.name}", método "retornaMelhorCotacao".
+        <'ERRO'>
+          message: Houve um erro ao realizar a cotacao... \n ${error}.
+        PARAMETROS:
+          ID USUÁRIO: ${body.idUsuario},
+          ORIGEM: ${body.localOrigemViagem},
+          DESTINO: ${body.localDestinoViagem},
+          DATA IDA: ${body.tsIdaViagem},
+          DATA RETORNO: ${body.tsVoltaViagem}.
       `);
 
       throw new ErroExterno(...ERRO_EXTERNO_VIAGEM_EM_ANDAMENTO).formatMessage();
     }
+  }
+
+  public async realizarCotacao(body: IRealizaCotacao): Promise<object | void> {
+    const usuarioParceiro = await UsuarioService.consultaUsuarioDoParceiro(body);
+
+    console.log("usuarioParceiro", usuarioParceiro);
+
+    if (Object.keys(usuarioParceiro.data).length !== 0) {
+      console.log("to aqui tio");
+    }
+  }
+
+  public calculaValorEconomizadoPorViagem(melhorCotacao: object): number {
+    const cotacaoVencedora = Object.values(melhorCotacao);
+
+    const menorValorCotacoes: Array<number> = [];
+
+    cotacaoVencedora.forEach((parceiro) => menorValorCotacoes.push(parceiro.valor));
+
+    const maiorValorCotacao = Math.max(...menorValorCotacoes);
+    const menorValorCotacao = Math.min(...menorValorCotacoes);
+
+    let valorEconomizado = maiorValorCotacao - menorValorCotacao;
+    valorEconomizado = formataValorPraDuasCasasDecimais(valorEconomizado);
+
+    return valorEconomizado;
   }
 }

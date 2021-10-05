@@ -20,3 +20,11 @@ export function retornarErroValidacao(resultadoValidacao: ValidationResult, erro
     );
   }
 }
+
+export function formataValorPraDuasCasasDecimais(valor: number): number {
+  if (valor.toPrecision().split(".")[1]?.length > 2) {
+    const fixed = 10 ** 2;
+    return Number(Math.round(valor * fixed) / fixed);
+  }
+  return valor;
+}
