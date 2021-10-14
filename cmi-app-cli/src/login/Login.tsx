@@ -6,6 +6,8 @@ import firebase from "../firebase/firebaseconfig";
 import {Formik} from 'formik';
 import {loginForm} from "./login.form";
 import {registerStyle} from "../register/register.style";
+import {Root, Toast} from 'popup-ui'
+import createUser from "../register/register.service";
 
 interface LoginScreenProps {
     navigation: any;
@@ -27,10 +29,17 @@ const Login = (props: LoginScreenProps) => {
                 /**
                  * Mudar o comportamento do console.error
                  */
+
                 const errorCode = error.code;
                 const errorMessage = error.message;
                 console.error((errorCode))
                 console.error((errorMessage))
+
+                Toast.show({
+                    title: 'Houve um problema!',
+                    text: errorCode,
+                    color: '#e74c3c'
+                })
             });
     }
     const [showPassword, setShowPassword] = React.useState({password: true});
@@ -40,6 +49,8 @@ const Login = (props: LoginScreenProps) => {
     }
 
     return (
+        <Root>
+
         <SafeAreaView style={loginStyle.content}>
             <View style={loginStyle.view}>
                 <Card>
@@ -98,6 +109,7 @@ const Login = (props: LoginScreenProps) => {
                 </Card>
             </View>
         </SafeAreaView>
+        </Root>
     );
 }
 export default Login;

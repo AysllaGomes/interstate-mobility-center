@@ -39,29 +39,21 @@ export const RegisterScreen = (props: LoginScreenProps) => {
     }
 
     const registerUser = async (values) => {
-        let errorMongo = await createUser(values)
-
-        if (errorMongo.status != 200) {
-
-            Toast.show({
-                title: 'Houve um problema!',
-                text: errorMongo.data.message,
-                color: '#e74c3c'
-            })
-            return;
-        }
-
-        let errorFirebase = RegisterWithFirebase(values.email, values.password)
-
-        if (errorFirebase != null) {
-            return console.error("Error with Firebase Register")
-        }
-
-
-        console.error(errorMongo)
-
-
-        props.navigation.navigate("Home")
+            let errorMongo = await createUser(values)
+            if (errorMongo.status != 200) {
+                Toast.show({
+                    title: 'Houve um problema!',
+                    text: errorMongo.data.message,
+                    color: '#e74c3c'
+                })
+                return;
+            }
+            let errorFirebase = RegisterWithFirebase(values.email, values.password)
+            if (errorFirebase != null) {
+                return console.error("Error with Firebase Register")
+            }
+            console.error(errorMongo)
+            props.navigation.navigate("Home")
     }
 
     const [showPassword, setShowPassword] = React.useState({password: true, confPassword: true});
