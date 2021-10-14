@@ -7,10 +7,10 @@ import {Formik} from 'formik';
 import {loginForm} from "./login.form";
 import {registerStyle} from "../register/register.style";
 import {Root, Toast} from 'popup-ui'
-import createUser from "../register/register.service";
+import {NativeStackNavigatorProps} from "react-native-screens/lib/typescript/native-stack/types";
 
 interface LoginScreenProps {
-    navigation: any;
+    navigation: NativeStackNavigatorProps;
 }
 
 const Login = (props: LoginScreenProps) => {
