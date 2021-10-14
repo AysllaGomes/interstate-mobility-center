@@ -13,7 +13,7 @@ export class CotacaoController {
 
   constructor({ service = new CotacaoService() }) { this.service = service; }
 
-  public async retornaMelhorCotacao(body: IRealizaCotacao): Promise<IRetornaCotacao | undefined> {
-    return this.service.retornaMelhorCotacao(body);
+  public async cotacao(body: IRealizaCotacao): Promise<IRetornaCotacao | undefined> {
+    return this.service.cotacao(body);
   }
 }

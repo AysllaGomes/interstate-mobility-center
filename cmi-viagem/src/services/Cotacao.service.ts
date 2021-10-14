@@ -19,7 +19,7 @@ import { IRetornaCotacao } from "../model/interfaces/RetornaCotacao";
 export class CotacaoService {
   private serviceValidator = new ServiceValidator();
 
-  public async retornaMelhorCotacao(body: IRealizaCotacao): Promise<IRetornaCotacao | undefined> {
+  public async cotacao(body: IRealizaCotacao): Promise<IRetornaCotacao | undefined> {
     const resultadoValidacao = this.serviceValidator.validarRetornaMelhorCotacao(body);
     retornarErroValidacao(resultadoValidacao, ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS);
 
