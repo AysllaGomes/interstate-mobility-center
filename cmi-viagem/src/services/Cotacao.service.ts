@@ -15,6 +15,7 @@ import { UsuarioService } from "./Usuario.service";
 import { ServiceValidator } from "../validators/Service.validator";
 import { IRealizaCotacao } from "../model/interfaces/RealizaCotacao";
 import { IRetornaCotacao } from "../model/interfaces/RetornaCotacao";
+import { AutenticacaoService } from "./Autenticacao.service";
 
 export class CotacaoService {
   private serviceValidator = new ServiceValidator();
@@ -28,7 +29,7 @@ export class CotacaoService {
 
       console.log("usuario", usuario);
 
-      const cotacoes = await this.realizarCotacao(body);
+      const cotacoes = await this.realizarCotacao();
 
       console.log("cotacoes", cotacoes);
 
@@ -50,14 +51,10 @@ export class CotacaoService {
     }
   }
 
-  public async realizarCotacao(body: IRealizaCotacao): Promise<object | void> {
-    const usuarioParceiro = await UsuarioService.consultaUsuarioDoParceiro(body);
+  public async realizarCotacao(): Promise<object | void> {
+    const token = await AutenticacaoService.retornaTokenParceiros();
 
-    console.log("usuarioParceiro", usuarioParceiro);
-
-    if (Object.keys(usuarioParceiro.data).length !== 0) {
-      console.log("to aqui tio");
-    }
+    console.log("token", token);
   }
 
   public calculaValorEconomizadoPorViagem(melhorCotacao: object): number {
