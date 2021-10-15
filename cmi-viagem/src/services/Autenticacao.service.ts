@@ -19,7 +19,7 @@ export class AutenticacaoService {
       return response.data;
     } catch (error) {
       logger.error(`
-        ERRO no MS "${environment.app.name}", método "AutenticacaoService -> retornaTokenParceiros".
+        ERRO no MS "${environment.app.name}", retornaTokenParceiros.
         <'ERRO'>
           message: ERRO ao retornar o token dos parceiros...
           sugestão: Verifique se existe algum parceiro ativo no BD ou se eles estão disponíveis
