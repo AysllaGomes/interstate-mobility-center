@@ -6,7 +6,9 @@ import {indexStyle} from "./index.style";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import {NativeStackNavigatorProps} from "react-native-screens/lib/typescript/native-stack/types";
-import {Picker} from "@react-native-picker/picker";
+import axios from "axios";
+import DropDownPicker from 'react-native-dropdown-picker';
+import {Item} from "react-native-paper/lib/typescript/components/List/List";
 
 interface HomeScreenProps {
     navigation: NativeStackNavigatorProps
@@ -83,11 +85,33 @@ const HomeScreen = (props: HomeScreenProps) => {
         hideDatePickerArrival()
         setDates({...dates, arrival: dateArrival})
     }
-    
-    console.log('dateArrival', dates.arrival);
 
-    const [selectedLanguage, setSelectedLanguage] = useState();
+    const [estadosBrasil, setEstadosBrasil] = useState([])
+    const [value, setValue] = useState(null)
+    const [open, setOpen] = useState(false)
 
+    useEffect(() => {
+        const buscarEstadosApiGov = async () => {
+            try {
+                let res = await axios.get("https://servicodados.ibge.gov.br/api/v1/localidades/estados")
+                setEstadosBrasil(res.data)
+            } catch (error) {
+
+            }
+        }
+        buscarEstadosApiGov().then(r => r)
+
+        const buscarMunicipiosApiGov = async (value) => {
+            try {
+                let res = await axios.get("https://servicodados.ibge.gov.br/api/v1/localidades/estados/"+value+"/municipios")
+                setEstadosBrasil(res.data)
+            } catch (error) {
+
+            }
+        }
+    }, []);
+
+DropDownPicker.setTheme("DARK")
     return(
         <SafeAreaView>
             <View>
@@ -119,18 +143,24 @@ const HomeScreen = (props: HomeScreenProps) => {
                     mode="date"
                     onConfirm={handleConfirmArrival}
                     onCancel={hideDatePickerArrival}
-
                 />
-                    <Picker style={indexStyle.dropdownPicker}
-                        selectedValue={selectedLanguage}
-                        onValueChange={(itemValue, itemIndex) =>
-                            setSelectedLanguage(itemValue)
-                        }>
-                        <Picker.Item label="Estado" value="estado" />
-                        <Picker.Item label="DF" value="df" />
-                    </Picker>
+                </View>
             </View>
-            </View>
+            <DropDownPicker
+                items={estadosBrasil}
+                value={value}
+                setItems={setEstadosBrasil}
+                setValue={setValue}
+                open={open}
+                setOpen={setOpen}
+                searchable={true}
+                placeholder="Selecione um estado"
+                searchPlaceholder="Pesquise um estado"
+                schema={{
+                    label: 'nome',
+                    value: 'id'
+                }}
+            />
             <FlatList data={list} renderItem={({item}) => <TravelListItem navigation={props.navigation} data={item}  />}
                       keyExtractor={(item) => item.id}
             />

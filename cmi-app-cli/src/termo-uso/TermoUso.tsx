@@ -1,5 +1,5 @@
-import React from 'react';
-import {SafeAreaView, Text, View} from "react-native";
+import React, {} from 'react';
+import {SafeAreaView, Text, TouchableOpacity, View} from "react-native";
 import {Button} from "react-native-paper";
 import {Root} from 'popup-ui'
 import {NativeStackNavigatorProps} from "react-native-screens/lib/typescript/native-stack/types";
@@ -20,12 +20,16 @@ const TermoUso = (props: LoginScreenProps) => {
             return error.response
         }
     }
+
     return (
         <Root>
             <SafeAreaView>
                 <View>
                     <Text>TERMO DE USO !</Text>
                     <Button onPress={goHome}>HOME</Button>
+
+
+
                 </View>
             </SafeAreaView>
         </Root>
