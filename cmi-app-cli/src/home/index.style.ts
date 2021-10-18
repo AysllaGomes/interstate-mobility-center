@@ -45,7 +45,13 @@ export const indexStyle = StyleSheet.create({
         fontSize: 16,
         lineHeight: 21,
         letterSpacing: 0.25,
-
+    },
+    dropdownPicker : {
+        width: 300,
+        height: 45,
+        borderColor: "red",
+        borderWidth: 2,
+        backgroundColor: "red"
     }
 });
 

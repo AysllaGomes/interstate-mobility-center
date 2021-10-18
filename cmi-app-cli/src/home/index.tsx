@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
-import {SafeAreaView, View, FlatList, TouchableOpacity, StatusBar, Text, Image, Button} from "react-native";
+import {SafeAreaView, View, FlatList, TouchableOpacity, StatusBar, Text, Image} from "react-native";
 import { TextInput } from "react-native-paper";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import results from "./results";
 import {indexStyle} from "./index.style";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import {NativeStackNavigatorProps} from "react-native-screens/lib/typescript/native-stack/types";
+import {Picker} from "@react-native-picker/picker";
 
 interface HomeScreenProps {
     navigation: NativeStackNavigatorProps
@@ -83,6 +83,10 @@ const HomeScreen = (props: HomeScreenProps) => {
         hideDatePickerArrival()
         setDates({...dates, arrival: dateArrival})
     }
+    
+    console.log('dateArrival', dates.arrival);
+
+    const [selectedLanguage, setSelectedLanguage] = useState();
 
     return(
         <SafeAreaView>
@@ -97,6 +101,7 @@ const HomeScreen = (props: HomeScreenProps) => {
                         <View style={indexStyle.DepartureDatePickerButton}>
                             <Text style={indexStyle.datePickerButtonText}>Data de Partida</Text>
                         </View>
+                        
                     </TouchableOpacity>
                 <DateTimePickerModal
                     isVisible={isDatePickerVisible.departure}
@@ -116,6 +121,14 @@ const HomeScreen = (props: HomeScreenProps) => {
                     onCancel={hideDatePickerArrival}
 
                 />
+                    <Picker style={indexStyle.dropdownPicker}
+                        selectedValue={selectedLanguage}
+                        onValueChange={(itemValue, itemIndex) =>
+                            setSelectedLanguage(itemValue)
+                        }>
+                        <Picker.Item label="Estado" value="estado" />
+                        <Picker.Item label="DF" value="df" />
+                    </Picker>
             </View>
             </View>
             <FlatList data={list} renderItem={({item}) => <TravelListItem navigation={props.navigation} data={item}  />}
