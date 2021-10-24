@@ -25,6 +25,10 @@ export class UsuarioController {
       return this.service.cadastrarUsuario(body);
     }
 
+    public async retornaDadosUsuario(idUsuario: string): Promise<IUsuario | ErroSQL> {
+      return this.service.retornaDadosUsuario(idUsuario);
+    }
+
     public async detalharUsuario(body: IDetalharUsuario): Promise<IUsuario | ErroSQL> {
       return this.service.detalharUsuario(body);
     }
@@ -39,9 +43,5 @@ export class UsuarioController {
 
     public async usuarioAssinaturaTermoDeUso(body: IUsuarioAssinaturaTermoDeUso): Promise<IRetornoPassageiroAssinaturaTermoDeUso> {
       return this.service.usuarioAssinaturaTermoDeUso(body);
-    }
-
-    public async retornaDadosUsuario(idUsuario: string): Promise<IUsuario | ErroSQL> {
-      return this.service.retornaDadosUsuario(idUsuario);
     }
 }
