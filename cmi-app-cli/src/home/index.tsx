@@ -1,13 +1,17 @@
 import React, {useEffect, useState} from "react";
-import {SafeAreaView, View, FlatList, TouchableOpacity, StatusBar, Text, Image, Button} from "react-native";
+import {SafeAreaView, View, FlatList, TouchableOpacity, StatusBar, Text, Image} from "react-native";
 import { TextInput } from "react-native-paper";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import results from "./results";
 import {indexStyle} from "./index.style";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import moment from "moment";
+import {NativeStackNavigatorProps} from "react-native-screens/lib/typescript/native-stack/types";
+import axios from "axios";
+import DropDownPicker from 'react-native-dropdown-picker';
+import {Item} from "react-native-paper/lib/typescript/components/List/List";
+
 interface HomeScreenProps {
-    navigation: any,
-    page: null
+    navigation: NativeStackNavigatorProps
 }
 
 const TravelListItem = ({ data, navigation } ) => {
@@ -24,31 +28,36 @@ const TravelListItem = ({ data, navigation } ) => {
 }
 
 const HomeScreen = (props: HomeScreenProps) => {
-    const toTravelPackage = () => props.navigation.navigate("Package")
-
     const [searchText, setSearchText] = useState('');
     const [list, setList] = useState(results)
     const [dates, setDates] = useState({arrival: '', departure: ''})
 
-
     useEffect(() =>{
-        if(searchText === '') {
-            setList(results);
-        }else {
-            setList(
-                results.filter(item=> (item.title.toLowerCase().indexOf(searchText.toLowerCase()) > -1))
-            );
-        }
-    }, [searchText]);
+            (searchText === '') ? setList(results) : setList(results.filter(item=> (item.title.toLowerCase().indexOf(searchText.toLowerCase()) > -1)))
+        },[searchText]
+    );
 
-    useEffect(() =>{
-        if(dates.departure === '' && dates.arrival === '') {
-            setList(results);
-        }else {
-            setList(
-                results.filter((pacote) => pacote.dateArrival == dates.arrival && pacote.dateDeparture == dates.departure)
-            );
+    useEffect(() => {
+        // datas picker
+        const dateFormat = 'DD/MM/YYYY'
+        const dateDiffAccepted = 2
+
+        let dateDeparture = moment(dates.departure, dateFormat)
+        let dateArrival = moment(dates.arrival, dateFormat)
+        let packagesWithDatesFiltered = results
+
+        if (!dateArrival.isValid() && !dateDeparture.isValid()) {
+            setList(results)
         }
+        else {
+            if(dateDeparture.isValid()) {
+                packagesWithDatesFiltered = packagesWithDatesFiltered.filter(travelPackages=> Math.abs(moment(travelPackages.dateDeparture, dateFormat).diff(dateDeparture, "days")) <= dateDiffAccepted)
+            }
+            if (dateArrival.isValid()) {
+                packagesWithDatesFiltered = packagesWithDatesFiltered.filter(travelPackages=> Math.abs(moment(travelPackages.dateArrival, dateFormat).diff(dateArrival, "days")) <= dateDiffAccepted)
+            }
+        }
+        setList(packagesWithDatesFiltered)
     }, [dates]);
 
     const [isDatePickerVisible, setDatePickerVisibility] = useState({departure: false, arrival: false});
@@ -59,42 +68,50 @@ const HomeScreen = (props: HomeScreenProps) => {
     const hideDatePickerDeparture = () => {
         setDatePickerVisibility({...isDatePickerVisible, departure: false});
     }
-
     const handleConfirmDeparture = (date) => {
          const departureDate = date.getDate().toString().concat("/").concat((date.getUTCMonth()+1).toString()).concat("/").concat(date.getFullYear().toString())
          hideDatePickerDeparture()
-
-        setDates({...dates, departure: departureDate})
+        setDates({...dates, departure: departureDate}) 
     }
     const showDatePickerArrival = () => {
         setDatePickerVisibility({...isDatePickerVisible, arrival: true, });
-
-
     }
     const hideDatePickerArrival = () => {
         setDatePickerVisibility({...isDatePickerVisible, arrival: false, });
     }
 
-
     const handleConfirmArrival = (date) => {
         const dateArrival = date.getDate().toString().concat("/").concat((date.getUTCMonth()+1).toString()).concat("/").concat(date.getFullYear().toString())
         hideDatePickerArrival()
-
         setDates({...dates, arrival: dateArrival})
     }
 
-    const filterByDate = (dateArrival, dateDeparture) => {
-        return results.filter((pacote) => pacote.dateArrival == dateArrival && pacote.dateDeparture == dateDeparture);
-    }
+    const [estadosBrasil, setEstadosBrasil] = useState([])
+    const [value, setValue] = useState(null)
+    const [open, setOpen] = useState(false)
 
-    console.log('Arrival Date', dates.arrival);
-    console.log('Departure Date', dates.departure);
-    console.log('Datas ', filterByDate(dates.arrival, dates.departure))
+    useEffect(() => {
+        const buscarEstadosApiGov = async () => {
+            try {
+                let res = await axios.get("https://servicodados.ibge.gov.br/api/v1/localidades/estados")
+                setEstadosBrasil(res.data)
+            } catch (error) {
 
-    function handleOrderClick() {
+            }
+        }
+        buscarEstadosApiGov().then(r => r)
 
-    }
+        const buscarMunicipiosApiGov = async (value) => {
+            try {
+                let res = await axios.get("https://servicodados.ibge.gov.br/api/v1/localidades/estados/"+value+"/municipios")
+                setEstadosBrasil(res.data)
+            } catch (error) {
 
+            }
+        }
+    }, []);
+
+DropDownPicker.setTheme("DARK")
     return(
         <SafeAreaView>
             <View>
@@ -103,39 +120,52 @@ const HomeScreen = (props: HomeScreenProps) => {
                     value={searchText}
                     onChangeText={(t) => setSearchText(t)}
                     />
-                <TouchableOpacity onPress={handleOrderClick}>
-                    <MaterialCommunityIcons
-                        name="order-alphabetical-ascending"
-                        size={32}
-                        color="#888"
-                    />
-                </TouchableOpacity>
-                <Button title="Show date partida" onPress={showDatePickerDeparture}>Date</Button>
-
+                <View style={indexStyle.dateFilters}>
+                    <TouchableOpacity onPress={showDatePickerDeparture}>
+                        <View style={indexStyle.DepartureDatePickerButton}>
+                            <Text style={indexStyle.datePickerButtonText}>Data de Partida</Text>
+                        </View>
+                        
+                    </TouchableOpacity>
                 <DateTimePickerModal
                     isVisible={isDatePickerVisible.departure}
                     mode="date"
                     onConfirm={handleConfirmDeparture}
                     onCancel={hideDatePickerDeparture}
-
                 />
-                <Button title="Show date Picker Chegada" onPress={showDatePickerArrival}>Data chegada</Button>
+                    <TouchableOpacity onPress={showDatePickerArrival}>
+                        <View style={indexStyle.ArrivalDatePickerButton}>
+                            <Text style={indexStyle.datePickerButtonText}>Data de Chegada</Text>
+                        </View>
+                    </TouchableOpacity>
                 <DateTimePickerModal
                     isVisible={isDatePickerVisible.arrival}
                     mode="date"
                     onConfirm={handleConfirmArrival}
                     onCancel={hideDatePickerArrival}
-
                 />
+                </View>
             </View>
+            <DropDownPicker
+                items={estadosBrasil}
+                value={value}
+                setItems={setEstadosBrasil}
+                setValue={setValue}
+                open={open}
+                setOpen={setOpen}
+                searchable={true}
+                placeholder="Selecione um estado"
+                searchPlaceholder="Pesquise um estado"
+                schema={{
+                    label: 'nome',
+                    value: 'id'
+                }}
+            />
             <FlatList data={list} renderItem={({item}) => <TravelListItem navigation={props.navigation} data={item}  />}
                       keyExtractor={(item) => item.id}
             />
             <StatusBar />
         </SafeAreaView>
     );
-
 }
-
-
 export default HomeScreen;

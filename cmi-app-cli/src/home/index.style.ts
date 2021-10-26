@@ -1,5 +1,6 @@
 import {StatusBar, StyleSheet} from "react-native";
 import {theme} from "../../App.style";
+import {red50} from "react-native-paper/lib/typescript/styles/colors";
 
 export const indexStyle = StyleSheet.create({
     content: {
@@ -23,6 +24,34 @@ export const indexStyle = StyleSheet.create({
     images: {
         width: 480,
         height: 209
+    },
+    dateFilters: {
+        display: "flex",
+        flexDirection: "row",
+        padding: 10,
+        margin: 10
+    },
+    DepartureDatePickerButton: {
+        flexGrow: 1
+    },
+    ArrivalDatePickerButton: {
+        flexGrow: 1,
+    },
+    datePickerButtonText: {
+        textAlign: "center",
+        padding: 10,
+        color: "white",
+        backgroundColor: '#106EBE',
+        fontSize: 16,
+        lineHeight: 21,
+        letterSpacing: 0.25,
+    },
+    dropdownPicker : {
+        width: 300,
+        height: 45,
+        borderColor: "red",
+        borderWidth: 2,
+        backgroundColor: "red"
     }
 });
 
