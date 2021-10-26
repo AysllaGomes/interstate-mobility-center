@@ -52,7 +52,6 @@ export const RegisterScreen = (props: LoginScreenProps) => {
             if (errorFirebase != null) {
                 return console.error("Error with Firebase Register")
             }
-            console.error(errorMongo)
             props.navigation.navigate("Home")
     }
 
