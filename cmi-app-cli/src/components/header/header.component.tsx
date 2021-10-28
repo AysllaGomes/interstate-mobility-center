@@ -11,8 +11,10 @@ export const HeaderComponent = (props: HeaderComponentParams) => {
     const signUp = () => props.navigation.navigate(props.page)
     return (
         <Appbar>
-            <Appbar.BackAction onPress={() => {signUp()}}  />
-            <Appbar.Content title={props.title} />
+            <Appbar.BackAction onPress={() => {
+                signUp()
+            }}/>
+            <Appbar.Content title={props.title}/>
         </Appbar>
     )
 }

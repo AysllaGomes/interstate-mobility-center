@@ -22,7 +22,7 @@ const Login = (props: LoginScreenProps) => {
     const buscarIDUsuarioPoEmail = async (email: string) => {
         const urlBase = "http://192.168.0.107:3001"
         try {
-            let res = await axios.post(urlBase+"/usuario/detalhar", {"email": email})
+            let res = await axios.post(urlBase + "/usuario/detalhar", {"email": email})
             return res.data._id
         } catch (error) {
             return error.response
@@ -39,24 +39,26 @@ const Login = (props: LoginScreenProps) => {
         }
     }
     const LoginFirebase = async (email: string, password: string) => {
-       try {
-           await firebase.auth().signInWithEmailAndPassword(email, password)
-           let idUsuario = await buscarIDUsuarioPoEmail(email)
-           let termoAssinado = await verificaTermoDeUso(idUsuario)
-           // Mudar para TRUE, somente para facilitar testes
-           {(termoAssinado === false) ? props.navigation.navigate("TermoUso") : props.navigation.navigate("Home")}
+        try {
+            await firebase.auth().signInWithEmailAndPassword(email, password)
+            let idUsuario = await buscarIDUsuarioPoEmail(email)
+            let termoAssinado = await verificaTermoDeUso(idUsuario)
+            // Mudar para TRUE, somente para facilitar testes
+            {
+                (termoAssinado === false) ? props.navigation.navigate("TermoUso", {idUsuario: idUsuario}) : props.navigation.navigate("Home")
+            }
 
-       } catch (error) {
-           const errorCode = error.code;
+        } catch (error) {
+            const errorCode = error.code;
 
-               Toast.show({
-                   type: 'error',
-                   position: 'top',
-                   title: 'Houve um problema!',
-                   text: errorCode,
-                   color: '#e74c3c',
-               })
-           }
+            Toast.show({
+                type: 'error',
+                position: 'top',
+                title: 'Houve um problema!',
+                text: errorCode,
+                color: '#e74c3c',
+            })
+        }
     }
 
     const [showPassword, setShowPassword] = React.useState({password: true});
@@ -78,7 +80,15 @@ const Login = (props: LoginScreenProps) => {
                                         LoginFirebase(values.email, values.password)
                                     }}
                                     validationSchema={loginForm}>
-                                {({handleSubmit, handleChange, touched, setFieldTouched, handleBlur, errors, values}) => (
+                                {({
+                                      handleSubmit,
+                                      handleChange,
+                                      touched,
+                                      setFieldTouched,
+                                      handleBlur,
+                                      errors,
+                                      values
+                                  }) => (
                                     <>
                                         <TextInput
                                             label="Email"
@@ -113,11 +123,13 @@ const Login = (props: LoginScreenProps) => {
                                                 {errors.password}
                                             </Text> : null
                                         }
-                                        <Button onPress={resetPassword} uppercase={false} style={loginStyle.cardButton}>Esqueceu
-                                            a senha?</Button>
+                                        <Button onPress={resetPassword} uppercase={false} style={loginStyle.cardButton}><Text
+                                            style={loginStyle.text}>Esqueceu a senha?</Text></Button>
                                         <Button onPress={handleSubmit} mode="contained"
-                                                style={loginStyle.cardButton}>Entrar</Button>
-                                        <Button onPress={register} style={loginStyle.cardButton}>Cadastro</Button>
+                                                style={loginStyle.cardButton}><Text
+                                            style={loginStyle.text}>Entrar</Text></Button>
+                                        <Button onPress={register} style={loginStyle.cardButton}><Text
+                                            style={loginStyle.text}>Cadastro</Text></Button>
                                     </>
                                 )}
                             </Formik>

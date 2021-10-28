@@ -3,20 +3,45 @@ import {theme} from "../../App.style";
 import {red50} from "react-native-paper/lib/typescript/styles/colors";
 
 export const indexStyle = StyleSheet.create({
+
     content: {
-        padding: 15,
-        paddingTop: 0
+        // View principal
     },
-    icon: {
-        color: theme.colors.primary
+    filters: {
+        marginBottom: 10,
+        marginLeft: 10,
+        marginRight: 10
     },
-    button: {
-        margin: 15,
-        marginLeft: 0,
-        marginRight: 0
+    packagesContent: {
+        marginBottom: 10
+    },
+    packagesContentInfo: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        padding: 10,
+        borderBottomRightRadius: 10,
+        borderBottomLeftRadius: 10,
+        backgroundColor: theme.colors.secondary,
+    },
+    packagesText: {
+        color: "white"
+    },
+    buttonCleanFilters: {
+        display: "flex",
+        flexDirection: "column",
+        color: "white",
+        borderRadius: 4,
+        backgroundColor: theme.colors.primary,
+
+    },
+    buttonsText: {
+        color: "white",
+        fontFamily: theme.fontFamily.fontFamily,
+
     },
     errorText: {
-        color: "#ff0000"
+        color: theme.colors.error,
     },
     dateComponent: {
         width: 350,
@@ -28,8 +53,12 @@ export const indexStyle = StyleSheet.create({
     dateFilters: {
         display: "flex",
         flexDirection: "row",
-        padding: 10,
-        margin: 10
+        justifyContent: "space-between",
+        marginTop: 5,
+        marginBottom: 10,
+    },
+    textDateFilter: {
+        marginTop: 20,
     },
     DepartureDatePickerButton: {
         flexGrow: 1
@@ -41,17 +70,37 @@ export const indexStyle = StyleSheet.create({
         textAlign: "center",
         padding: 10,
         color: "white",
-        backgroundColor: '#106EBE',
         fontSize: 16,
         lineHeight: 21,
         letterSpacing: 0.25,
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: theme.colors.primary,
+        borderRadius: 4,
+        fontFamily: theme.fontFamily.fontFamily,
     },
-    dropdownPicker : {
-        width: 300,
-        height: 45,
-        borderColor: "red",
-        borderWidth: 2,
-        backgroundColor: "red"
+
+    dropdownPickerContainer: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+    },
+    dropdownPicker: {
+        flexGrow: 1,
+        flexShrink: 1,
+        marginBottom: 10
+    },
+    dropdownPickerOrigem: {
+        marginRight: 5
+    },
+    dropdownPickerDestino: {
+        marginLeft: 5
+    },
+    text: {
+        fontFamily: theme.fontFamily.fontFamily,
+    },
+    flatlist: {
+        marginBottom: 10
     }
 });
 

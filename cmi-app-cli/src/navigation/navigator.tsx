@@ -7,6 +7,7 @@ import {RegisterScreen} from "../register/register.screen";
 import ResetPassword from "../login/reset-password/ResetPassword";
 import Package from "../travelPackage/package";
 import TermoUso from "../termo-uso/TermoUso";
+import TravelInfo from '../travel-info/TravelInfo';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +21,7 @@ const AppNavigator = () => (
             <Stack.Screen name="Register" component={RegisterScreen}/>
             <Stack.Screen name="Home" component={HomeScreen}/>
             <Stack.Screen name="Package" component={Package}/>
+            <Stack.Screen name="TravelInfo" component={TravelInfo}/>
         </Stack.Navigator>
     </NavigationContainer>
 )
