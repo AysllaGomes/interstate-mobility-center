@@ -9,10 +9,11 @@ import moment from "moment";
 import {NativeStackNavigatorProps} from "react-native-screens/lib/typescript/native-stack/types";
 import axios from "axios";
 import DropDownPicker from 'react-native-dropdown-picker';
-
+import { NavigationContainer } from "@react-navigation/native";
 interface HomeScreenProps {
     navigation: NativeStackNavigatorProps
 }
+
 
 const TravelListItem = ({data, navigation}) => {
     const toTravelPackage = () => navigation.navigate("Package", {data: data})
@@ -30,9 +31,10 @@ const TravelListItem = ({data, navigation}) => {
 }
 
 const HomeScreen = (props: HomeScreenProps) => {
-    const [searchText, setSearchText] = useState('');
+    const [searchText, setSearchText] = useState('')
     const [list, setList] = useState(results)
     const [dates, setDates] = useState({arrival: '', departure: ''})
+    const [selectedState, setSelectedState] = useState({arrival: '', departure: ''})
 
     useEffect(() => {
             (searchText === '') ? setList(results) : setList(results.filter(item => (item.title.toLowerCase().indexOf(searchText.toLowerCase()) > -1)))
@@ -46,20 +48,31 @@ const HomeScreen = (props: HomeScreenProps) => {
 
         let dateDeparture = moment(dates.departure, dateFormat)
         let dateArrival = moment(dates.arrival, dateFormat)
+        let packagesFiltered = results
         let packagesWithDatesFiltered = results
 
-        if (!dateArrival.isValid() && !dateDeparture.isValid()) {
-            setList(results)
-        } else {
-            if (dateDeparture.isValid()) {
-                packagesWithDatesFiltered = packagesWithDatesFiltered.filter(travelPackages => Math.abs(moment(travelPackages.dateDeparture, dateFormat).diff(dateDeparture, "days")) <= dateDiffAccepted)
+        const filterByDate = () => {
+                if (dateDeparture.isValid()) {
+                    packagesFiltered = packagesFiltered.filter(travelPackages => Math.abs(moment(travelPackages.dateDeparture, dateFormat).diff(dateDeparture, "days")) <= dateDiffAccepted)
+                }
+                if (dateArrival.isValid()) {
+                    packagesFiltered = packagesFiltered.filter(travelPackages => Math.abs(moment(travelPackages.dateArrival, dateFormat).diff(dateArrival, "days")) <= dateDiffAccepted)
+                }
+        }
+
+        const filterByStates = () => {
+            if(selectedState.departure != null && selectedState.departure != ''){
+                packagesFiltered = packagesFiltered.filter(travelPackages => travelPackages.estadoOrigem == selectedState.departure)
             }
-            if (dateArrival.isValid()) {
-                packagesWithDatesFiltered = packagesWithDatesFiltered.filter(travelPackages => Math.abs(moment(travelPackages.dateArrival, dateFormat).diff(dateArrival, "days")) <= dateDiffAccepted)
+            if(selectedState.arrival != null && selectedState.arrival != ''){
+                packagesFiltered = packagesFiltered.filter(travelPackages => travelPackages.estadoDestino == selectedState.arrival)
             }
         }
-        setList(packagesWithDatesFiltered)
-    }, [dates]);
+
+        filterByDate()
+        filterByStates()
+        setList(packagesFiltered)
+    }, [dates, selectedState]);
 
     const [isDatePickerVisible, setDatePickerVisibility] = useState({departure: false, arrival: false});
 
@@ -99,6 +112,7 @@ const HomeScreen = (props: HomeScreenProps) => {
         setDates({arrival: null, departure: null})
         setValueDropdownPartida(null)
         setValueDropdownDestino(null)
+        setSelectedState({arrival: null, departure: null})
     }
 
     useEffect(() => {
@@ -112,10 +126,13 @@ const HomeScreen = (props: HomeScreenProps) => {
         }
         buscarEstadosApiGov().then(r => r)
     }, []);
+
     DropDownPicker.setTheme("DARK")
     return (
-        <SafeAreaView>
-            <View style={indexStyle.content}>
+    <SafeAreaView>
+
+
+        <View style={indexStyle.content}>
                 <View style={indexStyle.filters}>
                     <TextInput
                         placeholder="Pesquise um pacote"
@@ -139,6 +156,8 @@ const HomeScreen = (props: HomeScreenProps) => {
                             onConfirm={handleConfirmDeparture}
                             onCancel={hideDatePickerDeparture}
                             locale="es-ES"
+                            minimumDate={new Date()}
+
                         />
                         <TouchableOpacity onPress={showDatePickerArrival}>
 
@@ -153,8 +172,8 @@ const HomeScreen = (props: HomeScreenProps) => {
                         onConfirm={handleConfirmArrival}
                         onCancel={hideDatePickerArrival}
                         locale="es-ES"
+                        minimumDate={new Date()}
                     />
-
 
                     <View style={indexStyle.dropdownPickerContainer}>
                         <View style={[indexStyle.dropdownPicker, indexStyle.dropdownPickerOrigem]}>
@@ -168,9 +187,10 @@ const HomeScreen = (props: HomeScreenProps) => {
                                 searchable={true}
                                 placeholder="Origem"
                                 searchPlaceholder="Pesquise um estado"
+                                onChangeValue={value => setSelectedState({...selectedState, departure: value != null ? value.toString() : ''})}
                                 schema={{
                                     label: 'nome',
-                                    value: 'id'
+                                    value: 'nome'
                                 }}
                             />
                         </View>
@@ -185,9 +205,10 @@ const HomeScreen = (props: HomeScreenProps) => {
                                 searchable={true}
                                 placeholder="Destino"
                                 searchPlaceholder="Pesquise um estado"
+                                onChangeValue={value => setSelectedState({...selectedState, arrival: value != null ? value.toString() : ''})}
                                 schema={{
                                     label: 'nome',
-                                    value: 'id'
+                                    value: 'nome'
                                 }}
                             />
                         </View>
