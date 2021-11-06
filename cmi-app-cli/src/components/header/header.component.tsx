@@ -4,11 +4,10 @@ import {Appbar} from "react-native-paper";
 interface HeaderComponentParams {
     navigation: any;
     title: string,
-    page: string
 }
 
 export const HeaderComponent = (props: HeaderComponentParams) => {
-    const signUp = () => props.navigation.navigate(props.page)
+    const signUp = () => props.navigation.goBack()
     return (
         <Appbar>
             <Appbar.BackAction onPress={() => {

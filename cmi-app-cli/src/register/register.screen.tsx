@@ -9,13 +9,15 @@ import {Formik} from 'formik';
 import {registerForm} from "./register.form";
 import {Root, Toast} from 'popup-ui'
 import {NativeStackNavigatorProps} from "react-native-screens/lib/typescript/native-stack/types";
+import axios from "axios";
 
-interface LoginScreenProps {
+interface ScreenProps {
     navigation: NativeStackNavigatorProps,
-    page: string
+    page: string,
+    route: NativeStackNavigatorProps
 }
 
-export const RegisterScreen = (props: LoginScreenProps) => {
+export const RegisterScreen = (props: ScreenProps) => {
     const RegisterWithFirebase = (email: string, password: string) => {
         firebase.auth().createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {
@@ -39,8 +41,8 @@ export const RegisterScreen = (props: LoginScreenProps) => {
     }
 
     const registerUser = async (values) => {
-            let errorMongo = await createUser(values)
-            if (errorMongo.status != 200) {
+        let errorMongo = await createUser(values)
+        if (errorMongo.status != 200) {
                 Toast.show({
                     title: 'Houve um problema!',
                     text: errorMongo.data.message,
@@ -52,7 +54,7 @@ export const RegisterScreen = (props: LoginScreenProps) => {
             if (errorFirebase != null) {
                 return console.error("Error with Firebase Register")
             }
-            props.navigation.navigate("Home")
+            props.navigation.navigate("TermoUso", {emailUsuario: values.email})
     }
 
     const [showPassword, setShowPassword] = React.useState({password: true, confPassword: true});
@@ -88,11 +90,22 @@ export const RegisterScreen = (props: LoginScreenProps) => {
             .replace(/(-\d{4})(\d+?)$/, "$1");
     };
 
+    const buscarIDUsuarioPoEmail = async (email: string) => {
+        const urlBase = "http://192.168.0.107:3001"
+        try {
+            let res = await axios.post(urlBase + "/usuario/detalhar", {"email": email})
+            return res.data._id
+        } catch (error) {
+            return error.response
+        }
+    }
+
+
     return (
         <Root>
             <SafeAreaView>
                 <ScrollView>
-                    <HeaderComponent title="Cadastro" navigation={props.navigation} page="Login"/>
+                    <HeaderComponent title="Cadastro" navigation={props.navigation}/>
                     <Formik initialValues={{
                         name: '',
                         email: '',
@@ -179,6 +192,7 @@ export const RegisterScreen = (props: LoginScreenProps) => {
                                     onBlur={handleBlur('birthDate')}
                                     value={values.birthDate}
                                 />
+
                                 {
                                     touched.birthDate && errors.birthDate ? <Text style={{color: "red"}}>
                                         {errors.birthDate}

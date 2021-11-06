@@ -34,11 +34,9 @@ const AppNavigator = () => (
             <Stack.Screen name="Home" component={DrowerRoutes} />
             <Stack.Screen name="ResetPassword" component={ResetPassword}/>
             <Stack.Screen name="Register" component={RegisterScreen}/>
-            <Drawer.Screen name="Package" component={Package}/>
-            <Drawer.Screen name="TravelInfo" component={TravelInfo}/>
+            <Stack.Screen name="Package" component={Package}/>
+            <Stack.Screen name="TravelInfo" component={TravelInfo}/>
         </Stack.Navigator>
-
-
     </NavigationContainer>
 )
 

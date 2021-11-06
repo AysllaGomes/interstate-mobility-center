@@ -5,11 +5,11 @@ import {Root} from 'popup-ui'
 import {NativeStackNavigatorProps} from "react-native-screens/lib/typescript/native-stack/types";
 import axios from "axios";
 import CheckBox from '@react-native-community/checkbox';
-import { getUniqueId, getManufacturer } from 'react-native-device-info';
-import DeviceInfo from 'react-native-device-info';
 import { useFonts, GermaniaOne_400Regular } from '@expo-google-fonts/germania-one';
 import AppLoading from "expo-app-loading"
 import { theme } from '../../App.style';
+import * as Device from 'expo-device';
+import { HeaderComponent } from '../components/header/header.component';
 
 interface LoginScreenProps {
     navigation: NativeStackNavigatorProps,
@@ -17,9 +17,10 @@ interface LoginScreenProps {
 }
 
 const TermoUso = (props: LoginScreenProps, route) => {
+    const { emailUsuario } = props.route.params;
+
     const goHome = () => props.navigation.navigate("Home") && assinarTermoDeUso()
     const [toggleCheckBox, setToggleCheckBox] = useState(false)
-    const { idUsuario } = props.route.params;
     const [termoUso, setTermoUso] = useState("")
 
     useEffect(() => {
@@ -35,10 +36,27 @@ const TermoUso = (props: LoginScreenProps, route) => {
         exibirTermoDeUso().then(res => res)
     }, []);
 
-    const assinarTermoDeUso = async () => {
+    const buscarIDUsuarioPorEmail = async () => {
         const urlBase = "http://192.168.0.107:3001"
         try {
-            await axios.post(urlBase + "/usuario/assinaturaTermoDeUso", {"idUsuario": idUsuario})
+            let res = await axios.post(urlBase + "/usuario/detalhar", {"email": emailUsuario})
+            return res.data._id
+        } catch (error) {
+            return error.response
+        }
+    } 
+    const deviceInfo = {
+            os: Device.osName,
+            "os-version": Device.osVersion,
+            model: Device.modelName,
+            brand: Device.brand
+    }
+
+    const assinarTermoDeUso = async () => {
+        let idUsuario = await buscarIDUsuarioPorEmail();
+        const urlBase = "http://192.168.0.107:3001"
+        try {
+            await axios.post(urlBase + "/usuario/assinaturaTermoDeUso", {"idUsuario": idUsuario}, {headers: deviceInfo})
         } catch (error) {
             return error.response
         }
@@ -48,7 +66,8 @@ const TermoUso = (props: LoginScreenProps, route) => {
         <Root>
             <SafeAreaView>
             <ScrollView>
-                    <View style={styles.container}>
+                <HeaderComponent title="Termo de Uso" navigation={props.navigation}/>
+                <View style={styles.container}>
                         <Text style={styles.title}>TERMO DE USO !</Text>
                         <View ><Text style={styles.termo}>{termoUso}</Text></View>
 
@@ -57,10 +76,11 @@ const TermoUso = (props: LoginScreenProps, route) => {
                             disabled={false}
                             value={toggleCheckBox}
                             onValueChange={(newValue) => setToggleCheckBox(newValue)}
+                            tintColor="red"
                         />
                         <Text style={styles.text}>Concorda com o termo?</Text>
                     </View>
-                    <Button style={styles.button} onPress={goHome}><Text style={styles.buttonText}>Entrar</Text></Button>
+                    <Button disabled={!toggleCheckBox} style={styles.button} onPress={()=> assinarTermoDeUso() && goHome() }><Text style={styles.buttonText}>Entrar</Text></Button>
                 </View>
             </ScrollView>
         </SafeAreaView>

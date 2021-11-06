@@ -19,7 +19,7 @@ const Login = (props: LoginScreenProps) => {
     const resetPassword = () => props.navigation.navigate("ResetPassword")
 
     // Consula se usuario possui termo de uso 
-    const buscarIDUsuarioPoEmail = async (email: string) => {
+    const buscarIDUsuarioPorEmail = async (email: string) => {
         const urlBase = "http://192.168.0.107:3001"
         try {
             let res = await axios.post(urlBase + "/usuario/detalhar", {"email": email})
@@ -41,11 +41,10 @@ const Login = (props: LoginScreenProps) => {
     const LoginFirebase = async (email: string, password: string) => {
         try {
             await firebase.auth().signInWithEmailAndPassword(email, password)
-            let idUsuario = await buscarIDUsuarioPoEmail(email)
+            let idUsuario = await buscarIDUsuarioPorEmail(email)
             let termoAssinado = await verificaTermoDeUso(idUsuario)
-            // Mudar para TRUE, somente para facilitar testes
             {
-                (termoAssinado === false) ? props.navigation.navigate("TermoUso", {idUsuario: idUsuario}) : props.navigation.navigate("Home")
+                (termoAssinado === false) ? props.navigation.navigate("TermoUso", {emailUsuario: email}) : props.navigation.navigate("Home")
             }
 
         } catch (error) {

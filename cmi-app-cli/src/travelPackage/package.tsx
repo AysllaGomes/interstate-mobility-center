@@ -7,11 +7,11 @@ import {packageStyle} from "./package.style"
 import {theme} from "../../App.style";
 import moment from 'moment';
 
-interface LoginScreenProps {
+interface ScreenProps {
     navigation: any,
     route: any
 }
-const Package = (props: LoginScreenProps) => {
+const Package = (props: ScreenProps) => {
     const {data} = props.route.params;
 
     const goTravelInfo = () => {
@@ -20,7 +20,7 @@ const Package = (props: LoginScreenProps) => {
 
     return (
         <SafeAreaView>
-            <HeaderComponent title="Resumo do Pacote" navigation={props.navigation} page="Home"/>
+            <HeaderComponent title="Resumo do Pacote" navigation={props.navigation}/>
             <Image style={packageStyle.images} source={data.image}/>
 
             <View style={packageStyle.content}>
