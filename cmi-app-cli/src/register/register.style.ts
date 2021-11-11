@@ -6,9 +6,6 @@ export const registerStyle = StyleSheet.create({
         padding: 15,
         paddingTop: 0
     },
-    icon: {
-        color: theme.colors.primary
-    },
     button: {
         margin: 15,
         marginLeft: 0,

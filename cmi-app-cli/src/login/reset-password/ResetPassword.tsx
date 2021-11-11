@@ -4,11 +4,12 @@ import {Button, Card, TextInput} from "react-native-paper";
 import { useValidation } from 'react-native-form-validator';
 import {resetPasswordStyle} from "./ResetPassword.style";
 import {HeaderComponent} from "../../components/header/header.component";
+import { theme } from '../../../App.style';
 
-interface LoginScreenProps {
+interface ScreenProps {
     navigation: any;
 }
-const ResetPassword = (props: LoginScreenProps) => {
+const ResetPassword = (props: ScreenProps) => {
 
     const send = () => props.navigation.navigate("Home")
 
@@ -37,15 +38,14 @@ const ResetPassword = (props: LoginScreenProps) => {
     return (
         <SafeAreaView style={resetPasswordStyle.content}>
             <View style={resetPasswordStyle.view}>
-                <HeaderComponent title="Reset Password" navigation={props.navigation} page="Login"/>
+                <HeaderComponent title="Reset Password" navigation={props.navigation} />
 
-                <Card>
-                    <Card.Title title="Mobility Center" titleStyle={resetPasswordStyle.cardTitle}>
-                    </Card.Title>
+                <Card >
+                    {/*/!*<Card.Title title="Mobility Center" titleStyle={resetPasswordStyle.cardTitle}>*!/</Card.Title>*/}
                     <Card.Content>
                         <TextInput
-                            placeholder="Email"
-                            label="Usuário"
+                            placeholder="E-mail"
+                            label="E-mail"
                             keyboardType="email-address"
                             onChangeText={setEmail}
                             onTextInput={validaEmail}

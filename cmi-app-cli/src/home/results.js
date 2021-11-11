@@ -8,6 +8,8 @@ export default [
         preco: "2.000,00",
         duracao: '20 dias',
         diaria: '100',
+        estadoOrigem: 'Rondônia',
+        estadoDestino: 'Acre',
         descricao: '     Em Arapiraca (Centro), Em Arapiraca (na área de Centro), Falcão Hotel e Restaurante fica a apenas 5 minutos de carro de Museu do Esporte e de Planetário e Casa da Ciência. Este hotel fica a 3,1 km de Arapiraca Garden Shopping. ' +
             'Sinta-se em casa em um de nossos 52 quartos com ar-condicionado, minibares e TVs LED. O Wi-Fi de cortesia mantém você conectado e há programas a cabo para sua diversão.  '
     },
