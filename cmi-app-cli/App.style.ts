@@ -1,16 +1,22 @@
 import {DefaultTheme} from "react-native-paper";
-
+const primary = "#105652"
+const secondary = "#212121"
 export const theme = {
     ...DefaultTheme,
     colors: {
         ...DefaultTheme.colors,
-        primary: "rgb(101,37,131)",
-        secondary: "#212121",
-        textColor: "rgba(32,32,32, 0.6)" +
-
-            "",
+        primary: primary,
+        secondary: secondary,
+        textColor: "rgba(32,32,32, 0.6)",
         background: "transparent",
-        error: "red"
+        diplayErrorMessage: "red",
+        buttons: "#B91646"
+    },
+    toastErrorMensage: {
+        background: secondary,
+        successsTextColor: "green",
+        warningTextColor: "yellow",
+        dangerTextColor: "white"
     },
     fontFamily: {
         fontFamily: "GermaniaOne_400Regular",
@@ -19,7 +25,7 @@ export const theme = {
         color: "white",
         borderRadius: 4,
         // backgroundColor: "#FE7700",
-        backgroundColor: "rgb(101,37,131)",
+        backgroundColor: primary,
     }
 }
 

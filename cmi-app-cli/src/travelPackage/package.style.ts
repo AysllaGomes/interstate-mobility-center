@@ -24,7 +24,7 @@ export const packageStyle = StyleSheet.create({
     },
     datesTravelContent: {},
     descriptionContent: {
-        marginBottom: 20
+        marginBottom: 20,
     },
     text: {
         fontFamily: theme.fontFamily.fontFamily,

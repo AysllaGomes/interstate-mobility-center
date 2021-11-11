@@ -13,15 +13,15 @@ export const indexStyle = StyleSheet.create({
         marginRight: 10
     },
     packagesContent: {
-        marginBottom: 10
+        marginBottom: 10,
     },
     packagesContentInfo: {
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
         padding: 10,
-        borderBottomRightRadius: 10,
-        borderBottomLeftRadius: 10,
+        // borderBottomRightRadius: 10,
+        // borderBottomLeftRadius: 10,
         backgroundColor: theme.colors.secondary,
     },
     packagesText: {

@@ -8,7 +8,7 @@ export const resetPasswordStyle = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "row",
-        backgroundColor: "rgb(101,37,131)"
+        backgroundColor: theme.colors.primary
     },
     view: {
         width: "80%"

@@ -9,7 +9,6 @@ export const loginStyle = StyleSheet.create({
         alignItems: "center",
         flexDirection: "row",
         backgroundColor: theme.colors.primary,
-
     },
     view: {
         width: "80%"

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {SafeAreaView, View, FlatList, TouchableOpacity, StatusBar, Text, Image, ScrollView} from "react-native";
+import {SafeAreaView, View, FlatList, TouchableOpacity, StatusBar, Text, Image, ScrollView, AsyncStorage} from "react-native";
 import {Button} from "react-native-paper";
 import {TextInput} from "react-native-paper";
 import results from "./results";
@@ -10,6 +10,7 @@ import {NativeStackNavigatorProps} from "react-native-screens/lib/typescript/nat
 import axios from "axios";
 import DropDownPicker from 'react-native-dropdown-picker';
 import { NavigationContainer } from "@react-navigation/native";
+import { GetUsuarioLogadoData } from "../../assets/DadosUsuarioLogado/DadosUsuarioLogado";
 interface HomeScreenProps {
     navigation: NativeStackNavigatorProps
 }
@@ -35,6 +36,8 @@ const HomeScreen = (props: HomeScreenProps) => {
     const [list, setList] = useState(results)
     const [dates, setDates] = useState({arrival: '', departure: ''})
     const [selectedState, setSelectedState] = useState({arrival: '', departure: ''})
+    const [usuarioLogado, setUsuarioLogado] = useState({email: ''})
+
 
     useEffect(() => {
             (searchText === '') ? setList(results) : setList(results.filter(item => (item.title.toLowerCase().indexOf(searchText.toLowerCase()) > -1)))
@@ -130,8 +133,6 @@ const HomeScreen = (props: HomeScreenProps) => {
     DropDownPicker.setTheme("DARK")
     return (
     <SafeAreaView>
-
-
         <View style={indexStyle.content}>
                 <View style={indexStyle.filters}>
                     <TextInput

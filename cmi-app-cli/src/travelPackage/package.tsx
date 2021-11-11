@@ -11,21 +11,19 @@ interface ScreenProps {
     navigation: any,
     route: any
 }
+
 const Package = (props: ScreenProps) => {
     const {data} = props.route.params;
 
     const goTravelInfo = () => {
         props.navigation.navigate("TravelInfo")
     }
-
     return (
         <SafeAreaView>
             <HeaderComponent title="Resumo do Pacote" navigation={props.navigation}/>
             <Image style={packageStyle.images} source={data.image}/>
-
             <View style={packageStyle.content}>
                 <Text style={[packageStyle.text, packageStyle.textTitle]}>{data.title}</Text>
-
                 <View style={packageStyle.titleAnPricePackageContent}>
                     <View style={packageStyle.priceContent}>
                         <Text style={packageStyle.text}>Preço final</Text>
@@ -34,19 +32,17 @@ const Package = (props: ScreenProps) => {
                     <View style={packageStyle.datesTravelContent}>
                         <Text style={packageStyle.text}> {data.duracao}</Text>
                         <Text
-                            style={packageStyle.text}> {moment(data.dateDeparture, 'DD/MM/YYYY').format('Do/MM [-] ')}{moment(data.dateArrival, 'DD/MM/YYYY').format('MM [de] YYYY')}
+                            style={packageStyle.text}> {moment(data.dateDeparture, 'DD/MM/YYYY').format('DD/MM [-] ')}{moment(data.dateArrival, 'DD/MM/YYYY').format('MM [de] YYYY')}
                         </Text>
                     </View>
                 </View>
-
-
                 <View style={packageStyle.descriptionContent}>
-                    <Text style={packageStyle.text}> {data.descricao}</Text>
+                    <Text style={[packageStyle.text, {textAlign: "center"}]}> {data.descricao}</Text>
                 </View>
-
-                <Button onPress={goTravelInfo} style={theme.buttons}><Text style={[packageStyle.text, packageStyle.buttonText]}>Efetuar
+                <Button onPress={goTravelInfo} style={theme.buttons}><Text
+                    style={[packageStyle.text, packageStyle.buttonText]}>Efetuar
                     Compra</Text></Button>
-            </View>
+                </View>
         </SafeAreaView>
     );
 }

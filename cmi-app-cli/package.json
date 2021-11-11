@@ -10,6 +10,7 @@
   "dependencies": {
     "@expo-google-fonts/germania-one": "^0.2.0",
     "@mdi/font": "^6.1.95",
+    "@react-native-async-storage/async-storage": "^1.15.11",
     "@react-native-community/checkbox": "^0.5.8",
     "@react-native-community/datetimepicker": "3.5.2",
     "@react-native-community/masked-view": "^0.1.11",
@@ -22,6 +23,7 @@
     "date-fns": "^2.24.0",
     "expo": "~42.0.1",
     "expo-app-loading": "1.1.2",
+    "expo-device": "~3.3.0",
     "expo-font": "~9.2.1",
     "expo-google-sign-in": "~9.2.1",
     "expo-status-bar": "~1.0.4",
@@ -40,11 +42,13 @@
     "react-native-paper": "^4.9.2",
     "react-native-reanimated": "^2.2.3",
     "react-native-render-html": "^6.1.0",
+    "react-native-root-toast": "^3.3.0",
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "^3.4.0",
+    "react-native-toast-notification": "^1.1.2",
+    "react-native-toast-notifications": "^3.2.2",
     "react-native-vector-icons": "^9.0.0",
-    "yup": "^0.32.9",
-    "expo-device": "~3.3.0"
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",

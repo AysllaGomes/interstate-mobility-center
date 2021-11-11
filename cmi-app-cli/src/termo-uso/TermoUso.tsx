@@ -5,11 +5,11 @@ import {Root} from 'popup-ui'
 import {NativeStackNavigatorProps} from "react-native-screens/lib/typescript/native-stack/types";
 import axios from "axios";
 import CheckBox from '@react-native-community/checkbox';
-import { useFonts, GermaniaOne_400Regular } from '@expo-google-fonts/germania-one';
+import {useFonts, GermaniaOne_400Regular} from '@expo-google-fonts/germania-one';
 import AppLoading from "expo-app-loading"
-import { theme } from '../../App.style';
+import {theme} from '../../App.style';
 import * as Device from 'expo-device';
-import { HeaderComponent } from '../components/header/header.component';
+import {HeaderComponent} from '../components/header/header.component';
 
 interface LoginScreenProps {
     navigation: NativeStackNavigatorProps,
@@ -17,11 +17,24 @@ interface LoginScreenProps {
 }
 
 const TermoUso = (props: LoginScreenProps, route) => {
-    const { emailUsuario } = props.route.params;
+    const {emailUsuario} = props.route.params;
 
     const goHome = () => props.navigation.navigate("Home") && assinarTermoDeUso()
     const [toggleCheckBox, setToggleCheckBox] = useState(false)
     const [termoUso, setTermoUso] = useState("")
+
+    //Change Button Opacity hehe
+    const [buttonOpacity, setButtonOpacity] = useState(1)
+    useEffect(() => {
+        const changeButton = () => {
+            if (toggleCheckBox == false) {
+                setButtonOpacity(.8)
+            } else
+                setButtonOpacity(1)
+        }
+        changeButton()
+    })
+    // - end
 
     useEffect(() => {
         const exibirTermoDeUso = async () => {
@@ -44,12 +57,13 @@ const TermoUso = (props: LoginScreenProps, route) => {
         } catch (error) {
             return error.response
         }
-    } 
+    }
     const deviceInfo = {
-            os: Device.osName,
-            "os-version": Device.osVersion,
-            model: Device.modelName,
-            brand: Device.brand
+        versaoDoApp: require("../../package.json"),
+        os: Device.osName,
+        "os-version": Device.osVersion,
+        model: Device.modelName,
+        brand: Device.brand
     }
 
     const assinarTermoDeUso = async () => {
@@ -61,48 +75,56 @@ const TermoUso = (props: LoginScreenProps, route) => {
             return error.response
         }
     }
-
     return (
         <Root>
             <SafeAreaView>
-            <ScrollView>
                 <HeaderComponent title="Termo de Uso" navigation={props.navigation}/>
-                <View style={styles.container}>
-                        <Text style={styles.title}>TERMO DE USO !</Text>
-                        <View ><Text style={styles.termo}>{termoUso}</Text></View>
 
-                    <View style={styles.checkbox}>
-                        <CheckBox
-                            disabled={false}
-                            value={toggleCheckBox}
-                            onValueChange={(newValue) => setToggleCheckBox(newValue)}
-                            tintColor="red"
-                        />
-                        <Text style={styles.text}>Concorda com o termo?</Text>
+                <ScrollView>
+                    <View style={styles.container}>
+
+                        <Text style={styles.title}>Termos e condições gerais de uso do APP</Text>
+                        <View><Text style={styles.termo}>{termoUso}</Text></View>
+
+                        <View style={styles.checkbox}>
+                            <CheckBox
+                                disabled={false}
+                                value={toggleCheckBox}
+                                onValueChange={(newValue) => setToggleCheckBox(newValue)}
+                                tintColor="red"
+                            />
+                            <Text style={styles.text}>Concorda com o termo?</Text>
+                        </View>
+                        <Button disabled={!toggleCheckBox} style={{...styles.button, ...{opacity: buttonOpacity}}}
+                                onPress={() => assinarTermoDeUso() && goHome()}><Text
+                            style={styles.buttonText}>Concordar</Text></Button>
+
                     </View>
-                    <Button disabled={!toggleCheckBox} style={styles.button} onPress={()=> assinarTermoDeUso() && goHome() }><Text style={styles.buttonText}>Entrar</Text></Button>
-                </View>
-            </ScrollView>
-        </SafeAreaView>
+                </ScrollView>
+            </SafeAreaView>
         </Root>
     );
 }
-
 export default TermoUso;
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 50,
+        marginTop: 30,
         marginBottom: 10
     },
     title: {
         fontFamily: theme.fontFamily.fontFamily,
-        color: "rgb(101,37,131)",
-        textAlign: "center"
+        color: theme.colors.primary,
+        textAlign: "center",
+        fontSize: 18,
+        marginBottom: 10
     },
-    button:{
-      backgroundColor: "rgb(101,37,131)",
-        margin: 10
+    button: {
+        backgroundColor: theme.colors.primary,
+        margin: 10,
+        marginBottom: 50,
+        paddingTop: 5,
+        paddingBottom: 5,
     },
     buttonText: {
         fontFamily: theme.fontFamily.fontFamily,
@@ -114,7 +136,7 @@ const styles = StyleSheet.create({
         fontFamily: theme.fontFamily.fontFamily,
 
     },
-    checkbox:{
+    checkbox: {
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
