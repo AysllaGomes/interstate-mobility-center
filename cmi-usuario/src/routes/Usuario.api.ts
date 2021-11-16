@@ -98,7 +98,7 @@ export class UsuarioApi extends ApiRouter {
         *         schema:
         *             $ref: '#/definitions/Usuario'
         */
-      server.get(`${this.path}/detalhar`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
+      server.post(`${this.path}/detalhar`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
         try {
           if (request.body.email) {
             return response.json(await this.controller.detalharUsuario(request.body));
@@ -172,7 +172,8 @@ export class UsuarioApi extends ApiRouter {
        *         schema:
        *             $ref: '#/definitions/IRetornoPassageiroAssinaturaTermoDeUso'
        */
-      server.get(`${this.path}/consultaAssinaturaTermoUsuario`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
+      //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      server.post(`${this.path}/consultaAssinaturaTermoUsuario`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
         try {
           if (request.body.idUsuario) {
             const result: IRetornoPassageiroAssinaturaTermoDeUso = await this.controller.usuarioAssinaturaTermoDeUso(request.body);
