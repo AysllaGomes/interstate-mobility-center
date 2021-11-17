@@ -99,7 +99,7 @@ const Login = (props: LoginScreenProps) => {
             <SafeAreaView style={loginStyle.content}>
                 <View style={loginStyle.view}>
                     <Card>
-                        <Card.Title title="Mobility Center" titleStyle={loginStyle.cardTitle}>
+                        <Card.Title title="VoeJá" titleStyle={loginStyle.cardTitle}>
                         </Card.Title>
                         <Card.Content>
                             <Formik initialValues={{email: '', password: ''}}

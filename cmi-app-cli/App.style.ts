@@ -20,6 +20,7 @@ export const theme = {
     },
     fontFamily: {
         fontFamily: "GermaniaOne_400Regular",
+
     },
     buttons: {
         color: "white",
