@@ -8,6 +8,8 @@ import ResetPassword from "../login/reset-password/ResetPassword";
 import Package from "../travelPackage/package";
 import TermoUso from "../termo-uso/TermoUso";
 import TravelInfo from '../travel-info/TravelInfo';
+import Payment from '../payment/Payment';
+import ResumoCompra from '../resumo-compra/resumoCompra';
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import DrawerContent from "../drawer/DrowerContent"
 
@@ -36,6 +38,8 @@ const AppNavigator = () => (
             <Stack.Screen name="Register" component={RegisterScreen}/>
             <Stack.Screen name="Package" component={Package}/>
             <Stack.Screen name="TravelInfo" component={TravelInfo}/>
+            <Stack.Screen name="Payment" component={Payment}/>
+            <Stack.Screen name="ResumoCompra" component={ResumoCompra}/>
         </Stack.Navigator>
     </NavigationContainer>
 )
