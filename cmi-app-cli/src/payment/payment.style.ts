@@ -3,7 +3,7 @@ import {theme} from "../../App.style";
 
 export const paymentStyle = StyleSheet.create({
     content: {
-        padding: 15,
+        padding: 10,
         paddingTop: 0
     },
     button: {

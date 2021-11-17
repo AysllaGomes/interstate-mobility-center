@@ -2,13 +2,14 @@ import * as yup from 'yup';
 import {parse, isDate, format, toDate} from "date-fns";
 
 export const paymentForm = yup.object().shape({
-    email: yup.string().required("Preencher campo!").email("Email inválido!"),
-    name: yup.string().required("Preencher campo!"),
-    cpf: yup.string().required("Preencher campo!").test("validar-cpf", "CPF inválido!", (e) => validaCpf(e)),
+    cardNumber: yup.number().required("Obrigatório!"),
+    mesCartao: yup.number().min(1, "Formato inválido!").max(12, "Formato inválido!").required("Obrigatório!"),
+    anoCartao: yup.string().min(2, "Formato inválido!").max(2, "Formato inválido!").required("Obrigatório!"),
+    cvcCartao: yup.string().min(3, "Formato inválido!").max(3, "Formato inválido!").required("Obrigatório!"),
+    name: yup.string().required("Obrigatório!"),
+    cpf: yup.string().required("Obrigatório!").test("validar-cpf", "CPF inválido!", (e) => validaCpf(e)),
 
 })
-
-
 function validaCpf(cpf) {
     if (typeof cpf !== "string") return false
     cpf = cpf.replace(/[\s.-]*/igm, '')

@@ -26,25 +26,45 @@ const maskCPF = (value) => {
 };
 
 
+const cardMask = (value) => {
+    return value.replace(/\D/g, "")
+}
+const dateMask = (value) => {
+    return value.replace(/\D/g, "")
+}
+// limitar tamanho para 3
+const cvcMask = (value) => {
+    return value.replace(/\D/g, "")
+}
+
 
 const Payment = (props: ScreenProps) => {
 
-    const resumoViagem = () => {
+    const goResumoViagem = () => {
         props.navigation.navigate("ResumoCompra")
-
     }
     return (
         <SafeAreaView>
             <HeaderComponent title="Pagamento" navigation={props.navigation}/>
-            <ScrollView>
-                <Text>Payment </Text>
+            <View style={paymentStyle.content}>
+                <Text style={{
+                    ...{fontFamily: theme.fontFamily.fontFamily}, ...{
+                        textAlign: "center",
+                        marginTop: 20,
+                        marginBottom: 20,
+                        fontSize: 18
+                    }
+                }}>Digite as informações do cartão de crédito que você
+                    deseja usar para o pagamento</Text>
                 <Formik initialValues={{
                     name: '',
-                    email: '',
                     cardNumber: '',
-                    cpf: ''
+                    cpf: '',
+                    mesCartao: '',
+                    anoCartao: '',
+                    cvcCartao: ''
                 }}
-                        onSubmit={values => resumoViagem()}
+                        onSubmit={values => goResumoViagem()}
                         validationSchema={paymentForm}>
                     {({
                           handleSubmit,
@@ -57,17 +77,101 @@ const Payment = (props: ScreenProps) => {
                           values
                       }) => (
 
-                        <View style={paymentStyle.content}>
-
+                        <View>
                             <TextInput
+                                keyboardType="numeric"
                                 label="Número do cartão"
-                                onChangeText={handleChange('cardNumber')}
+                                onChangeText={(value) => setFieldValue('cardNumber', cardMask(value))}
                                 onFocus={() => setFieldTouched('cardNumber')}
                                 onBlur={handleBlur('cardNumber')}
                                 value={values.cardNumber}
                             />
 
+                            {
+                                touched.cardNumber && errors.cardNumber ? <Animatable.Text
+                                    style={{
+                                        color: theme.colors.diplayErrorMessage,
+                                        display: "flex",
+                                        flexDirection: "column"
+                                    }}
+                                    animation="shake"
+                                    duration={500}
+                                    easing={"linear"}>
+                                    {errors.cardNumber}
+                                </Animatable.Text> : null
+                            }
 
+                            <View style={{display: "flex", flexDirection: "row"}}>
+                                <View style={{flex: 1, paddingRight: 20}}>
+                                    <TextInput
+                                        placeholder="MM"
+                                        keyboardType="numeric"
+                                        onChangeText={(value) => setFieldValue('mesCartao', dateMask(value))}
+                                        onFocus={() => setFieldTouched('mesCartao')}
+                                        onBlur={handleBlur('mesCartao')}
+                                        value={values.mesCartao}
+                                    />
+                                    {
+                                        touched.mesCartao && errors.mesCartao ? <Animatable.Text
+                                            style={{
+                                                color: theme.colors.diplayErrorMessage,
+                                                display: "flex",
+                                                flexDirection: "column"
+                                            }}
+                                            animation="shake"
+                                            duration={500}
+                                            easing={"linear"}>
+                                            {errors.mesCartao}
+                                        </Animatable.Text> : null
+                                    }
+                                </View>
+                                <View style={{flex: 1, paddingRight: 20}}>
+                                    <TextInput
+                                        placeholder="AA"
+                                        keyboardType="numeric"
+                                        onChangeText={(value) => setFieldValue('anoCartao', dateMask(value))}
+                                        onFocus={() => setFieldTouched('anoCartao')}
+                                        onBlur={handleBlur('anoCartao')}
+                                        value={values.anoCartao}
+                                    />
+                                    {
+                                        touched.anoCartao && errors.anoCartao ? <Animatable.Text
+                                            style={{
+                                                color: theme.colors.diplayErrorMessage,
+                                                display: "flex",
+                                                flexDirection: "column"
+                                            }}
+                                            animation="shake"
+                                            duration={500}
+                                            easing={"linear"}>
+                                            {errors.anoCartao}
+                                        </Animatable.Text> : null
+                                    }
+                                </View>
+                                <View style={{flex: 1}}>
+                                    <TextInput
+                                        placeholder="CVC"
+                                        keyboardType="numeric"
+                                        onChangeText={(value) => setFieldValue('cvcCartao', cvcMask(value))}
+                                        onFocus={() => setFieldTouched('cvcCartao')}
+                                        onBlur={handleBlur('cvcCartao')}
+                                        value={values.cvcCartao}
+                                    />
+                                    {
+                                        touched.cvcCartao && errors.cvcCartao ? <Animatable.Text
+                                            style={{
+                                                color: theme.colors.diplayErrorMessage,
+                                                display: "flex",
+                                                flexDirection: "row"
+                                            }}
+                                            animation="shake"
+                                            duration={500}
+                                            easing={"linear"}>
+                                            {errors.cvcCartao}
+                                        </Animatable.Text> : null
+                                    }
+                                </View>
+                            </View>
 
                             <TextInput
                                 label="Nome no cartão"
@@ -96,7 +200,7 @@ const Payment = (props: ScreenProps) => {
                                 value={values.cpf}
                             />
                             {
-                                touched.cpf && errors.cpf ?       <Animatable.Text
+                                touched.cpf && errors.cpf ? <Animatable.Text
                                     style={{color: theme.colors.diplayErrorMessage}}
                                     animation="shake"
                                     duration={500}
@@ -105,31 +209,18 @@ const Payment = (props: ScreenProps) => {
                                 </Animatable.Text> : null
                             }
 
-                            <TextInput
-                                placeholder="E-mail"
-                                keyboardType="email-address"
-                                onChangeText={handleChange('email')}
-                                onFocus={() => setFieldTouched('email')}
-                                onBlur={handleBlur('email')}
-                                value={values.email}
-                            />
-                            {
-                                touched.email && errors.email ?       <Animatable.Text
-                                    style={{color: theme.colors.diplayErrorMessage}}
-                                    animation="shake"
-                                    duration={500}
-                                    easing={"linear"}>
-                                    {errors.email}
-                                </Animatable.Text> : null
-                            }
                             <Button onPress={handleSubmit} mode="contained"
-                           >Realizar compra</Button>
+                                    style={{...theme.buttons, ...{marginTop: 20}}}><Text
+                                style={{
+                                    color: theme.buttons.color,
+                                    fontFamily: theme.fontFamily.fontFamily,
+                                    fontSize: 18
+                                }}>Realizar compra</Text></Button>
                         </View>
                     )}
                 </Formik>
-            </ScrollView>
+            </View>
         </SafeAreaView>
-
     )
 }
 export default Payment;

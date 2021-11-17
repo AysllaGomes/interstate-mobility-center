@@ -144,6 +144,7 @@ const TravelInfo = (props: ScreenProps) => {
         <SafeAreaView>
             <ScrollView>
                 <HeaderComponent title="Informações da Viagem" navigation={props.navigation}/>
+                <View  style={{marginHorizontal: 10}}>
                 <Text style={{
                     ...{fontFamily: theme.fontFamily.fontFamily}, ...{
                         textAlign: "center",
@@ -241,7 +242,7 @@ const TravelInfo = (props: ScreenProps) => {
                                     }
                                 )}
                                 <Button onPress={handleSubmit}
-                                        style={{...theme.buttons, ...{marginTop: 20, margin: 5}}}><Text
+                                        style={{...theme.buttons, ...{marginTop: 20}}}><Text
                                     style={{
                                         color: theme.buttons.color,
                                         fontFamily: theme.fontFamily.fontFamily,
@@ -253,6 +254,7 @@ const TravelInfo = (props: ScreenProps) => {
                     }}
 
                 </Formik>
+                </View>
             </ScrollView>
         </SafeAreaView>
     )
