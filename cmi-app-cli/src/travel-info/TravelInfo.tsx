@@ -144,116 +144,125 @@ const TravelInfo = (props: ScreenProps) => {
         <SafeAreaView>
             <ScrollView>
                 <HeaderComponent title="Informações da Viagem" navigation={props.navigation}/>
-                <View  style={{marginHorizontal: 10}}>
-                <Text style={{
-                    ...{fontFamily: theme.fontFamily.fontFamily}, ...{
-                        textAlign: "center",
-                        marginTop: 20,
-                        marginBottom: 20,
-                        fontSize: 18
-                    }
-                }}>Digite as informações do usuário que irá realizar a viagem</Text>
-
-                <Formik
-                    initialValues={{passageiros: [criarFormularioPassageiro()],}}
-                    onSubmit={values => goPayment(values.passageiros)}
-                >
-                    {({
-                          handleChange,
-                          handleBlur,
-                          handleSubmit,
-                          values,
-                          setFieldValue,
-                          errors,
-                          touched,
-                          setTouched,
-                          isSubmitting,
-                          setSubmitting,
-                          validateOnMount
-                      }) => {
-                        const adicionarFormularioPassageiro = () => {
-                            if (values.passageiros.length <= 2) setFieldValue('passageiros', [...values.passageiros, criarFormularioPassageiro()])
+                <View style={{marginHorizontal: 10}}>
+                    <Text style={{
+                        ...{fontFamily: theme.fontFamily.fontFamily}, ...{
+                            textAlign: "center",
+                            marginTop: 20,
+                            marginBottom: 20,
+                            fontSize: 18
                         }
-                        const removerFormularioPassageiro = () => {
-                            if (values.passageiros.length > 1) {
-                                setFieldValue('passageiros', [...values.passageiros].slice(0, values.passageiros.length - 1))
+                    }}>Digite as informações do usuário que irá realizar a viagem</Text>
+
+                    <Formik
+                        initialValues={{passageiros: [criarFormularioPassageiro()],}}
+                        onSubmit={values => goPayment(values.passageiros)}
+                    >
+                        {({
+                              handleChange,
+                              handleBlur,
+                              handleSubmit,
+                              values,
+                              setFieldValue,
+                              errors,
+                              touched,
+                              setTouched,
+                              isSubmitting,
+                              setSubmitting,
+                              validateOnMount
+                          }) => {
+                            const adicionarFormularioPassageiro = () => {
+                                if (values.passageiros.length <= 2) setFieldValue('passageiros', [...values.passageiros, criarFormularioPassageiro()])
                             }
-                        }
-                        return (
-                            <View>
-                                <Button onPress={adicionarFormularioPassageiro}>Adicionar passageiro</Button>
-                                <Button onPress={removerFormularioPassageiro}>Remover passageiro</Button>
+                            const removerFormularioPassageiro = () => {
+                                if (values.passageiros.length > 1) {
+                                    setFieldValue('passageiros', [...values.passageiros].slice(0, values.passageiros.length - 1))
+                                }
+                            }
+                            return (
+                                <View>
+                                    <Button onPress={adicionarFormularioPassageiro}>Adicionar passageiro</Button>
+                                    <Button onPress={removerFormularioPassageiro}>Remover passageiro</Button>
 
-                                {values.passageiros.map((text, index) => {
-                                        let validations = {
-                                            nome: validaNome(values.passageiros[index].nome),
-                                            idade: validaIdade(values.passageiros[index].idade),
-                                            cpf: validaCpf(values.passageiros[index].cpf),
-                                            telefone: validaTelefone(values.passageiros[index].telefone)
+                                    {values.passageiros.map((text, index) => {
+                                            let validations = {
+                                                nome: validaNome(values.passageiros[index].nome),
+                                                idade: validaIdade(values.passageiros[index].idade),
+                                                cpf: validaCpf(values.passageiros[index].cpf),
+                                                telefone: validaTelefone(values.passageiros[index].telefone)
+                                            }
+                                            return (<View key={index}>
+                                                <Text style={{
+                                                    fontFamily: theme.fontFamily.fontFamily,
+                                                    fontSize: 18,
+                                                    marginTop: 20
+                                                }}>Passageiro {index + 1}</Text>
+                                                <TextInput
+                                                    key={index}
+                                                    placeholder="Nome completo"
+                                                    onChangeText={handleChange(`passageiros.${index}.nome`)}
+                                                    onBlur={handleBlur(`passageiros[${index}].nome`)}
+                                                    value={values.passageiros[index].nome}
+                                                />
+                                                {!validations.nome.valid && isSubmitting ?
+                                                    <Text
+                                                        style={{color: theme.colors.diplayErrorMessage}}>{validations.nome.errorMsg}</Text> : null}
+
+                                                <View style={{display: "flex", flexDirection: "row"}}>
+                                                    <View style={{flex: 1, paddingRight: 20}}>
+                                                        <TextInput
+                                                            placeholder="Idade"
+                                                            keyboardType="decimal-pad"
+                                                            onChangeText={handleChange(`passageiros[${index}].idade`)}
+                                                            onBlur={handleBlur(`passageiros[${index}].idade`)}
+                                                            value={values.passageiros[index].idade}
+                                                        />
+                                                        {!validations.idade.valid && isSubmitting ?
+                                                            <Text
+                                                                style={{color: theme.colors.diplayErrorMessage}}>{validations.idade.errorMsg}</Text> : null}
+                                                    </View>
+                                                    <View style={{flex: 1, paddingRight: 20}}>
+                                                        <TextInput
+                                                            placeholder="CPF"
+                                                            keyboardType="decimal-pad"
+                                                            onChangeText={(e) => setFieldValue(`passageiros[${index}].cpf`, maskCPF(e))}
+                                                            onBlur={handleBlur(`passageiros[${index}].cpf`)}
+                                                            value={values.passageiros[index].cpf}
+                                                        />
+                                                        {!validations.cpf.valid && isSubmitting ?
+                                                            <Text
+                                                                style={{color: theme.colors.diplayErrorMessage}}>{validations.cpf.errorMsg}</Text> : null}
+                                                    </View>
+                                                    <View style={{flex: 1, paddingRight: 20}}>
+                                                        <TextInput
+                                                            placeholder="Celular"
+                                                            keyboardType="phone-pad"
+                                                            onChangeText={(e) => setFieldValue(`passageiros[${index}].telefone`, maskPhone(e))}
+                                                            onBlur={handleBlur(`passageiros[${index}].telefone`)}
+                                                            value={values.passageiros[index].telefone}
+                                                        />
+                                                        {!validations.telefone.valid && isSubmitting ?
+                                                            <Text
+                                                                style={{color: theme.colors.diplayErrorMessage}}>{validations.telefone.errorMsg}</Text> : null}
+                                                    </View>
+                                                </View>
+
+                                            </View>)
                                         }
-                                        return (<View key={index}>
-                                            <Text style={{
-                                                fontFamily: theme.fontFamily.fontFamily,
-                                                fontSize: 18,
-                                                marginTop: 20
-                                            }}>Passageiro {index + 1}</Text>
-                                            <TextInput
-                                                key={index}
-                                                placeholder="Nome completo"
-                                                onChangeText={handleChange(`passageiros.${index}.nome`)}
-                                                onBlur={handleBlur(`passageiros[${index}].nome`)}
-                                                value={values.passageiros[index].nome}
-                                            />
-                                            {!validations.nome.valid && isSubmitting ?
-                                                <Text
-                                                    style={{color: theme.colors.diplayErrorMessage}}>{validations.nome.errorMsg}</Text> : null}
-                                            <TextInput
-                                                placeholder="Idade"
-                                                keyboardType="decimal-pad"
-                                                onChangeText={handleChange(`passageiros[${index}].idade`)}
-                                                onBlur={handleBlur(`passageiros[${index}].idade`)}
-                                                value={values.passageiros[index].idade}
-                                            />
-                                            {!validations.idade.valid && isSubmitting ?
-                                                <Text
-                                                    style={{color: theme.colors.diplayErrorMessage}}>{validations.idade.errorMsg}</Text> : null}
+                                    )}
+                                    <Button onPress={handleSubmit}
+                                            style={{...theme.buttons, ...{marginTop: 20}}}><Text
+                                        style={{
+                                            color: theme.buttons.color,
+                                            fontFamily: theme.fontFamily.fontFamily,
+                                            fontSize: 18
+                                        }}>Efetuar
+                                        Compra</Text></Button>
+                                </View>
+                            )
+                        }}
 
-                                            <TextInput
-                                                placeholder="CPF"
-                                                keyboardType="decimal-pad"
-                                                onChangeText={(e) => setFieldValue(`passageiros[${index}].cpf`, maskCPF(e))}
-                                                onBlur={handleBlur(`passageiros[${index}].cpf`)}
-                                                value={values.passageiros[index].cpf}
-                                            />
-                                            {!validations.cpf.valid && isSubmitting ?
-                                                <Text
-                                                    style={{color: theme.colors.diplayErrorMessage}}>{validations.cpf.errorMsg}</Text> : null}
-                                            <TextInput
-                                                placeholder="Celular"
-                                                keyboardType="phone-pad"
-                                                onChangeText={(e) => setFieldValue(`passageiros[${index}].telefone`, maskPhone(e))}
-                                                onBlur={handleBlur(`passageiros[${index}].telefone`)}
-                                                value={values.passageiros[index].telefone}
-                                            />
-                                            {!validations.telefone.valid && isSubmitting ?
-                                                <Text
-                                                    style={{color: theme.colors.diplayErrorMessage}}>{validations.telefone.errorMsg}</Text> : null}
-                                        </View>)
-                                    }
-                                )}
-                                <Button onPress={handleSubmit}
-                                        style={{...theme.buttons, ...{marginTop: 20}}}><Text
-                                    style={{
-                                        color: theme.buttons.color,
-                                        fontFamily: theme.fontFamily.fontFamily,
-                                        fontSize: 18
-                                    }}>Efetuar
-                                    Compra</Text></Button>
-                            </View>
-                        )
-                    }}
-
-                </Formik>
+                    </Formik>
                 </View>
             </ScrollView>
         </SafeAreaView>

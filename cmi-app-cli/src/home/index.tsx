@@ -14,8 +14,21 @@ import { GetUsuarioLogadoData } from "../../assets/DadosUsuarioLogado/DadosUsuar
 interface HomeScreenProps {
     navigation: NativeStackNavigatorProps
 }
-
-
+// Chega a ser cômico, mas precisa disso para habilitar Scroll sem Wornings kkkk
+function VirtualizedView(props: any) {
+    return (
+        <FlatList
+            data={[]}
+            ListEmptyComponent={null}
+            keyExtractor={() => "dummy"}
+            renderItem={null}
+            ListHeaderComponent={() => (
+                <React.Fragment>{props.children}</React.Fragment>
+            )}
+        />
+    );
+}
+// Fim
 const TravelListItem = ({data, navigation}) => {
     const toTravelPackage = () => navigation.navigate("Package", {data: data})
     return (
@@ -133,6 +146,7 @@ const HomeScreen = (props: HomeScreenProps) => {
     DropDownPicker.setTheme("DARK")
     return (
     <SafeAreaView>
+        <VirtualizedView>
         <View style={indexStyle.content}>
                 <View style={indexStyle.filters}>
                     <TextInput
@@ -229,6 +243,7 @@ const HomeScreen = (props: HomeScreenProps) => {
                 </View>
 
             </View>
+        </VirtualizedView>
         </SafeAreaView>
 
     );

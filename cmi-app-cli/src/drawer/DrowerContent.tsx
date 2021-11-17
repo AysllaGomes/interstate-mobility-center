@@ -26,10 +26,9 @@ function DrawerContent(props) {
     }
 
     const goToTermoDeUso = () => {
-        props.navigation.navigate("TermoUso")
+        props.navigation.navigate("UserTravels")
 
     }
-
 
     return (
 
@@ -38,12 +37,12 @@ function DrawerContent(props) {
                 <DrawerItem
                     icon={({color, size}) => (
                         <Icon
-                            name="book-open"
+                            name="car"
                             color={color}
                             size={size}
                         />
                     )}
-                    label="Termo de uso!"
+                    label="Minhas viagens"
                     onPress={goToTermoDeUso}
                 />
 

@@ -5,7 +5,6 @@ import {NativeStackNavigatorProps} from 'react-native-screens/lib/typescript/nat
 import {HeaderComponent} from '../components/header/header.component';
 import {Text} from "react-native-paper";
 import {Formik} from 'formik';
-
 import {theme} from '../../App.style';
 import * as Animatable from 'react-native-animatable';
 
@@ -14,25 +13,15 @@ interface ScreenProps {
     page: string,
     route: NativeStackNavigatorProps
 }
-
-const ResumoCompra = (props: ScreenProps) => {
-
-    const goHome = () => {
-        props.navigation.navigate("Home")
-    }
+const UserTravels = (props: ScreenProps) => {
 
     return (
         <SafeAreaView>
-            <HeaderComponent title="Resumo compra" navigation={props.navigation}/>
-            <View style={{paddingHorizontal: 10}}>
-                <Text style={{fontFamily: theme.fontFamily.fontFamily, textAlign: "center", marginTop: 20, fontSize: 38}}>Parabéns !</Text>
-                <Text style={{fontFamily: theme.fontFamily.fontFamily, textAlign: "center", marginTop: 20, fontSize: 18}}>Compra realizada com sucesso :)</Text>
-
-
-            <Button onPress={goHome} mode="contained" >Home</Button>
+            <HeaderComponent title="Minhas viagens" navigation={props.navigation}/>
+            <View>
+                <Text>My travels</Text>
             </View>
         </SafeAreaView>
     )
 }
-
-export default ResumoCompra;
+export default UserTravels;

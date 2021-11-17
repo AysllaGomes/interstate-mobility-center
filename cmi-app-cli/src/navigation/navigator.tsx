@@ -10,6 +10,7 @@ import TermoUso from "../termo-uso/TermoUso";
 import TravelInfo from '../travel-info/TravelInfo';
 import Payment from '../payment/Payment';
 import ResumoCompra from '../resumo-compra/resumoCompra';
+import UserTravels from '../userTravels/UserTravels'; 
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import DrawerContent from "../drawer/DrowerContent"
 
@@ -40,6 +41,7 @@ const AppNavigator = () => (
             <Stack.Screen name="TravelInfo" component={TravelInfo}/>
             <Stack.Screen name="Payment" component={Payment}/>
             <Stack.Screen name="ResumoCompra" component={ResumoCompra}/>
+            <Stack.Screen name="UserTravels" component={UserTravels}/>
         </Stack.Navigator>
     </NavigationContainer>
 )
