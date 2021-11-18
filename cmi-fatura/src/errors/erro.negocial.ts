@@ -15,10 +15,12 @@ export class ErroNegocial extends ErroPadrao {
 
 export const ERRO_NEGOCIAL_NA_VALIDACAO: [string, string] = ["001", "Ocorreu um erro na validação: {0}"];
 export const ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS: [string, string] = ["002", "Ocorreu um erro, existe(m) propriedade(s) obrigatória(s) não informada(s)."];
+export const ERRO_NEGOCIAL_JA_EXISTE_FATURA_ABERTA_PRA_ESSE_CONTRATO_NESSE_PERIODO: [string, string] = ["003", "Ocorreu um erro, já existe uma fatura aberta nesse período para o contrato: '{0}'"];
 
 export const listErroNegocio = [
   new ErroNegocial(...ERRO_NEGOCIAL_NA_VALIDACAO),
   new ErroNegocial(...ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS),
+  new ErroNegocial(...ERRO_NEGOCIAL_JA_EXISTE_FATURA_ABERTA_PRA_ESSE_CONTRATO_NESSE_PERIODO),
 ];
 
 /**
