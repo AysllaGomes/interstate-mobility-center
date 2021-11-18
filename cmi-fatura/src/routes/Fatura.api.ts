@@ -41,5 +41,28 @@ export class FaturaApi extends ApiRouter {
           return response.json(await this.faturaController.aberturaFatura(request.body));
         } catch (error) { next(error); }
       });
+
+      /**
+         * @swagger
+         *   /fatura/encerrar:
+         *   post:
+         *     description: Fechar a fatura do idFaturaContratoMobilidade informado.
+         *     summary: Fechar a fatura
+         *     parameters:
+         *      - in: body
+         *        name: 'idFaturaContratoMobilidade'
+         *        required: true
+         *     tags:
+         *       - Fatura
+         *     responses:
+         *       200:
+         *         description: Retorna um false em caso de erro ou a FaturaContratoMobilidadeInterface no caso ok
+         *         type: FaturaContratoMobilidadeInterface | false
+         */
+      server.post(`${this.path}/encerrar`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
+        try {
+          response.json(await this.faturaController.encerrarFatura(request.body));
+        } catch (error) { next(error); }
+      });
     }
 }

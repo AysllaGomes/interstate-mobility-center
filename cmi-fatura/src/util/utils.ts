@@ -17,6 +17,14 @@ export function diffTimeInSeconds(start: [number, number]): number {
   return Math.round((diff[0] * 1e9 + diff[1]) / 1000000);
 }
 
+export function formataValorPraDuasCasasDecimais(valor: number): number {
+  if (valor.toPrecision().split(".")[1]?.length > 2) {
+    const fixed = 10 ** 2;
+    return Number(Math.round(valor * fixed) / fixed);
+  }
+  return valor;
+}
+
 export function retornarErroValidacao(resultadoValidacao: ValidationResult, erroPadrao: [string, string]): void {
   if (resultadoValidacao.error) {
     throw new ErroNegocial(...erroPadrao).formatMessage(

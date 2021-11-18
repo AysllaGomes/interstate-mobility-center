@@ -6,27 +6,32 @@ import {
 } from "../util/utils";
 import {
   ErroSQL,
+  ERRO_SQL_FATURA_NAO_ENCONTRADA,
   ERRO_SQL_REGISTRO_NAO_ENCONTRADO,
   ERRO_SQL_AO_SALVAR_DADOS_DE_FATURA,
   ERRO_SQL_AO_INCREMENTAR_NUMERO_DA_FATURA,
+  ERRO_SQL_AO_ATUALIZAR_REGISTRO_PARA_FECHAMENTO_FATURA,
 } from "../errors/erro.sql";
 import {
   ErroNegocial,
   ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS,
   ERRO_NEGOCIAL_JA_EXISTE_FATURA_ABERTA_PRA_ESSE_CONTRATO_NESSE_PERIODO,
 } from "../errors/erro.negocial";
+import { ViagemService } from "./Viagem.service";
 import ContratoModel, { IContrato } from "../model/Contrato";
 import { IDatasFatura } from "../model/interfaces/DatasFatura";
 import { ServiceValidator } from "../validators/Service.validator";
 import { IAberturaFatura } from "../model/interfaces/AberturaFatura";
+import { IViagemDaFatura } from "../model/interfaces/ViagemDaFatura";
 import { EstadoDaFaturaEnum } from "../model/enums/EstadoDaFatura.enum";
+import { IEncerrarFatura } from "../model/interfaces/EncerrarFatura";
 import { EstadoDoPagamentoDaFaturaEnum } from "../model/enums/EstadoDoPagamentoDaFatura.enum";
-import FaturaContratoMobilidade, { IFaturaContratoMobilidade } from "../model/FaturaContratoMobilidade";
+import FaturaContratoMobilidade, { IFatura } from "../model/Fatura";
 
 export class FaturaService {
     private serviceValidator = new ServiceValidator();
 
-    public async aberturaFatura(body: IAberturaFatura): Promise<IFaturaContratoMobilidade | undefined> {
+    public async aberturaFatura(body: IAberturaFatura): Promise<IFatura | undefined> {
       const resultadoValidacao = this.serviceValidator.validaNovaFatura(body);
       retornarErroValidacao(resultadoValidacao, ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS);
 
@@ -44,7 +49,7 @@ export class FaturaService {
         const existeFaturaAberta = await this.verificaSeJaExisteFaturaAbertaProContratoNessePeriodo(datas.primeiroDiaDoMes, datas.ultimoDiaDoMes, idContrato);
 
         if (!existeFaturaAberta) {
-          const fatura: IFaturaContratoMobilidade = await this.formataAberturaFatura(contratoMobilidade, datas);
+          const fatura: IFatura = await this.formataAberturaFatura(contratoMobilidade, datas);
 
           return this.salvarFatura(fatura);
         }
@@ -71,7 +76,7 @@ export class FaturaService {
       throw new ErroSQL(...ERRO_SQL_REGISTRO_NAO_ENCONTRADO).formatMessage("Contrato");
     }
 
-    public async formataAberturaFatura(contratoMobilidade: IContrato, datas: IDatasFatura): Promise<IFaturaContratoMobilidade> {
+    public async formataAberturaFatura(contratoMobilidade: IContrato, datas: IDatasFatura): Promise<IFatura> {
       // eslint-disable-next-line no-underscore-dangle
       const idContrato = contratoMobilidade._id;
 
@@ -104,7 +109,7 @@ export class FaturaService {
       try {
         logger.debug(`Verificando se já existe uma fatura aberta nesse período pro contrato: ${idContrato}...`);
 
-        const fatura: IFaturaContratoMobilidade | null = await FaturaContratoMobilidade.findOne({
+        const fatura: IFatura | null = await FaturaContratoMobilidade.findOne({
           "contrato.idContratoMobilidade": idContrato,
           estadoDaFatura: EstadoDaFaturaEnum.INICIADA,
           $and: [
@@ -137,7 +142,7 @@ export class FaturaService {
       try {
         logger.debug("Incrementando numero da fatura...");
 
-        const fatura: IFaturaContratoMobilidade | null = await FaturaContratoMobilidade
+        const fatura: IFatura | null = await FaturaContratoMobilidade
           .findOne({
             "contrato.idContratoMobilidade": idContrato,
           }).sort({ dataCriacao: "desc" });
@@ -164,7 +169,7 @@ export class FaturaService {
       }
     }
 
-    public async salvarFatura(fatura: IFaturaContratoMobilidade): Promise<IFaturaContratoMobilidade> {
+    public async salvarFatura(fatura: IFatura): Promise<IFatura> {
       const identificadorFatura = fatura.numeroFatura;
       const { idContratoMobilidade } = fatura.contrato;
       try {
@@ -188,6 +193,57 @@ export class FaturaService {
       `);
 
         throw new ErroNegocial(...ERRO_SQL_AO_SALVAR_DADOS_DE_FATURA).formatMessage(String(identificadorFatura), idContratoMobilidade);
+      }
+    }
+
+    public async encerrarFatura(body: IEncerrarFatura): Promise<IFatura | null> {
+      const resultadoValidacao = this.serviceValidator.validaFechamentoFatura(body);
+      retornarErroValidacao(resultadoValidacao, ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS);
+
+      const { idFaturaContratoMobilidade } = body;
+
+      if (idFaturaContratoMobilidade) {
+        const arrObjViagem: IViagemDaFatura[] = await ViagemService.buscarViagensFinalizadaPorIdFatura(body);
+
+        await new ServiceValidator().verificaInconsistenciasNaFatura(idFaturaContratoMobilidade, arrObjViagem);
+
+        return this.atualizaDadosParaFechamentoDaFatura(idFaturaContratoMobilidade);
+      }
+
+      logger.error(`
+        ERRO no MS "${environment.app.name}", método "fecharFatura".
+        <'ERRO NEGOCIAL'>
+          message: Não foi encontrado a fatura: ${idFaturaContratoMobilidade}, na base de dados...
+        Parâmetros da requisição:
+          ID FATURA: ${idFaturaContratoMobilidade}
+      `);
+      throw new ErroSQL(...ERRO_SQL_FATURA_NAO_ENCONTRADA).formatMessage(idFaturaContratoMobilidade);
+    }
+
+    public async atualizaDadosParaFechamentoDaFatura(idFaturaContratoMobilidade: string): Promise<IFatura | null> {
+      try {
+        logger.debug("Atualizando a fatura...");
+
+        return FaturaContratoMobilidade.findOneAndUpdate(
+          { _id: idFaturaContratoMobilidade },
+          { estadoDaFatura: EstadoDaFaturaEnum.CONCLUIDA },
+          { upsert: true },
+          (error, doc) => doc,
+        );
+      } catch (error) {
+        logger.error(`
+          ERRO no MS "${environment.app.name}", método "atualizaDadosParaFechamentoDaFatura".
+          <'ERRO'>
+            message: Não foi possível atualizar a fatura: ${idFaturaContratoMobilidade}...
+          Parâmetros da requisição:
+            ID FATURA: ${idFaturaContratoMobilidade}
+          Resposta:
+          <'ERRO DB'>
+            sqlcode: ${error.code}
+            message: ${error.message}.
+        `);
+
+        throw new ErroSQL(...ERRO_SQL_AO_ATUALIZAR_REGISTRO_PARA_FECHAMENTO_FATURA).formatMessage(idFaturaContratoMobilidade);
       }
     }
 }

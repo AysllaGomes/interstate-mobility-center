@@ -7,7 +7,7 @@ import { ModalidadeDeRecebimentoEnum } from "./enums/ModalidadeDeRecebimento.enu
 import { EstadoDoPagamentoDaFaturaEnum } from "./enums/EstadoDoPagamentoDaFatura.enum";
 import { ICentroDeCustoFaturaContrato } from "./interfaces/CentroDeCustoFaturaContrato";
 
-export interface IFaturaContratoMobilidade extends Document {
+export interface IFatura extends Document {
   _id: string;
   numeroFatura: number;
   contrato: IContratoFatura;
@@ -130,7 +130,7 @@ export interface IFaturaContratoMobilidade extends Document {
  *      }
  */
 
-const FaturaContratoMobilidadeSchema: Schema = new Schema({
+const FaturaSchema: Schema = new Schema({
   numeroFatura: {
     type: Number,
     required: true,
@@ -181,4 +181,4 @@ const FaturaContratoMobilidadeSchema: Schema = new Schema({
   },
 });
 
-export default mongoose.model<IFaturaContratoMobilidade>("FaturaContratoMobilidade", FaturaContratoMobilidadeSchema, "faturaContratoMobilidade");
+export default mongoose.model<IFatura>("Fatura", FaturaSchema, "fatura");
