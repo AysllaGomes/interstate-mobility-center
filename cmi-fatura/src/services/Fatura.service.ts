@@ -16,12 +16,12 @@ import {
   ERRO_NEGOCIAL_JA_EXISTE_FATURA_ABERTA_PRA_ESSE_CONTRATO_NESSE_PERIODO,
 } from "../errors/erro.negocial";
 import ContratoModel, { IContrato } from "../model/Contrato";
+import { IDatasFatura } from "../model/interfaces/DatasFatura";
 import { ServiceValidator } from "../validators/Service.validator";
 import { IAberturaFatura } from "../model/interfaces/AberturaFatura";
 import { EstadoDaFaturaEnum } from "../model/enums/EstadoDaFatura.enum";
 import { EstadoDoPagamentoDaFaturaEnum } from "../model/enums/EstadoDoPagamentoDaFatura.enum";
 import FaturaContratoMobilidade, { IFaturaContratoMobilidade } from "../model/FaturaContratoMobilidade";
-import { IDatasFatura } from "../model/interfaces/DatasFatura";
 
 export class FaturaService {
     private serviceValidator = new ServiceValidator();
@@ -62,13 +62,13 @@ export class FaturaService {
       }
 
       logger.error(`
-      ERRO no MS "${environment.app.name}", método "aberturaFatura".
-      <'ERRO NEGOCIAL'>
-        message: O contrato: '${idContratoMobilidade}, não foi encontrado na base de dados...
-      Parâmetros da requisição:
-        ID CONTRATO: ${idContratoMobilidade},
-    `);
-      throw new ErroSQL(...ERRO_SQL_REGISTRO_NAO_ENCONTRADO).formatMessage("ContratoMobilidade");
+        ERRO no MS "${environment.app.name}", método "aberturaFatura".
+        <'ERRO NEGOCIAL'>
+          message: O contrato: '${idContratoMobilidade}, não foi encontrado na base de dados...
+        Parâmetros da requisição:
+          ID CONTRATO: ${idContratoMobilidade},
+      `);
+      throw new ErroSQL(...ERRO_SQL_REGISTRO_NAO_ENCONTRADO).formatMessage("Contrato");
     }
 
     public async formataAberturaFatura(contratoMobilidade: IContrato, datas: IDatasFatura): Promise<IFaturaContratoMobilidade> {
