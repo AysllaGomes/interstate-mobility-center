@@ -6,7 +6,7 @@ import { IPeriodoReferencia } from "./interfaces/PeriodoReferencia";
 import { ModalidadeDeRecebimentoEnum } from "./enums/ModalidadeDeRecebimento.enum";
 import { EstadoContradoMobilidadeEnum } from "./enums/EstadoContradoMobilidade.enum";
 
-export interface IContratoMobilidade extends Document {
+export interface IContrato extends Document {
 
   _id: string;
   numeroDeIdentificacao: number;
@@ -81,7 +81,7 @@ export interface IContratoMobilidade extends Document {
  *         type: date
  */
 
-const ContratoMobilidadeSchema: Schema = new Schema({
+const ContratoSchema: Schema = new Schema({
   numeroDeIdentificacao: {
     type: Number,
     required: true,
@@ -132,4 +132,4 @@ const ContratoMobilidadeSchema: Schema = new Schema({
   },
 });
 
-export default mongoose.model<IContratoMobilidade>("ContratoMobilidade", ContratoMobilidadeSchema, "contratoMobilidade");
+export default mongoose.model<IContrato>("Contrato", ContratoSchema, "contrato");

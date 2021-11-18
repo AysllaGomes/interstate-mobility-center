@@ -8,7 +8,6 @@ import { EstadoDoPagamentoDaFaturaEnum } from "./enums/EstadoDoPagamentoDaFatura
 import { ICentroDeCustoFaturaContrato } from "./interfaces/CentroDeCustoFaturaContrato";
 
 export interface IFaturaContratoMobilidade extends Document {
-
   _id: string;
   numeroFatura: number;
   contrato: IContratoFatura;
@@ -18,11 +17,10 @@ export interface IFaturaContratoMobilidade extends Document {
   centrosDeCusto: Array<ICentroDeCustoFaturaContrato>
   estadoDaFatura: EstadoDaFaturaEnum;
   estadoDoPagamentoDaFatura: EstadoDoPagamentoDaFaturaEnum;
-  "meioDePagamento_@CMU": MeioDePagamentoEnum;
-  "modalidadeDeRecebimento_@CMU": ModalidadeDeRecebimentoEnum;
+  meioDePagamento: MeioDePagamentoEnum;
+  modalidadeDeRecebimento: ModalidadeDeRecebimentoEnum;
   dataCriacao: Date;
   dataUltimaAtualizacao: Date;
-  quantidadeViagem?: number;
 }
 
 /**
@@ -40,8 +38,8 @@ export interface IFaturaContratoMobilidade extends Document {
  *       - centrosDeCusto
  *       - estadoDaFatura
  *       - estadoDoPagamentoDaFatura
- *       - meioDePagamento_@CMU
- *       - modalidadeDeRecebimento_@CMU
+ *       - meioDePagamento
+ *       - modalidadeDeRecebimento
  *       - dataCriacao
  *       - dataUltimaAtualizacao
  *     properties:
@@ -73,14 +71,14 @@ export interface IFaturaContratoMobilidade extends Document {
  *         - A pagar
  *         - Pago
  *         - Cancelado
- *       meioDePagamento_@CMU:
+ *       meioDePagamento:
  *         type: string
  *         enum:
  *         - Débito em conta corrente
  *         - Cartão de crédito
  *         - Pix
  *         - TED
- *       modalidadeDeRecebimento_@CMU:
+ *       modalidadeDeRecebimento:
  *         type: string
  *         enum:
  *         - Após o fechamento da fatura
@@ -93,44 +91,42 @@ export interface IFaturaContratoMobilidade extends Document {
  *      {
  *          numeroFatura: 1001,
  *          contrato: {
- *              idContratoMobilidade_@CMU: 609194210562734c162a76c1,
- *              numeroDeIdentificacaoContratoMobilidade_@CMU: 3,
- *              nomeCliente_@MCI: Padaria de Aguiar Bono
+ *              idContratoMobilidade: 615275cfae51bb002ea736d2,
+ *              numeroDeIdentificacaoContratoMobilidade: 3,
+ *              nomeCliente: Nome de uma Matriz
  *          },
  *          periodoReferencia: {
- *              dataInicio: 2021-06-01T03:00:00.000Z,
- *              dataFim: 2021-06-30T23:59:59.999Z
+ *              dataInicio: 2021-11-01T03:00:00.000Z,
+ *              dataFim: 2021-11-30T23:59:59.999Z
  *          },
- *          dataDeVencimento: 2021-08-01T00:00:00.000Z,
+ *          dataDeVencimento: 2021-12-20T00:00:00.000Z,
  *          valorTotalDaFatura: 60.6,
  *          centrosDeCusto: [
  *              {
- *                  numeroDeIdentificacaoDoCentroDeCusto_@CMU: 550,
+ *                  numeroDeIdentificacaoDoCentroDeCusto: 550,
  *                  numeroNotaDebito: 1,
  *                  estadoNotaDebito: Em Aberto,
  *                  finalidadeNotaDebito: Despesas com serviços de transporte individual de passageiros,
  *                  valorFaturadoDoCentroDeCusto: 60.6,
- *                  lancamentosEVT: [],
  *                  viagens: [
  *                      {
- *                          idViagem_@CMU: 60c8d8855c11ec345ba919ff,
- *                          nomePassageiro_@CMU: Ana Maria Abras da Fonseca,
- *                          cpfCnpj_@CMU: 01943847053,
- *                          codigoCliente_@CMU : 105001310,
- *                          nomeParceiro_@CMU : noveNovePop,
- *                          iconeParceiro_@CMU : https://img.ibxk.com.br/2018/9/programas/15870025155352397.png,
- *                          valorViagem_@CMU : 10.1,
- *                          dataViagem_@CMU" : 2021-06-12T17:33:20.301Z
+ *                          idViagem: 60c8d8855c11ec345ba919ff,
+ *                          nomePassageiro: Steph Gingrich,
+ *                          cpf: 02373315009,
+ *                          nomeParceiro : Nock,
+ *                          iconeParceiro : https://avatars.githubusercontent.com/u/17545810?s=280&v=4,
+ *                          valorViagem : 10.1,
+ *                          dataViagem" : 2021-11-10T17:33:20.301Z
  *                      }
  *                  ]
  *              }
  *          ],
  *          estadoDaFatura : Iniciada,
  *          estadoDoPagamentoDaFatura : A pagar,
- *          meioDePagamento_@CMU : Débito em conta corrente,
- *          modalidadeDeRecebimento_@CMU : Após o fechamento da fatura,
- *          dataCriacao : 2021-06-01T17:42:09.905Z,
- *          dataUltimaAtualizacao : 2021-06-15T17:42:09.905Z
+ *          meioDePagamento : Débito em conta corrente,
+ *          modalidadeDeRecebimento : Após o fechamento da fatura,
+ *          dataCriacao : 2021-11-10T17:42:09.905Z,
+ *          dataUltimaAtualizacao : 2021-11-15T17:42:09.905Z
  *      }
  */
 
@@ -167,11 +163,11 @@ const FaturaContratoMobilidadeSchema: Schema = new Schema({
     type: Object,
     required: true,
   },
-  "meioDePagamento_@CMU": {
+  meioDePagamento: {
     type: String,
     required: true,
   },
-  "modalidadeDeRecebimento_@CMU": {
+  modalidadeDeRecebimento: {
     type: String,
     required: true,
   },

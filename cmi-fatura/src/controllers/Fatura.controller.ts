@@ -13,7 +13,7 @@ export class FaturaController {
 
   constructor({ service = new FaturaService() }) { this.service = service; }
 
-  public async aberturaFatura(aberturaFatura: IAberturaFatura): Promise<IFaturaContratoMobilidade | undefined> {
-    return this.service.aberturaFatura(aberturaFatura);
+  public async aberturaFatura(body: IAberturaFatura): Promise<IFaturaContratoMobilidade | undefined> {
+    return this.service.aberturaFatura(body);
   }
 }

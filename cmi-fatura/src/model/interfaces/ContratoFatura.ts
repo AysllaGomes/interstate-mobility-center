@@ -7,29 +7,29 @@
  *     required:
  *       - idContratoMobilidade
  *     properties:
- *        numeroIdentificacaoContrato:
- *           type: number
- *        nomeParceiro:
- *           type: string
  *        idContratoMobilidade:
  *           type: string
  *        numeroDeIdentificacaoContratoMobilidade:
  *           type: number
  *        nomeCliente:
  *           type: string
+ *        numeroIdentificacaoContrato:
+ *           type: number
+ *        nomeParceiro:
+ *           type: string
  *     example:
  *          {
  *              numeroIdentificacaoContrato: 3,
- *              nomeParceiro: Wappa,
- *              idContratoMobilidade: 609194210562734c162a76c1,
+ *              nomeParceiro: Nock,
+ *              idContratoMobilidade: 615275cfae51bb002ea736d2,
  *              numeroDeIdentificacaoContratoMobilidade: 3,
- *              nomeCliente: Wappa
+ *              nomeCliente: Nock
  *          }
  */
 export interface IContratoFatura {
-    numeroIdentificacaoContrato?: string;
-    nomeParceiro?: string;
     idContratoMobilidade: string;
     numeroDeIdentificacaoContratoMobilidade?: number;
     nomeCliente?: string;
+    nomeParceiro?: string;
+    numeroIdentificacaoContrato?: number;
 }

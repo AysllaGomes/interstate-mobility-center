@@ -9,14 +9,14 @@ import { IViagemCentroDeCustoFaturaContrato } from "./ViagemCentroDeCustoFaturaC
  *   ICentroDeCustoFaturaContrato:
  *     type: object
  *     required:
- *       - numeroDeIdentificacaoDoCentroDeCusto_@CMU
+ *       - numeroDeIdentificacaoDoCentroDeCusto
  *       - numeroNotaDebito
  *       - estadoNotaDebito
  *       - finalidadeNotaDebito
  *       - valorFaturadoDoCentroDeCusto
  *       - viagens
  *     properties:
- *        numeroDeIdentificacaoDoCentroDeCusto_@CMU:
+ *        numeroDeIdentificacaoDoCentroDeCusto:
  *           type: number
  *        numeroNotaDebito:
  *           type: number
@@ -36,14 +36,14 @@ import { IViagemCentroDeCustoFaturaContrato } from "./ViagemCentroDeCustoFaturaC
  *     example:
  *          {
  *              numeroIdentificacaoContrato: 3,
- *              nomeParceiro: Wappa,
- *              idContratoMobilidade_@CMU: 609194210562734c162a76c1,
- *              numeroDeIdentificacaoContratoMobilidade_@CMU: 3,
- *              nomeCliente_@MCI: Wappa
+ *              nomeParceiro: Nock,
+ *              idContratoMobilidade: 615275cfae51bb002ea736d2,
+ *              numeroDeIdentificacaoContratoMobilidade: 3,
+ *              nomeCliente: Nock
  *          }
  */
 export interface ICentroDeCustoFaturaContrato {
-    "numeroDeIdentificacaoDoCentroDeCusto_@CMU": number;
+    numeroDeIdentificacaoDoCentroDeCusto: number;
     numeroNotaDebito: number;
     estadoNotaDebito: EstadoNotaDebitoEnum;
     finalidadeNotaDebito: FinalidadeNotaDebitoEnum;

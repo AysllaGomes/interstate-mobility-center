@@ -16,8 +16,8 @@
  *         format: "date-time"
  *     example:
  *      {
- *          dataInicio: 2021-06-01T03:00:00.000Z,
- *          dataFim: 2021-06-30T23:59:59.999Z
+ *          dataInicio: 2021-11-01T03:00:00.000Z,
+ *          dataFim: 2021-11-30T23:59:59.999Z
  *      }
  */
 

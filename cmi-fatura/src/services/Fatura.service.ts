@@ -15,58 +15,36 @@ import {
   ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS,
   ERRO_NEGOCIAL_JA_EXISTE_FATURA_ABERTA_PRA_ESSE_CONTRATO_NESSE_PERIODO,
 } from "../errors/erro.negocial";
-import ContratoMobilidade from "../model/ContratoMobilidade";
+import ContratoModel, { IContrato } from "../model/Contrato";
 import { ServiceValidator } from "../validators/Service.validator";
 import { IAberturaFatura } from "../model/interfaces/AberturaFatura";
 import { EstadoDaFaturaEnum } from "../model/enums/EstadoDaFatura.enum";
 import { EstadoDoPagamentoDaFaturaEnum } from "../model/enums/EstadoDoPagamentoDaFatura.enum";
 import FaturaContratoMobilidade, { IFaturaContratoMobilidade } from "../model/FaturaContratoMobilidade";
+import { IDatasFatura } from "../model/interfaces/DatasFatura";
 
 export class FaturaService {
     private serviceValidator = new ServiceValidator();
 
-    public async aberturaFatura(novaFatura: IAberturaFatura): Promise<IFaturaContratoMobilidade | undefined> {
-      const resultadoValidacao = this.serviceValidator.validaNovaFatura(novaFatura);
+    public async aberturaFatura(body: IAberturaFatura): Promise<IFaturaContratoMobilidade | undefined> {
+      const resultadoValidacao = this.serviceValidator.validaNovaFatura(body);
       retornarErroValidacao(resultadoValidacao, ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS);
 
-      const { idContratoMobilidade } = novaFatura;
+      const { idContratoMobilidade } = body;
 
       logger.debug(`Buscando dados do contrato de id: ${idContratoMobilidade}...`);
-      const contratoMobilidade = await ContratoMobilidade.findById(idContratoMobilidade);
+      const contratoMobilidade: IContrato | null = await ContratoModel.findById(idContratoMobilidade);
 
       if (contratoMobilidade) {
         // eslint-disable-next-line no-underscore-dangle
         const idContrato = contratoMobilidade._id;
 
-        const datas = calcularPeriodoReferenciaEDataVencimento(novaFatura, contratoMobilidade.diaDoVencimentoDaFatura);
+        const datas = calcularPeriodoReferenciaEDataVencimento(body, contratoMobilidade.diaDoVencimentoDaFatura);
 
         const existeFaturaAberta = await this.verificaSeJaExisteFaturaAbertaProContratoNessePeriodo(datas.primeiroDiaDoMes, datas.ultimoDiaDoMes, idContrato);
 
         if (!existeFaturaAberta) {
-          const proximoNumeroFatura = await this.incrementarNumeroFatura(idContrato);
-
-          logger.debug(`Criando nova fatura para o contrato: ${idContrato}...`);
-          const fatura = new FaturaContratoMobilidade({
-            numeroFatura: proximoNumeroFatura,
-            contrato: {
-              idContratoMobilidade: idContrato,
-              numeroDeIdentificacaoContratoMobilidade: contratoMobilidade.numeroDeIdentificacao,
-              nomeCliente: contratoMobilidade.contratante.nomeCliente,
-            },
-            periodoReferencia: {
-              dataInicio: datas.primeiroDiaDoMes,
-              dataFim: datas.ultimoDiaDoMes,
-            },
-            dataDeVencimento: datas.dataDeVencimentoDaFatura,
-            valorTotalDaFatura: 0,
-            centrosDeCusto: [],
-            estadoDaFatura: EstadoDaFaturaEnum.INICIADA,
-            estadoDoPagamentoDaFatura: EstadoDoPagamentoDaFaturaEnum.A_PAGAR,
-            "meioDePagamento_@CMU": contratoMobilidade.meioDePagamento,
-            "modalidadeDeRecebimento_@CMU": contratoMobilidade.modalidadeDeRecebimento,
-            dataCriacao: new Date(),
-            dataUltimaAtualizacao: new Date(),
-          });
+          const fatura: IFaturaContratoMobilidade = await this.formataAberturaFatura(contratoMobilidade, datas);
 
           return this.salvarFatura(fatura);
         }
@@ -93,12 +71,41 @@ export class FaturaService {
       throw new ErroSQL(...ERRO_SQL_REGISTRO_NAO_ENCONTRADO).formatMessage("ContratoMobilidade");
     }
 
+    public async formataAberturaFatura(contratoMobilidade: IContrato, datas: IDatasFatura): Promise<IFaturaContratoMobilidade> {
+      // eslint-disable-next-line no-underscore-dangle
+      const idContrato = contratoMobilidade._id;
+
+      logger.debug(`Criando nova fatura para o contrato: ${idContrato}...`);
+      const proximoNumeroFatura = await this.incrementarNumeroFatura(idContrato);
+
+      return new FaturaContratoMobilidade({
+        numeroFatura: proximoNumeroFatura,
+        contrato: {
+          idContratoMobilidade: idContrato,
+          numeroDeIdentificacaoContratoMobilidade: contratoMobilidade.numeroDeIdentificacao,
+        },
+        periodoReferencia: {
+          dataInicio: datas.primeiroDiaDoMes,
+          dataFim: datas.ultimoDiaDoMes,
+        },
+        dataDeVencimento: datas.dataDeVencimentoDaFatura,
+        valorTotalDaFatura: 0,
+        centrosDeCusto: [],
+        estadoDaFatura: EstadoDaFaturaEnum.INICIADA,
+        estadoDoPagamentoDaFatura: EstadoDoPagamentoDaFaturaEnum.A_PAGAR,
+        meioDePagamento: contratoMobilidade.meioDePagamento,
+        modalidadeDeRecebimento: contratoMobilidade.modalidadeDeRecebimento,
+        dataCriacao: new Date(),
+        dataUltimaAtualizacao: new Date(),
+      });
+    }
+
     public async verificaSeJaExisteFaturaAbertaProContratoNessePeriodo(dataInicio: Date, dataFim: Date, idContrato: string): Promise<boolean> {
       try {
         logger.debug(`Verificando se já existe uma fatura aberta nesse período pro contrato: ${idContrato}...`);
 
         const fatura: IFaturaContratoMobilidade | null = await FaturaContratoMobilidade.findOne({
-          "contrato.idContratoMobilidade_@CMU": idContrato,
+          "contrato.idContratoMobilidade": idContrato,
           estadoDaFatura: EstadoDaFaturaEnum.INICIADA,
           $and: [
             { "periodoReferencia.dataInicio": dataInicio },
@@ -132,7 +139,7 @@ export class FaturaService {
 
         const fatura: IFaturaContratoMobilidade | null = await FaturaContratoMobilidade
           .findOne({
-            "contrato.idContratoMobilidade_@CMU": idContrato,
+            "contrato.idContratoMobilidade": idContrato,
           }).sort({ dataCriacao: "desc" });
 
         let qtdAtualFaturas = 1;
