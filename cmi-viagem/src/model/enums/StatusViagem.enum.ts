@@ -1,5 +1,4 @@
 export enum StatusViagemEnum {
-  NO_SHOW = "No Show",
   DESCONHECIDO = "Status Desconhecido",
   COTADO = "Cotado",
   CONTRATANDO = "Contratando",

@@ -19,9 +19,7 @@ export class UsuarioApi extends ApiRouter {
       this.path = "/usuario";
     }
 
-    public active(): boolean {
-      return true;
-    }
+    public active(): boolean { return true; }
 
     public async applyRoutes(server: express.Application): Promise<void> {
       /**
@@ -48,6 +46,34 @@ export class UsuarioApi extends ApiRouter {
       server.post(`${this.path}/cadastro`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
         try {
           return response.json(await this.controller.cadastrarUsuario(request.body));
+        } catch (error) { next(error); }
+      });
+
+      /**
+       * @swagger
+       *   /usuario/{idUsuario}:
+       *   get:
+       *     description: Realiza o detalhamento do usuário a partir do id informado.
+       *     summary: EndPoint que realiza detalhamento do usuário a partir do id informado.
+       *     tags:
+       *       - Usuário
+       *     parameters:
+       *      - name: "idUsuario"
+       *        in: "path"
+       *        required: true
+       *        type: "string"
+       *     responses:
+       *       200:
+       *         description: Lista de resposta que contem todos os objetos que foram retornados pela consulta no banco de dados
+       *         schema:
+       *             $ref: '#/definitions/Usuario'
+       */
+      server.get(`${this.path}/:idUsuario`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
+        try {
+          if (request.params.idUsuario) {
+            return response.json(await this.controller.retornaDadosUsuario(request.params.idUsuario.toString()));
+          }
+          next(new ErroNegocial(...ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS).formatMessage("idUsuario"));
         } catch (error) { next(error); }
       });
 
@@ -159,34 +185,6 @@ export class UsuarioApi extends ApiRouter {
                 conteudo: `<html><body><p>${result?.conteudo}</p></body></html>`,
               },
             );
-          }
-          next(new ErroNegocial(...ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS).formatMessage("idUsuario"));
-        } catch (error) { next(error); }
-      });
-
-      /**
-       * @swagger
-       *   /usuario/{idUsuario}:
-       *   get:
-       *     description: Realiza o detalhamento do usuário a partir do id informado.
-       *     summary: EndPoint que realiza detalhamento do usuário a partir do id informado.
-       *     tags:
-       *       - Usuário
-       *     parameters:
-       *      - name: "idUsuario"
-       *        in: "path"
-       *        required: true
-       *        type: "string"
-       *     responses:
-       *       200:
-       *         description: Lista de resposta que contem todos os objetos que foram retornados pela consulta no banco de dados
-       *         schema:
-       *             $ref: '#/definitions/Usuario'
-       */
-      server.get(`${this.path}/:idUsuario`, async (req: express.Request, resp: express.Response, next: express.NextFunction) => {
-        try {
-          if (req.params.idUsuario) {
-            return resp.json(await this.controller.retornaDadosUsuario(req.params.idUsuario.toString()));
           }
           next(new ErroNegocial(...ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS).formatMessage("idUsuario"));
         } catch (error) { next(error); }

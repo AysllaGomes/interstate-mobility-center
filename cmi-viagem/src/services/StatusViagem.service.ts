@@ -8,7 +8,6 @@ export class StatusViagemService {
       const objtUltimoStatus = viagem.statusViagem[viagem.statusViagem.length - 1];
       if (
         objtUltimoStatus.statusViagem === StatusViagemEnum.FATURADO
-          || objtUltimoStatus.statusViagem === StatusViagemEnum.NO_SHOW
           || objtUltimoStatus.statusViagem === StatusViagemEnum.CANCELADO_PASSAGEIRO
       ) {
         arrObjViagemFiltrado = [
