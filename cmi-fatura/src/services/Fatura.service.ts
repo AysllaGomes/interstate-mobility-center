@@ -21,12 +21,12 @@ import { ViagemService } from "./Viagem.service";
 import ContratoModel, { IContrato } from "../model/Contrato";
 import { IDatasFatura } from "../model/interfaces/DatasFatura";
 import { ServiceValidator } from "../validators/Service.validator";
+import FaturaContratoMobilidade, { IFatura } from "../model/Fatura";
 import { IAberturaFatura } from "../model/interfaces/AberturaFatura";
 import { IViagemDaFatura } from "../model/interfaces/ViagemDaFatura";
-import { EstadoDaFaturaEnum } from "../model/enums/EstadoDaFatura.enum";
 import { IEncerrarFatura } from "../model/interfaces/EncerrarFatura";
+import { EstadoDaFaturaEnum } from "../model/enums/EstadoDaFatura.enum";
 import { EstadoDoPagamentoDaFaturaEnum } from "../model/enums/EstadoDoPagamentoDaFatura.enum";
-import FaturaContratoMobilidade, { IFatura } from "../model/Fatura";
 
 export class FaturaService {
     private serviceValidator = new ServiceValidator();
