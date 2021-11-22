@@ -56,6 +56,7 @@ export interface IUsuario extends Document {
  *         dataDeNascimento: "01/01/2000",
  *         numeroTelefoneCelular: "99999999999",
  *         termosDeUso: [],
+ *         dadosDePagamento: [],
  *         tsCriacao: "2021-09-15T21:57:49.871Z",
  *         __v: 0
  *      }
@@ -95,7 +96,7 @@ const UsuarioSchema: Schema = new Schema({
     required: false,
   },
   dadosDePagamento: {
-    type: Object,
+    type: Array,
     required: false,
   },
   tsCriacao: {
