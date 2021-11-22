@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { ITermosDeUso } from "./interfaces/TermosDeUso";
+import { IDadosDoPagamento } from "./interfaces/DadosPagamento";
 
 export interface IUsuario extends Document {
     nome: string;
@@ -10,6 +11,7 @@ export interface IUsuario extends Document {
     certidaoDeNascimento: string;
     numeroTelefoneCelular: string;
     termosDeUso?: Array<ITermosDeUso>;
+    dadosDePagamento?: Array<IDadosDoPagamento>;
     tsCriacao: Date;
 }
 
@@ -90,6 +92,10 @@ const UsuarioSchema: Schema = new Schema({
   },
   termosDeUso: {
     type: Array,
+    required: false,
+  },
+  dadosDePagamento: {
+    type: Object,
     required: false,
   },
   tsCriacao: {
