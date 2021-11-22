@@ -18,9 +18,9 @@ services:
   ###############################################################################
   # Api - Node Aplication
   ###############################################################################
-  cmi-fatura:
-    image: cmi-fatura
-    container_name: fatura
+  cmi-passageiro:
+    image: cmi-passageiro
+    container_name: passageiro
     expose:
       - 3007
     ports:
@@ -44,10 +44,10 @@ services:
     tty: true
     restart: unless-stopped
     networks:
-      - cmi-fatura-net
+      - cmi-passageiro-net
 
 networks:
-  cmi-fatura-net:
+  cmi-passageiro-net:
     driver: bridge
     ipam:
       config:
