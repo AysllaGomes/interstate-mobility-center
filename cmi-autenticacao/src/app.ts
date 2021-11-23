@@ -6,10 +6,12 @@ import { MainApi } from "./routes/main.api";
 import { ErrorApi } from "./routes/error.api";
 import { environment } from "./config/environment";
 import { handleError } from "./util/error.handler";
+import { ParceiroApi } from "./routes/Parceiro.api";
+import { AutenticacaoApi } from "./routes/Autenticacao.api";
 import { mergePatchBodyParser, middlewareForLog, verificaConexaoMongoMiddleware } from "./util/middleware";
 
-const getApiControllers = (): (ErrorApi | MainApi | DocsApi)[] => [
-  new ErrorApi(), new MainApi(), new DocsApi(),
+const getApiControllers = (): (ErrorApi | MainApi | DocsApi | AutenticacaoApi | ParceiroApi)[] => [
+  new ErrorApi(), new MainApi(), new DocsApi(), new AutenticacaoApi(), new ParceiroApi(),
 ];
 
 const app = express();
