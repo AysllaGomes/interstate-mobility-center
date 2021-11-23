@@ -16,7 +16,7 @@ export interface INocksMS {
 export interface IVariaveisDeAmbiente extends Document {
     _id: string;
     codigoVariavel : string;
-    habilitaNock?: INocksMS;
+    habilitaNock: INocksMS;
     sequencialNumeroDeIdentificacaoContrato: number;
     sequencialNumeroVersaoTermoDeUso: number;
 }
