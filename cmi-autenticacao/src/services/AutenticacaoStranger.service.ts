@@ -1,5 +1,4 @@
 import axios from "axios";
-import FormData from "form-data";
 import { logger } from "../util/logger";
 import { nockTestes } from "../util/middleware";
 import { environment } from "../config/environment";
@@ -15,14 +14,14 @@ export class AutenticacaoStrangerService extends AutenticacaoParceiroAbstract im
     try {
       logger.info("Gerar novo token para Stranger");
 
-      const formData = new FormData();
-      formData.append("Username", environment.stranger.user);
-      formData.append("Password", environment.stranger.pwd);
-
-      return await axios.post(`${environment.stranger.host}/token`, formData, {
-        timeout: environment.app.tempoRequestTimeout,
-        headers: formData.getHeaders(),
-      });
+      return {
+        data: {
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          access_token: environment.stranger.key,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          expires_in: 999999999,
+        },
+      };
     } catch (error) {
       logger.error(`ERRO ao gerar token para Stranger: ${error.message}`);
       return undefined;

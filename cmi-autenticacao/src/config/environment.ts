@@ -17,8 +17,7 @@ export interface IEnvironment {
   };
   stranger: {
     host?: string,
-    user?: string,
-    pwd?: string,
+    key?: string,
   };
   nock: {
     host?: string,
@@ -48,8 +47,7 @@ export const environment: IEnvironment = {
   },
   stranger: {
     host: process.env.STRANGER_HOST || "https://qa-clientintegration.stranger.in",
-    user: process.env.STRANGER_USER || "61bbina002",
-    pwd: process.env.STRANGER_PWD || "00457340",
+    key: process.env.STRANGER_PWD || "TOCAdtdwh63mwUPAuPQLP2bR17kAXFzY5WkzzDJL",
   },
   isValid() {
     return true;

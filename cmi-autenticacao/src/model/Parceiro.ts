@@ -27,13 +27,11 @@ export interface IParceiro extends Document {
  *       ativo:
  *         type: boolean
  *     example:
- *     {
- *         nome: "Nome do parceiro",
- *         codigoParceiro: "99999",
- *         cnpj: "99999999999999",
- *         parametros: "Parametros especificos do parceiro",
- *         ativo: true
- *     }
+ *       nome: "Nome do parceiro"
+ *       codigoParceiro: "99999"
+ *       cnpj: "99999999999999"
+ *       parametros: "Parametros especificos do parceiro"
+ *       ativo: true
  */
 
 const ParceiroSchema: Schema = new Schema({

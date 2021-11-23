@@ -113,7 +113,7 @@ export class AutenticacaoService {
           if (tokenDoParceiro) {
             objRetorno = {
               ...objRetorno,
-              [tokenDoParceiro.value.nomeParceiro]: tokenDoParceiro.value.data,
+              [tokenDoParceiro.nomeParceiro]: tokenDoParceiro.data,
             };
           }
         });
