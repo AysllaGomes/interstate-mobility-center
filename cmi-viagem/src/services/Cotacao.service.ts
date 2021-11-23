@@ -12,28 +12,74 @@ import {
   ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS,
 } from "../errors/erro.negocial";
 import { UsuarioService } from "./Usuario.service";
+import { ParceiroService } from "./Parceiro.service";
+import { IParceiro } from "../model/interfaces/Parceiro";
+import { ViagemNockService } from "./ViagemNock.service";
+import { StatusViagemService } from "./StatusViagem.service";
+import { AutenticacaoService } from "./Autenticacao.service";
+import { ViagemStrangerService } from "./ViagemStranger.service";
 import { ServiceValidator } from "../validators/Service.validator";
 import { IRealizaCotacao } from "../model/interfaces/RealizaCotacao";
 import { IRetornaCotacao } from "../model/interfaces/RetornaCotacao";
-import { AutenticacaoService } from "./Autenticacao.service";
+import { ViagemParceiroAbstract } from "./abstracts/ViagemParceiro.abstract";
 
 export class CotacaoService {
   private serviceValidator = new ServiceValidator();
+
+  private statusViagemService = new StatusViagemService();
+
+  public async getCotacoesService(nomeParceiro?: string): Promise<object | ViagemParceiroAbstract> {
+    const result = {};
+
+    if (!nomeParceiro) { await this.retornaParceirosAtivos(result); }
+
+    this.retornaServiceParceiro(nomeParceiro, result);
+
+    return result;
+  }
+
+  private async retornaParceirosAtivos(result: {}): Promise<void> {
+    const parceirosAtivos = await ParceiroService.retornaDadosParceirosComToken();
+
+    parceirosAtivos.forEach((parceiro: IParceiro) => {
+      if (parceiro.codigoParceiro === "nock") {
+        Object.assign(result, { nock: new ViagemNockService() });
+      }
+
+      if (parceiro.codigoParceiro === "stranger") {
+        Object.assign(result, { stranger: new ViagemStrangerService() });
+      }
+    });
+  }
+
+  private retornaServiceParceiro(nomeParceiro: string | undefined, result: {}): void {
+    if (nomeParceiro === "nock") {
+      Object.assign(result, { nock: new ViagemNockService() });
+    }
+
+    if (nomeParceiro === "stranger") {
+      Object.assign(result, { stranger: new ViagemStrangerService() });
+    }
+  }
 
   public async cotacao(body: IRealizaCotacao): Promise<IRetornaCotacao | undefined> {
     const resultadoValidacao = this.serviceValidator.validarRetornaMelhorCotacao(body);
     retornarErroValidacao(resultadoValidacao, ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS);
 
     try {
-      const usuario = await UsuarioService.retornaDadosPassageiro(body.idUsuario);
+      const usuarioPossuiViagemEmAndamento = await this.statusViagemService.verificaSeUsuarioPossuiViagemEmAndamento(body.idUsuario);
 
-      console.log("usuario", usuario);
+      if (!usuarioPossuiViagemEmAndamento) {
+        // const usuario = await UsuarioService.retornaDadosPassageiro(body.idUsuario);
+        const cotacoes = await this.realizarCotacao(body);
+        // const cotacaoVencedora = await this.definirMelhorCotacao(cotacoes);
 
-      const cotacoes = await this.realizarCotacao();
+        console.log("cotacoes", cotacoes);
 
-      console.log("cotacoes", cotacoes);
+        // let viagem = this.formataCotacaoViagem(body, usuario, cotacaoVencedora, cotacoes);
 
-      return;
+        return;
+      }
     } catch (error) {
       logger.error(`
         ERRO no MS "${environment.app.name}", método "retornaMelhorCotacao".
@@ -51,10 +97,34 @@ export class CotacaoService {
     }
   }
 
-  public async realizarCotacao(): Promise<object | void> {
+  public async realizarCotacao(body: IRealizaCotacao): Promise<object | void> {
+    const cotacao = await this.getCotacoesService();
+    const usuarioParceiro = await UsuarioService.consultaUsuarioDoParceiro(body);
     const token = await AutenticacaoService.retornaTokenParceiros();
 
-    console.log("token", token);
+    console.log("cotacao", cotacao);
+
+    console.log("usuarioParceiro", usuarioParceiro);
+
+    if (Object.keys(usuarioParceiro.data).length !== 0) {
+      const promisesResolvidas = await Promise.all(
+        Object.keys(cotacao).map(async (nomeParceiro) => {
+          console.log("nomeParceiro", nomeParceiro);
+
+          if (nomeParceiro) {
+            return {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+            // @ts-ignore
+              data: await Promise.resolve(cotacao[nomeParceiro].retornaCotacao(req, usuarioParceiro.data[nomeParceiro].id, token[nomeParceiro])),
+              nomeParceiro,
+            };
+          }
+          return null;
+        }),
+      );
+
+      console.log("promisesResolvidas", promisesResolvidas);
+    }
   }
 
   public calculaValorEconomizadoPorViagem(melhorCotacao: object): number {

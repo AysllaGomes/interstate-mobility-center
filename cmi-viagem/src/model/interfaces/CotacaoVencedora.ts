@@ -1,12 +1,11 @@
 export interface ICotacaoVencedora {
     parceiro: string;
-    idUsuarioParceiro: any;
+    idUsuarioParceiro: string;
     produto: string;
-    objIdParceiro: any;
+    objIdParceiro: object;
     valor: number;
     tempoEspera: number;
-    premium: boolean;
     icone: string;
-    tsCriacao: Date;
     valorEconomizado: number;
+    tsCriacao: Date;
 }

@@ -19,6 +19,7 @@ export interface IEnvironment {
   parceiros: {
     host: string;
     logo: string;
+    centroDeCustoNock: number;
   };
   isValid: () => boolean;
 }
@@ -42,6 +43,7 @@ export const environment: IEnvironment = {
   parceiros: {
     host: process.env.PARCEIRO_HOST || "https://qa-clientintegration.nock.in",
     logo: process.env.LOGO_PARCEIRO || "https://avatars.githubusercontent.com/u/17545810?s=280&v=4",
+    centroDeCustoNock: convertNumber(process.env.CENTRO_DE_CUSTO_NOCK, 0),
   },
   isValid() {
     return true;

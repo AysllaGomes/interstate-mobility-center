@@ -4,7 +4,7 @@ export interface ICotacaoVencedora extends Document {
   parceiro: string;
   idUsuarioParceiro: string | number;
   produto: string;
-  objIdParceiro: string;
+  objIdParceiro: object;
   valor: number;
   icone: string;
   valorEconomizado: number;
