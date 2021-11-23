@@ -3,4 +3,3 @@ export interface IHealthServices {
   nock: string;
   stranger: string;
 }
-
