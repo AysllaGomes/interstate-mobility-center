@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import mongoose from "mongoose";
 import { logger } from "../util/logger";
 import { environment } from "../config/environment";
@@ -106,7 +107,7 @@ export class AutenticacaoService {
       );
     });
 
-    await Promise.allSettled(arrPromises)
+    await Promise.all(arrPromises)
       .then((promisesResolvidas: any) => {
         promisesResolvidas.forEach((tokenDoParceiro:any) => {
           if (tokenDoParceiro) {
@@ -142,7 +143,7 @@ export class AutenticacaoService {
       );
     });
 
-    await Promise.allSettled(arrPromises)
+    await Promise.all(arrPromises)
       .then((promisesResolvidas: any) => {
         promisesResolvidas.forEach((tokenDoParceiro:any) => {
           if (tokenDoParceiro) {
