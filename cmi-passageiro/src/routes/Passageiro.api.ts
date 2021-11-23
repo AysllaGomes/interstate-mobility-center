@@ -25,7 +25,7 @@ export class PassageiroApi extends ApiRouter {
          *       - Usuário
          *     parameters:
          *      - in: body
-         *        name: IVinculoPassageiro
+         *        name: Array<IVinculoPassageiro>
          *        description: Um objeto do tipo IVinculoPassageiro
          *        required: true
          *        schema:
