@@ -17,7 +17,7 @@ export class CotacaoApi extends ApiRouter {
   public async applyRoutes(server: express.Application): Promise<void> {
     server.post(this.path, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
       try {
-        return response.json(await this.controller.cotacao(request.body));
+        return response.json(await this.controller.cotacao(request.body, next));
       } catch (error) { next(error); }
     });
   }

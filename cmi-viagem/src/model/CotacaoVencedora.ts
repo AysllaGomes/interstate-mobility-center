@@ -2,7 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 
 export interface ICotacaoVencedora extends Document {
   parceiro: string;
-  idUsuarioParceiro: string | number;
+  idUsuarioParceiro: string;
   produto: string;
   objIdParceiro: object;
   valor: number;

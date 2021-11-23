@@ -1,3 +1,4 @@
+import { NextFunction } from "express";
 import { logger } from "../util/logger";
 import { environment } from "../config/environment";
 import {
@@ -9,8 +10,15 @@ import {
   ERRO_EXTERNO_VIAGEM_EM_ANDAMENTO,
 } from "../errors/erro.externo";
 import {
+  ErroSQL,
+  ERRO_SQL_AO_SALVAR_COTACAO_DE_VIAGEM,
+} from "../errors/erro.sql";
+import {
   ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS,
 } from "../errors/erro.negocial";
+import Viagem from "../model/Viagem";
+import { IUsuario } from "../model/Usuario";
+import { ViagemService } from "./Viagem.service";
 import { UsuarioService } from "./Usuario.service";
 import { ParceiroService } from "./Parceiro.service";
 import { IParceiro } from "../model/interfaces/Parceiro";
@@ -20,8 +28,10 @@ import { AutenticacaoService } from "./Autenticacao.service";
 import { ViagemStrangerService } from "./ViagemStranger.service";
 import { UsuarioParceiros } from "./interfaces/UsuarioParceiros";
 import { ServiceValidator } from "../validators/Service.validator";
+import { StatusViagemEnum } from "../model/enums/StatusViagem.enum";
 import { IRealizaCotacao } from "../model/interfaces/RealizaCotacao";
 import { IRetornaCotacao } from "../model/interfaces/RetornaCotacao";
+import { IInterfaceViagem } from "../model/interfaces/InterfaceViagem";
 import { ViagemParceiroAbstract } from "./abstracts/ViagemParceiro.abstract";
 import CotacaoVencedora, { ICotacaoVencedora } from "../model/CotacaoVencedora";
 
@@ -64,7 +74,7 @@ export class CotacaoService {
     }
   }
 
-  public async cotacao(body: IRealizaCotacao): Promise<IRetornaCotacao | undefined> {
+  public async cotacao(body: IRealizaCotacao, next: NextFunction): Promise<IRetornaCotacao | undefined> {
     const resultadoValidacao = this.serviceValidator.validarRetornaMelhorCotacao(body);
     retornarErroValidacao(resultadoValidacao, ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS);
 
@@ -76,16 +86,13 @@ export class CotacaoService {
         const cotacoes = await this.realizarCotacao(body);
         const cotacaoVencedora = await this.definirMelhorCotacao(cotacoes);
 
-        console.log("usuario", usuario);
+        let viagem = this.formataCotacaoViagem(body, usuario, cotacaoVencedora, cotacoes);
+        viagem = await this.salvarCotacoes(viagem);
 
-        console.log("cotacoes", cotacoes);
-
-        console.log("cotacaoVencedora", cotacaoVencedora);
-
-        // let viagem = this.formataCotacaoViagem(body, usuario, cotacaoVencedora, cotacoes);
-
-        return;
+        // eslint-disable-next-line no-underscore-dangle
+        return ViagemService.setaRetornoCotaco(viagem._id, cotacaoVencedora, next);
       }
+      throw new ErroExterno(...ERRO_EXTERNO_VIAGEM_EM_ANDAMENTO).formatMessage();
     } catch (error) {
       logger.error(`
         ERRO no MS "${environment.app.name}", método "retornaMelhorCotacao".
@@ -183,6 +190,22 @@ export class CotacaoService {
     }
   }
 
+  public calculaValorEconomizadoPorViagem(melhorCotacao: object): number {
+    const cotacaoVencedora = Object.values(melhorCotacao);
+
+    const menorValorCotacoes: Array<number> = [];
+
+    cotacaoVencedora.forEach((parceiro) => menorValorCotacoes.push(parceiro.valor));
+
+    const maiorValorCotacao = Math.max(...menorValorCotacoes);
+    const menorValorCotacao = Math.min(...menorValorCotacoes);
+
+    let valorEconomizado = maiorValorCotacao - menorValorCotacao;
+    valorEconomizado = formataValorPraDuasCasasDecimais(valorEconomizado);
+
+    return valorEconomizado;
+  }
+
   public formatarCotacoesPorParceiro(parceiros: UsuarioParceiros, promisesResolvidas: any): object {
     let objCotacoes = {};
     const erroParceiro: Array<object> = [];
@@ -212,19 +235,42 @@ export class CotacaoService {
     return { ...objCotacoes, erroCotacaoParceiros: erroParceiro };
   }
 
-  public calculaValorEconomizadoPorViagem(melhorCotacao: object): number {
-    const cotacaoVencedora = Object.values(melhorCotacao);
+  public formataCotacaoViagem(body: IRealizaCotacao, usuario: IUsuario, cotacaoVencedora: ICotacaoVencedora, cotacoes: object | void): IInterfaceViagem {
+    return new Viagem({
+      idUsuario: body.idUsuario,
+      statusViagem: [
+        {
+          statusViagem: StatusViagemEnum.COTADO,
+          dtCriacao: new Date(),
+        },
+      ],
+      coordenadas: {
+        origemViagem: body.localOrigemViagem,
+        destinoViagem: body.localDestinoViagem,
+        tsIdaViagem: body.tsIdaViagem,
+        tsVoltaViagem: body.tsVoltaViagem,
+      },
+      cotacaoVencedora,
+      parceirosCotados: cotacoes,
+      tsCriacao: new Date(),
+    });
+  }
 
-    const menorValorCotacoes: Array<number> = [];
+  public async salvarCotacoes(viagem: IInterfaceViagem): Promise<IInterfaceViagem> {
+    try {
+      return new Viagem(viagem).save();
+    } catch (error) {
+      logger.error(`
+      ERRO no MS "${environment.app.name}", método "salvarCotacoes".
+      <'ERRO'>
+        message: Aconteceu um erro ao tentar salvar uma cotacao...
+      Parâmetros da requisição:
+        ID USUARIO: ${viagem.idUsuario}
+        STATUS VIAGEM: ${viagem.statusViagem}       
+        COORDENADAS: ${viagem.coordenadas}        
+    `);
 
-    cotacaoVencedora.forEach((parceiro) => menorValorCotacoes.push(parceiro.valor));
-
-    const maiorValorCotacao = Math.max(...menorValorCotacoes);
-    const menorValorCotacao = Math.min(...menorValorCotacoes);
-
-    let valorEconomizado = maiorValorCotacao - menorValorCotacao;
-    valorEconomizado = formataValorPraDuasCasasDecimais(valorEconomizado);
-
-    return valorEconomizado;
+      throw new ErroSQL(...ERRO_SQL_AO_SALVAR_COTACAO_DE_VIAGEM);
+    }
   }
 }

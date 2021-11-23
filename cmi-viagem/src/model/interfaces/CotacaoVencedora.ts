@@ -4,7 +4,6 @@ export interface ICotacaoVencedora {
     produto: string;
     objIdParceiro: object;
     valor: number;
-    tempoEspera: number;
     icone: string;
     valorEconomizado: number;
     tsCriacao: Date;

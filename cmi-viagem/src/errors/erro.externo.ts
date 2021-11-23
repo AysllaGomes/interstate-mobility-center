@@ -25,6 +25,10 @@ export const ERRO_EXTERNO_DADOS_PARC_AUTENTICACAO: [string, string] = [
 ];
 export const ERRO_EXTERNO_DO_PARCEIRO: [string, string] = ["106", "Ocorreu um erro na requisição do parceiro: {0}"];
 export const ERRO_EXTERNO_AO_CONSULTAR_STATUS_DA_VIAGEM: [string, string] = ["107", "Ocorreu um erro na consulta do status da viagem '{0}', erro: {1}"];
+export const AREA_NAO_ATENDIDA_POR_NENHUM_PARCEIRO: [string, string, string] = [
+  "108", "Não encontramos operadores nesta região.",
+  "Trabalhamos continuamente para atender em todo território nacional.",
+];
 
 export const listErroExterno = [
   new ErroExterno(...ERRO_EXTERNO_VIAGEM_EM_ANDAMENTO),
@@ -34,4 +38,5 @@ export const listErroExterno = [
   new ErroExterno(...ERRO_EXTERNO_DADOS_PARC_AUTENTICACAO),
   new ErroExterno(...ERRO_EXTERNO_DO_PARCEIRO),
   new ErroExterno(...ERRO_EXTERNO_AO_CONSULTAR_STATUS_DA_VIAGEM),
+  new ErroExterno(...AREA_NAO_ATENDIDA_POR_NENHUM_PARCEIRO),
 ];

@@ -1,3 +1,4 @@
+import { NextFunction } from "express";
 import { setTagSpan, traceable } from "jaeger-tracer-decorator";
 import { CotacaoService } from "../services/Cotacao.service";
 import { IRealizaCotacao } from "../model/interfaces/RealizaCotacao";
@@ -13,7 +14,7 @@ export class CotacaoController {
 
   constructor({ service = new CotacaoService() }) { this.service = service; }
 
-  public async cotacao(body: IRealizaCotacao): Promise<IRetornaCotacao | undefined> {
-    return this.service.cotacao(body);
+  public async cotacao(body: IRealizaCotacao, next: NextFunction): Promise<IRetornaCotacao | undefined> {
+    return this.service.cotacao(body, next);
   }
 }
