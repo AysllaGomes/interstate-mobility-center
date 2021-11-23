@@ -14,7 +14,7 @@ import {
   ErroSQL,
   ERRO_AO_VERIFICAR_SE_O_PARCEIRO_ESTA_ATIVO_NO_MONGODB,
 } from "../errors/erro.sql";
-import { IHealthServices } from "../model/HealthServices";
+import { IHealthServices } from "../model/interfaces/HealthServices";
 import ParceiroModel, { IParceiro } from "../model/Parceiro";
 import { ConexaoMongoEnum } from "../model/enums/ConexaoMongo.enum";
 import { AutenticacaoNockService } from "./AutenticacaoNock.service";

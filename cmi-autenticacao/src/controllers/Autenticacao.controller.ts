@@ -1,5 +1,5 @@
 import { setTagSpan, traceable } from "jaeger-tracer-decorator";
-import { IHealthServices } from "../model/HealthServices";
+import { IHealthServices } from "../model/interfaces/HealthServices";
 import { AutenticacaoService } from "../services/Autenticacao.service";
 
 @traceable()
