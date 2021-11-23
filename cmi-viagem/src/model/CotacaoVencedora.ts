@@ -41,7 +41,6 @@ export interface ICotacaoVencedora extends Document {
  *       icone: "https://icone.com/icone.png"
  *       tsCriacao: "2021-10-01"
  */
-export class CotacaoVencedora { }
 
 const CotacaoVencedoraSchema: Schema = new Schema({
   parceiro: {

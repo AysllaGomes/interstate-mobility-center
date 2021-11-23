@@ -18,10 +18,12 @@ import { ViagemNockService } from "./ViagemNock.service";
 import { StatusViagemService } from "./StatusViagem.service";
 import { AutenticacaoService } from "./Autenticacao.service";
 import { ViagemStrangerService } from "./ViagemStranger.service";
+import { UsuarioParceiros } from "./interfaces/UsuarioParceiros";
 import { ServiceValidator } from "../validators/Service.validator";
 import { IRealizaCotacao } from "../model/interfaces/RealizaCotacao";
 import { IRetornaCotacao } from "../model/interfaces/RetornaCotacao";
 import { ViagemParceiroAbstract } from "./abstracts/ViagemParceiro.abstract";
+import CotacaoVencedora, { ICotacaoVencedora } from "../model/CotacaoVencedora";
 
 export class CotacaoService {
   private serviceValidator = new ServiceValidator();
@@ -33,7 +35,7 @@ export class CotacaoService {
 
     if (!nomeParceiro) { await this.retornaParceirosAtivos(result); }
 
-    this.retornaServiceParceiro(nomeParceiro, result);
+    CotacaoService.retornaServiceParceiro(nomeParceiro, result);
 
     return result;
   }
@@ -52,7 +54,7 @@ export class CotacaoService {
     });
   }
 
-  private retornaServiceParceiro(nomeParceiro: string | undefined, result: {}): void {
+  private static retornaServiceParceiro(nomeParceiro: string | undefined, result: {}): void {
     if (nomeParceiro === "nock") {
       Object.assign(result, { nock: new ViagemNockService() });
     }
@@ -70,11 +72,15 @@ export class CotacaoService {
       const usuarioPossuiViagemEmAndamento = await this.statusViagemService.verificaSeUsuarioPossuiViagemEmAndamento(body.idUsuario);
 
       if (!usuarioPossuiViagemEmAndamento) {
-        // const usuario = await UsuarioService.retornaDadosPassageiro(body.idUsuario);
+        const usuario = await UsuarioService.retornaDadosPassageiro(body.idUsuario);
         const cotacoes = await this.realizarCotacao(body);
-        // const cotacaoVencedora = await this.definirMelhorCotacao(cotacoes);
+        const cotacaoVencedora = await this.definirMelhorCotacao(cotacoes);
+
+        console.log("usuario", usuario);
 
         console.log("cotacoes", cotacoes);
+
+        console.log("cotacaoVencedora", cotacaoVencedora);
 
         // let viagem = this.formataCotacaoViagem(body, usuario, cotacaoVencedora, cotacoes);
 
@@ -100,31 +106,110 @@ export class CotacaoService {
   public async realizarCotacao(body: IRealizaCotacao): Promise<object | void> {
     const cotacao = await this.getCotacoesService();
     const usuarioParceiro = await UsuarioService.consultaUsuarioDoParceiro(body);
-    const token = await AutenticacaoService.retornaTokenParceiros();
-
-    console.log("cotacao", cotacao);
-
-    console.log("usuarioParceiro", usuarioParceiro);
 
     if (Object.keys(usuarioParceiro.data).length !== 0) {
+      const token = await AutenticacaoService.retornaTokenParceiros();
+
       const promisesResolvidas = await Promise.all(
         Object.keys(cotacao).map(async (nomeParceiro) => {
-          console.log("nomeParceiro", nomeParceiro);
-
           if (nomeParceiro) {
             return {
             // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
             // @ts-ignore
-              data: await Promise.resolve(cotacao[nomeParceiro].retornaCotacao(req, usuarioParceiro.data[nomeParceiro].id, token[nomeParceiro])),
+              data: await Promise.resolve(cotacao[nomeParceiro].retornaCotacao(body, usuarioParceiro.data[nomeParceiro].id, token[nomeParceiro])),
               nomeParceiro,
             };
           }
           return null;
         }),
       );
-
-      console.log("promisesResolvidas", promisesResolvidas);
+      return this.formatarCotacoesPorParceiro(usuarioParceiro, promisesResolvidas);
     }
+  }
+
+  public async definirMelhorCotacao(cotacoes: any): Promise<ICotacaoVencedora> {
+    const parceirosCotados = {};
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const nomeParceiro of Object.keys(cotacoes)) {
+      // eslint-disable-next-line no-await-in-loop
+      Object.assign(parceirosCotados, await this.getCotacoesService(nomeParceiro));
+    }
+    let cotacaoVencedora = new CotacaoVencedora();
+    try {
+      logger.info("Definindo a melhor cotação");
+
+      const objCotacaoService: any = parceirosCotados;
+      let objMelhoresCotacoes: any;
+      let valorEconomizado;
+
+      Object.keys(objCotacaoService).forEach((nomeParceiro: string) => {
+        if (cotacoes[nomeParceiro] && !cotacoes[nomeParceiro].erro) {
+          const cotacao: ICotacaoVencedora = objCotacaoService[nomeParceiro].menorPreco(cotacoes[nomeParceiro]);
+
+          logger.info(`Formatando o menor valor do parceiro ${nomeParceiro} para reais.`);
+          cotacao.valor = objCotacaoService[nomeParceiro].formataPrecoEmReais(cotacao.valor);
+
+          logger.info(`Fixando o valor ${cotacao.valor} para apenas 2 casas decimais.`);
+          cotacao.valor = formataValorPraDuasCasasDecimais(cotacao.valor);
+
+          objMelhoresCotacoes = {
+            ...objMelhoresCotacoes,
+            [nomeParceiro]: cotacao,
+          };
+        }
+      });
+
+      if (objMelhoresCotacoes) {
+        Object.keys(objMelhoresCotacoes).forEach((value: string, index: number, arr) => {
+          if (!cotacaoVencedora.valor) {
+            cotacaoVencedora = objMelhoresCotacoes[arr[index]];
+          }
+
+          if (objMelhoresCotacoes[arr[index + 1]]) {
+            if (cotacaoVencedora.valor > objMelhoresCotacoes[arr[index + 1]].valor) {
+              cotacaoVencedora = objMelhoresCotacoes[arr[index + 1]];
+            }
+          }
+        });
+        valorEconomizado = this.calculaValorEconomizadoPorViagem(objMelhoresCotacoes);
+      }
+
+      return Object.assign(cotacaoVencedora, { valorEconomizado });
+    } catch (error) {
+      logger.error(`ERRO ao definir a melhor cotação: ${error}`);
+
+      return cotacaoVencedora;
+    }
+  }
+
+  public formatarCotacoesPorParceiro(parceiros: UsuarioParceiros, promisesResolvidas: any): object {
+    let objCotacoes = {};
+    const erroParceiro: Array<object> = [];
+
+    promisesResolvidas.forEach((cotacao: { data: any, nomeParceiro: string } | null) => {
+      if (cotacao && cotacao.data) {
+        if (!cotacao.data.erro) {
+          objCotacoes = {
+            ...objCotacoes,
+            [cotacao.nomeParceiro]: {
+              ...cotacao.data,
+              // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+              // @ts-ignore
+              idUsuarioParceiro: parceiros.data[cotacao.nomeParceiro].id,
+            },
+          };
+        } else {
+          logger.debug(`Parceiro: ${cotacao.nomeParceiro} \n Erro: ${cotacao.data.erro.mensagemErro}`);
+          erroParceiro.push({
+            parceiro: cotacao.data.erro.parceiro,
+            erro: cotacao.data.erro.mensagemErro,
+          });
+        }
+      }
+    });
+
+    return { ...objCotacoes, erroCotacaoParceiros: erroParceiro };
   }
 
   public calculaValorEconomizadoPorViagem(melhorCotacao: object): number {
