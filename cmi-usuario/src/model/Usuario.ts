@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { ITermosDeUso } from "./interfaces/TermosDeUso";
+import { IDadosDoPagamento } from "./interfaces/DadosPagamento";
 
 export interface IUsuario extends Document {
     nome: string;
@@ -10,6 +11,7 @@ export interface IUsuario extends Document {
     certidaoDeNascimento: string;
     numeroTelefoneCelular: string;
     termosDeUso?: Array<ITermosDeUso>;
+    dadosDePagamento?: Array<IDadosDoPagamento>;
     tsCriacao: Date;
 }
 
@@ -54,6 +56,7 @@ export interface IUsuario extends Document {
  *         dataDeNascimento: "01/01/2000",
  *         numeroTelefoneCelular: "99999999999",
  *         termosDeUso: [],
+ *         dadosDePagamento: [],
  *         tsCriacao: "2021-09-15T21:57:49.871Z",
  *         __v: 0
  *      }
@@ -89,6 +92,10 @@ const UsuarioSchema: Schema = new Schema({
     required: false,
   },
   termosDeUso: {
+    type: Array,
+    required: false,
+  },
+  dadosDePagamento: {
     type: Array,
     required: false,
   },

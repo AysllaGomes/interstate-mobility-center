@@ -7,6 +7,7 @@ export interface IEnvironment {
     version: string;
     description: string;
     host: string;
+    hostCMIViagemParceiro: string;
     port: number;
     env: string;
     logLevel: string;
@@ -24,6 +25,7 @@ export const environment: IEnvironment = {
     version: process.env.npm_package_version || "?.?.?",
     description: process.env.npm_package_description || "cmi-fatura in node with expressjs",
     host: process.env.APP_HOST || "localhost:3006",
+    hostCMIViagemParceiro: process.env.CMI_VIAGEM_PARCEIRO_HOST || "http://localhost:3002",
     env: process.env.NODE_ENV || "local",
     port: convertNumber(process.env.API_PORT, 3006),
     logLevel: process.env.LOG_LEVEL ? process.env.LOG_LEVEL.toLowerCase() : "debug",

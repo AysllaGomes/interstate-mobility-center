@@ -4,12 +4,13 @@ import { logger } from "./util/logger";
 import { DocsApi } from "./routes/docs.api";
 import { MainApi } from "./routes/main.api";
 import { ErrorApi } from "./routes/error.api";
+import { FaturaApi } from "./routes/Fatura.api";
 import { environment } from "./config/environment";
 import { handleError } from "./util/error.handler";
 import { mergePatchBodyParser, middlewareForLog, verificaConexaoMongoMiddleware } from "./util/middleware";
 
-const getApiControllers = (): (ErrorApi | MainApi | DocsApi)[] => [
-  new ErrorApi(), new MainApi(), new DocsApi(),
+const getApiControllers = (): (ErrorApi | MainApi | DocsApi | FaturaApi)[] => [
+  new ErrorApi(), new MainApi(), new DocsApi(), new FaturaApi(),
 ];
 
 const app = express();
