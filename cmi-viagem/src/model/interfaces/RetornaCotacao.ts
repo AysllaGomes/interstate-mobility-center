@@ -3,6 +3,5 @@ export interface IRetornaCotacao {
     parceiro: string;
     produto: string;
     valor: number;
-    tempoEspera: number;
     icone: string;
 }

@@ -4,5 +4,6 @@ export interface IStatusViagemParceiro {
   statusViagem: StatusViagemEnum;
   origemViagem?: Array<number>;
   destinoViagem?: Array<number>;
+  motivoErro?: string;
 }
 

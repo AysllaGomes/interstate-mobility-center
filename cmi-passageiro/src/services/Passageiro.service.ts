@@ -17,18 +17,23 @@ import { IVinculoPassageiro } from "../model/interfaces/VinculoPassageiro";
 export class PassageiroService {
     private serviceValidator = new ServiceValidator();
 
-    public async vinculoPassageiro(body: IVinculoPassageiro): Promise<IPassageiro | undefined> {
-      const resultadoValidacao = this.serviceValidator.validaVinculoPassageiro(body);
-      retornarErroValidacao(resultadoValidacao, ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS);
+    public async vinculoPassageiro(body: Array<IVinculoPassageiro>): Promise<Array<IPassageiro | undefined>> {
+      logger.debug("Salvando registros de passageiros no banco de dados...");
 
-      const resultadoRepeticoes = await PassageiroService.existeRepeticoesProibidas(body);
+      return Promise.all(
+        body.map(async (passageiro: IVinculoPassageiro) => {
+          const resultadoValidacao = this.serviceValidator.validaVinculoPassageiro(passageiro);
+          retornarErroValidacao(resultadoValidacao, ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS);
 
-      if (!resultadoRepeticoes) {
-        const passageiro = this.formataPassageiro(body);
-        return this.salvarPassageiro(passageiro);
-      }
+          const resultadoRepeticoes = await PassageiroService.existeRepeticoesProibidas(passageiro);
 
-      return undefined;
+          if (!resultadoRepeticoes) {
+            const vinculoPassageiro = this.formataPassageiro(passageiro);
+            return this.salvarPassageiro(vinculoPassageiro);
+          }
+          return undefined;
+        }),
+      );
     }
 
     public static async existeRepeticoesProibidas(passageiroCadastro: IVinculoPassageiro): Promise<boolean> {
