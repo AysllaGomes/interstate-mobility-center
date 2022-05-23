@@ -189,5 +189,32 @@ export class UsuarioApi extends ApiRouter {
           next(new ErroNegocial(...ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS).formatMessage("idUsuario"));
         } catch (error) { next(error); }
       });
+
+      /**
+       * @swagger
+       *   /usuario/atualizaDadosDePagamento:
+       *   post:
+       *     description: Realiza a atualização de dados de pagamento de usuário de acordo com a viagem, caso seja possível
+       *     summary: EndPoint que realiza a atualização de dados de pagamento de usuário de acordo com a viagem, caso seja possível
+       *     tags:
+       *       - Usuário
+       *     parameters:
+       *      - in: body
+       *        name: IDadosPagamento
+       *        description: Um objeto do tipo IDadosPagamento
+       *        required: true
+       *        schema:
+       *          $ref: '#/definitions/IDadosPagamento'
+       *     responses:
+       *       200:
+       *         description: Lista de resposta que contem todos os objetos que foram salvos no banco de dados
+       *         schema:
+       *             $ref: '#/definitions/Usuario'
+       */
+      server.post(`${this.path}/atualizaDadosDePagamento`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
+        try {
+          return response.json(await this.controller.atualizaDadosDePagamento(request.body));
+        } catch (error) { next(error); }
+      });
     }
 }

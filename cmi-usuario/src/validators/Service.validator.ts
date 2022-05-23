@@ -1,6 +1,7 @@
 import { messages } from "joi-translation-pt-br";
 import Joi, { CustomHelpers, ObjectSchema, ValidationResult } from "@hapi/joi";
 import { logger } from "../util/logger";
+import { IDadosDoPagamento } from "../model/interfaces/DadosPagamento";
 import { ICadastroUsuario } from "../model/interfaces/CadastroUsuario";
 import { IDetalharUsuario } from "../model/interfaces/DetalharUsuario";
 
@@ -64,5 +65,27 @@ export class ServiceValidator {
     if (resto !== parseInt(cpf.substring(10, 11))) return helpers.error("any.invalid");
 
     return cpf;
+  }
+
+  public validaAtualizaDadosDePagamento(body: IDadosDoPagamento): ValidationResult {
+    logger.debug("Validando os dados de pagamento...");
+
+    const schema: ObjectSchema<IDadosDoPagamento> = Joi.object({
+      idUsuario: Joi.string()
+        .min(24)
+        .max(24)
+        .required(),
+      idViagem: Joi.string()
+        .min(24)
+        .max(24)
+        .required(),
+      ultimosQuatroDigitos: Joi.required(),
+      cvc: Joi.required(),
+      dataDeVencimento: Joi.required(),
+      nomeDoTitularDoCartao: Joi.string().required(),
+      cpfDoTitularDoCartao: Joi.string().custom(ServiceValidator.validarCPF, "validar cpf").required(),
+    });
+
+    return schema.validate(body, { messages });
   }
 }

@@ -3,6 +3,7 @@ import { IUsuario } from "../model/Usuario";
 import { ErroSQL } from "../errors/erro.sql";
 import { UsuarioService } from "../services/Usuario.service";
 import { ICoordenadas } from "../model/interfaces/Coordenadas";
+import { IDadosDoPagamento } from "../model/interfaces/DadosPagamento";
 import { ICadastroUsuario } from "../model/interfaces/CadastroUsuario";
 import { IDetalharUsuario } from "../model/interfaces/DetalharUsuario";
 import { IInputTermoDeUsoApi } from "../model/interfaces/InputTermoDeUsoApi";
@@ -43,5 +44,9 @@ export class UsuarioController {
 
     public async usuarioAssinaturaTermoDeUso(body: IUsuarioAssinaturaTermoDeUso): Promise<IRetornoPassageiroAssinaturaTermoDeUso> {
       return this.service.usuarioAssinaturaTermoDeUso(body);
+    }
+
+    public async atualizaDadosDePagamento(body: IDadosDoPagamento): Promise<IRetornoUpdateUsuarioModel> {
+      return this.service.atualizaDadosDePagamento(body);
     }
 }

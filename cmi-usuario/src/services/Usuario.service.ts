@@ -3,14 +3,16 @@ import { environment } from "../config/environment";
 import {
   ErroNegocial,
   ERRO_NEGOCIAL_NA_VALIDACAO,
+  ERRO_NEGOCIAL_CPF_REPETIDO,
   ERRO_NEGOCIAL_EMAIL_REPETIDO,
-  ERRO_NEGOCIAL_REGISTRO_REPETIDO, ERRO_NEGOCIAL_CPF_REPETIDO,
+  ERRO_NEGOCIAL_REGISTRO_REPETIDO,
 } from "../errors/erro.negocial";
 import {
   ErroSQL,
   ERRO_SQL_AO_SALVAR_USUARIO,
   ERRO_SQL_BUSCA_DADOS_USUARIO,
   ERRO_AO_ATUALIZAR_TERMO_DE_USO_USUARIO,
+  ERRO_AO_ATUALIZAR_DADOS_DE_PAGAMENTO_USUARIO,
   ERRO_SQL_EMAIL_INFORMADO_DO_USUARIO_NAO_ENCONTRADO,
 } from "../errors/erro.sql";
 import { ITermoDeUso } from "../model/TermoDeUso";
@@ -22,6 +24,7 @@ import { ITermosDeUso } from "../model/interfaces/TermosDeUso";
 import { ServiceValidator } from "../validators/Service.validator";
 import { ICadastroUsuario } from "../model/interfaces/CadastroUsuario";
 import { IDetalharUsuario } from "../model/interfaces/DetalharUsuario";
+import { IDadosDoPagamento } from "../model/interfaces/DadosPagamento";
 import { IInputTermoDeUsoApi } from "../model/interfaces/InputTermoDeUsoApi";
 import { IDadosDoDispositivo } from "../model/interfaces/DadosDoDispositivo";
 import { IRetornoUpdateUsuarioModel } from "../model/interfaces/RetornoUpdateUsuarioModel";
@@ -204,5 +207,53 @@ export class UsuarioService {
       versao: termoDeUsoVigente.versao,
       conteudo: termoDeUsoVigente.conteudo,
     };
+  }
+
+  public async atualizaDadosDePagamento(body: IDadosDoPagamento): Promise<IRetornoUpdateUsuarioModel> {
+    const resultadoValidacao = this.serviceValidator.validaAtualizaDadosDePagamento(body);
+    retornarErroValidacao(resultadoValidacao, ERRO_NEGOCIAL_NA_VALIDACAO);
+
+    const dadosDoPagamento = this.formataDadosDoPagamento(body);
+    return this.salvarDadosDoPagamento(dadosDoPagamento);
+  }
+
+  public formataDadosDoPagamento(body: IDadosDoPagamento): Array<IDadosDoPagamento> {
+    return [
+      {
+        idViagem: body.idViagem,
+        idUsuario: body.idUsuario,
+        ultimosQuatroDigitos: body.ultimosQuatroDigitos,
+        cvc: body.cvc,
+        dataDeVencimento: body.dataDeVencimento,
+        nomeDoTitularDoCartao: body.nomeDoTitularDoCartao,
+        cpfDoTitularDoCartao: body.cpfDoTitularDoCartao,
+      },
+    ];
+  }
+
+  public async salvarDadosDoPagamento(dadosDePagamento: IDadosDoPagamento[]): Promise<IRetornoUpdateUsuarioModel> {
+    try {
+      logger.debug("Atualizando dados de pagamento do usuário...");
+
+      return UsuarioModel.updateOne(
+        { _id: dadosDePagamento[0].idUsuario },
+        { dadosDePagamento },
+        { upsert: true },
+        (error: Error, document: IUsuario) => document,
+      );
+    } catch (error) {
+      logger.error(`
+        ERRO no MS "${environment.app.name}", método "salvarDadosDoPagamento".
+        <'ERRO NEGOCIAL'>
+          message:  Não foi possível atualizar os dados de pagamento do usuário, na base de dados...
+        Parâmetros da requisição:
+          VIAGEM: ${dadosDePagamento[0].idViagem},
+          USUÁRIO: ${dadosDePagamento[0].idUsuario},
+          CPF DO TTULAR CARTÃO: ${dadosDePagamento[0].cpfDoTitularDoCartao},
+          NOME DO TTULAR CARTÃO: ${dadosDePagamento[0].nomeDoTitularDoCartao},
+      `);
+
+      throw new ErroSQL(...ERRO_AO_ATUALIZAR_DADOS_DE_PAGAMENTO_USUARIO);
+    }
   }
 }
