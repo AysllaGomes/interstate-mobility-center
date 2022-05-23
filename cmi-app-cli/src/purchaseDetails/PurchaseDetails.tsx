@@ -2,7 +2,7 @@ import React from 'react';
 import {SafeAreaView, ScrollView, View} from 'react-native';
 import {Button, TextInput} from "react-native-paper";
 import {NativeStackNavigatorProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {HeaderComponent} from '../components/header/header.component';
+import {HeaderComponent} from '../components/header/Header.component';
 import {Text} from "react-native-paper";
 import {Formik} from 'formik';
 
@@ -15,7 +15,7 @@ interface ScreenProps {
     route: NativeStackNavigatorProps
 }
 
-const ResumoCompra = (props: ScreenProps) => {
+const PurchaseDetails = (props: ScreenProps) => {
 
     const goHome = () => {
         props.navigation.navigate("Home")
@@ -35,4 +35,4 @@ const ResumoCompra = (props: ScreenProps) => {
     )
 }
 
-export default ResumoCompra;
+export default PurchaseDetails;

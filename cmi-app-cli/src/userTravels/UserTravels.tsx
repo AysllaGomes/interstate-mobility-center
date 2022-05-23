@@ -2,7 +2,7 @@ import React from 'react';
 import {SafeAreaView, ScrollView, View} from 'react-native';
 import {Button, TextInput} from "react-native-paper";
 import {NativeStackNavigatorProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {HeaderComponent} from '../components/header/header.component';
+import {HeaderComponent} from '../components/header/Header.component';
 import {Text} from "react-native-paper";
 import {Formik} from 'formik';
 import {theme} from '../../App.style';

@@ -1,6 +1,6 @@
 export default [
     {
-        id: 'OBJ 1',
+        id: '01',
         title: 'Maceió',
         image: require('../../assets/img/tim-johnson-J-yDj62KSxE-unsplash.jpg'),
         dateDeparture: '10/10/2021',
@@ -14,7 +14,7 @@ export default [
             'Sinta-se em casa em um de nossos 52 quartos com ar-condicionado, minibares e TVs LED. O Wi-Fi de cortesia mantém você conectado e há programas a cabo para sua diversão.  '
     },
     {
-        id: 'OBJ 2',
+        id: '02',
         title: 'Second Item',
         image: require('../../assets/img/pedro-lastra-Nyvq2juw4_o-unsplash.jpg'),
         dateDeparture: '10/10/2021',
@@ -23,7 +23,7 @@ export default [
         duracao: '20 dias'
     },
     {
-        id: 'OBJ 3',
+        id: '033',
         title: 'Third Item',
         image: require('../../assets/img/ben-o-bro-wpU4veNGnHg-unsplash.jpg'),
         dateDeparture: '2/10/2021',
@@ -32,7 +32,7 @@ export default [
         duracao: '29 dias'
     },
     {
-        id: 'OBJ 4',
+        id: '04',
         title: 'Fourth Item',
         image: require('../../assets/img/piotr-chrobot-6oUsyeYXgTg-unsplash.jpg'),
         dateDeparture: '5/10/2021',
@@ -41,7 +41,7 @@ export default [
         duracao: '1 dias'
     },
     {
-        id: 'OBJ 5',
+        id: '05',
         title: 'Five Item',
         image: require('../../assets/img/jonathan-roger-LY1eyQMFeyo-unsplash.jpg'),
         dateDeparture: '2/10/2021',
@@ -50,7 +50,7 @@ export default [
         duracao: '13 dias'
     },
     {
-        id: 'OBJ 6',
+        id: '06',
         title: 'Six Item',
         image: require('../../assets/img/henning-witzel-ukvgqriuOgo-unsplash.jpg'),
         dateDeparture: '22/10/2021',

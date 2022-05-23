@@ -2,13 +2,14 @@ import React from 'react';
 import {SafeAreaView, ScrollView, View} from 'react-native';
 import {Button, TextInput} from "react-native-paper";
 import {NativeStackNavigatorProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {HeaderComponent} from '../components/header/header.component';
+import {HeaderComponent} from '../components/header/Header.component';
 import {Text} from "react-native-paper";
 import {Formik} from 'formik';
 import {paymentForm} from './payment.form';
 import {paymentStyle} from './payment.style';
 import {theme} from '../../App.style';
 import * as Animatable from 'react-native-animatable';
+import { GetUsuarioLogadoData } from '../../assets/DadosUsuarioLogado/DadosUsuarioLogado';
 
 interface ScreenProps {
     navigation: NativeStackNavigatorProps,
@@ -38,11 +39,14 @@ const cvcMask = (value) => {
 }
 
 
-const Payment = (props: ScreenProps) => {
+const PaymentMethods = (props: ScreenProps) => {
 
     const goResumoViagem = () => {
         props.navigation.navigate("ResumoCompra")
     }
+    console.log(    GetUsuarioLogadoData().then((v)=> console.log(v))
+    )
+
     return (
         <SafeAreaView>
             <HeaderComponent title="Pagamento" navigation={props.navigation}/>
@@ -54,7 +58,7 @@ const Payment = (props: ScreenProps) => {
                         marginBottom: 20,
                         fontSize: 18
                     }
-                }}>Digite as informações do cartão de crédito que você
+                }}>Digite as informações do cartão de crédito VISA que você
                     deseja usar para o pagamento</Text>
                 <Formik initialValues={{
                     name: '',
@@ -79,8 +83,10 @@ const Payment = (props: ScreenProps) => {
 
                         <View>
                             <TextInput
+                                maxLength={16}
                                 keyboardType="numeric"
-                                label="Número do cartão"
+                                label="Número do Cartão"
+                                placeholder="0000 0000 0000"
                                 onChangeText={(value) => setFieldValue('cardNumber', cardMask(value))}
                                 onFocus={() => setFieldTouched('cardNumber')}
                                 onBlur={handleBlur('cardNumber')}
@@ -104,6 +110,7 @@ const Payment = (props: ScreenProps) => {
                             <View style={{display: "flex", flexDirection: "row"}}>
                                 <View style={{flex: 1, paddingRight: 20}}>
                                     <TextInput
+                                        maxLength={2}
                                         placeholder="MM"
                                         keyboardType="numeric"
                                         onChangeText={(value) => setFieldValue('mesCartao', dateMask(value))}
@@ -127,6 +134,7 @@ const Payment = (props: ScreenProps) => {
                                 </View>
                                 <View style={{flex: 1, paddingRight: 20}}>
                                     <TextInput
+                                        maxLength={2}
                                         placeholder="AA"
                                         keyboardType="numeric"
                                         onChangeText={(value) => setFieldValue('anoCartao', dateMask(value))}
@@ -150,6 +158,7 @@ const Payment = (props: ScreenProps) => {
                                 </View>
                                 <View style={{flex: 1}}>
                                     <TextInput
+                                        maxLength={3}
                                         placeholder="CVC"
                                         keyboardType="numeric"
                                         onChangeText={(value) => setFieldValue('cvcCartao', cvcMask(value))}
@@ -191,7 +200,8 @@ const Payment = (props: ScreenProps) => {
                             }
 
                             <TextInput
-                                label="CPF"
+                                maxLength={14}
+                                label="CPF do titular do cartao"
                                 placeholder="000.000.000-00"
                                 keyboardType="numeric"
                                 onChangeText={(e) => setFieldValue('cpf', maskCPF(e))}
@@ -223,4 +233,4 @@ const Payment = (props: ScreenProps) => {
         </SafeAreaView>
     )
 }
-export default Payment;
+export default PaymentMethods;

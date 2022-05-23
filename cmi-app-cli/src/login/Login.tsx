@@ -55,7 +55,7 @@ const Login = (props: LoginScreenProps) => {
                 (termoAssinado === false) ? props.navigation.navigate("TermoUso", {emailUsuario: email}) : props.navigation.navigate("Home", {emailUsuario: email})
             }
             //Guarda em memória - assets/
-            DadosUsuarioLogado({email: email})
+            DadosUsuarioLogado({email: email, idUsuario: idUsuario})
         } catch (error) {
             // Só esse switch maravilhoso porque o Firebase não retorna erro como numérico kk :)
             let errorMessage = "Erro"
@@ -74,10 +74,6 @@ const Login = (props: LoginScreenProps) => {
                     break
                 default:
                     return 'Algo de errado aconteceu!'
-                {
-                    error
-                }
-                    ;
             }
             return ToastMessage(errorMessage)
         }

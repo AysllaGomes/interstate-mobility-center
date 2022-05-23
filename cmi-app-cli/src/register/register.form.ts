@@ -17,8 +17,8 @@ export const registerForm = yup.object().shape({
     cpf: yup.string().required("Preencher campo!").test("validar-cpf", "CPF inválido!", (e) => validaCpf(e)),
     phoneNumber: yup.string().required("Preencher campo!").min(15, "Muito curto!").max(15),
     birthDate: yup.string().required("Preencher campo!").matches(/(^(((0[1-9]|1[0-9]|2[0-8])[\/](0[1-9]|1[012]))|((29|30|31)[\/](0[13578]|1[02]))|((29|30)[\/](0[4,6,9]|11)))[\/](19|[2-9][0-9])\d\d$)|(^29[\/]02[\/](19|[2-9][0-9])(00|04|08|12|16|20|24|28|32|36|40|44|48|52|56|60|64|68|72|76|80|84|88|92|96)$)/, "Data inválida!").typeError("Data inválida!"),
-    password: yup.string().min(6, "Deve conter pelo menos 6 carácteres").max(20, "Deve conter no máximo 20 carácteres ").required("Preencher campo!").matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-        "Deve conter 8 carácteres, 1 maiúsculo, 1 minúsculo, 1 número e 1 carácteres special"),
+    password: yup.string().max(20, "Deve conter no máximo 20 carácteres ").required("Preencher campo!").matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+        "Deve conter 8 caracteres, 1 maiúsculo, 1 minúsculo, 1 número e 1 caracter especial"),
     ConfPassword: yup.string().oneOf([yup.ref('password'), null], 'As senhas devem ser iguais!'),
 })
 

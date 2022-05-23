@@ -9,7 +9,7 @@ import {useFonts, GermaniaOne_400Regular} from '@expo-google-fonts/germania-one'
 import AppLoading from "expo-app-loading"
 import {theme} from '../../App.style';
 import * as Device from 'expo-device';
-import {HeaderComponent} from '../components/header/header.component';
+import {HeaderComponent} from '../components/header/Header.component';
 
 interface LoginScreenProps {
     navigation: NativeStackNavigatorProps,
@@ -79,7 +79,6 @@ const TermoUso = (props: LoginScreenProps, route) => {
         <Root>
             <SafeAreaView>
                 <HeaderComponent title="Termo de Uso" navigation={props.navigation}/>
-
                 <ScrollView>
                     <View style={styles.container}>
 
@@ -93,7 +92,7 @@ const TermoUso = (props: LoginScreenProps, route) => {
                                 onValueChange={(newValue) => setToggleCheckBox(newValue)}
                                 tintColor="red"
                             />
-                            <Text style={styles.text}>Concorda com o termo?</Text>
+                            <Text style={styles.text} onPress={() => setToggleCheckBox(!toggleCheckBox)}>Concorda com o termo?</Text>
                         </View>
                         <Button disabled={!toggleCheckBox} style={{...styles.button, ...{opacity: buttonOpacity}}}
                                 onPress={() => assinarTermoDeUso() && goHome()}><Text

@@ -11,24 +11,29 @@ import axios from "axios";
 import DropDownPicker from 'react-native-dropdown-picker';
 import { NavigationContainer } from "@react-navigation/native";
 import { GetUsuarioLogadoData } from "../../assets/DadosUsuarioLogado/DadosUsuarioLogado";
+import { theme } from "../../App.style";
 interface HomeScreenProps {
     navigation: NativeStackNavigatorProps
 }
 // Chega a ser cômico, mas precisa disso para habilitar Scroll sem Wornings kkkk
-function VirtualizedView(props: any) {
-    return (
-        <FlatList
-            data={[]}
-            ListEmptyComponent={null}
-            keyExtractor={() => "dummy"}
-            renderItem={null}
-            ListHeaderComponent={() => (
-                <React.Fragment>{props.children}</React.Fragment>
-            )}
-        />
-    );
-}
+// function VirtualizedView(props: any) {
+//     return (
+//         <FlatList
+//             data={[]}
+//             ListEmptyComponent={null}
+//             keyExtractor={() => "dummy"}
+//             renderItem={null}
+//             ListHeaderComponent={() => (
+//                 <React.Fragment>{props.children}</React.Fragment>
+//             )}
+//         />
+//     );
+// }
 // Fim
+
+
+         GetUsuarioLogadoData().then((v)=> console.log(v))
+
 const TravelListItem = ({data, navigation}) => {
     const toTravelPackage = () => navigation.navigate("Package", {data: data})
     return (
@@ -146,7 +151,6 @@ const HomeScreen = (props: HomeScreenProps) => {
     DropDownPicker.setTheme("DARK")
     return (
     <SafeAreaView>
-        <VirtualizedView>
         <View style={indexStyle.content}>
                 <View style={indexStyle.filters}>
                     <TextInput
@@ -155,7 +159,10 @@ const HomeScreen = (props: HomeScreenProps) => {
                         onChangeText={(t) => setSearchText(t)}
                     />
                     <View style={indexStyle.textDateFilter}>
-                        <Text>Periodo da Viagem</Text>
+                        <Text  style={{
+                            ...{fontFamily: theme.fontFamily.fontFamily}, ...{
+                                fontSize: 18
+                            }}}>Periodo da Viagem</Text>
                     </View>
 
                     <View style={indexStyle.dateFilters}>
@@ -243,7 +250,6 @@ const HomeScreen = (props: HomeScreenProps) => {
                 </View>
 
             </View>
-        </VirtualizedView>
         </SafeAreaView>
 
     );
