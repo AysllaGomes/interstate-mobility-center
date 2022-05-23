@@ -172,6 +172,7 @@ export class UsuarioApi extends ApiRouter {
        *         schema:
        *             $ref: '#/definitions/IRetornoPassageiroAssinaturaTermoDeUso'
        */
+
       server.post(`${this.path}/consultaAssinaturaTermoUsuario`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
         try {
           if (request.body.idUsuario) {

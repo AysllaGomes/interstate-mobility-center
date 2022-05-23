@@ -2,7 +2,7 @@ import * as yup from 'yup';
 import {parse, isDate, format, toDate} from "date-fns";
 
 export const paymentForm = yup.object().shape({
-    cardNumber: yup.number().required("Obrigatório!"),
+    cardNumber: yup.string().required("Obrigatório!").matches(/^4[0-9]{12}(?:[0-9]{3})?$/, "Cartão inválido!"),
     mesCartao: yup.number().min(1, "Formato inválido!").max(12, "Formato inválido!").required("Obrigatório!"),
     anoCartao: yup.string().min(2, "Formato inválido!").max(2, "Formato inválido!").required("Obrigatório!"),
     cvcCartao: yup.string().min(3, "Formato inválido!").max(3, "Formato inválido!").required("Obrigatório!"),

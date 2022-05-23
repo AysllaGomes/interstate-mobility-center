@@ -3,7 +3,7 @@ import {SafeAreaView, View, Text} from "react-native";
 import {Button, Card, TextInput} from "react-native-paper";
 import {useValidation} from 'react-native-form-validator';
 import {resetPasswordStyle} from "./ResetPassword.style";
-import {HeaderComponent} from "../../components/header/header.component";
+import {HeaderComponent} from "../../components/header/Header.component";
 import {theme} from '../../../App.style';
 import firebase from 'firebase';
 import * as Animatable from 'react-native-animatable';

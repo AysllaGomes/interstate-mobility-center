@@ -21,3 +21,17 @@ export const GetUsuarioLogadoData = async () => {
             // error reading value
         }
 }
+
+export const MergeUsuarioLogadoData = async (value) => {
+    try {
+        const jsonValue = JSON.stringify(value)
+        const newData = await AsyncStorage.mergeItem('@DadosUsuarioLogado_Key', jsonValue)
+        if (newData !== null) {
+            // value previously stored
+        }
+        return Promise.resolve(newData)
+
+    } catch (e) {
+        // error reading value
+    }
+}

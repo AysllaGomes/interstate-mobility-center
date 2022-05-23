@@ -2,7 +2,7 @@ import React from 'react';
 import {Provider as PaperProvider} from "react-native-paper";
 import { StyleSheet } from 'react-native';
 import {theme} from "./App.style";
-import AppNavigator from "./src/navigation/navigator";
+import AppNavigator from "./src/navigation/Navigator";
 import { useFonts, GermaniaOne_400Regular } from '@expo-google-fonts/germania-one';
 
 export default function App() {

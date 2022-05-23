@@ -2,10 +2,11 @@ import React, {useState} from 'react';
 import {SafeAreaView, View, Text, Image, ScrollView} from "react-native";
 import {Button, Card, TextInput} from "react-native-paper";
 import {useValidation} from 'react-native-form-validator';
-import {HeaderComponent} from "../components/header/header.component";
+import {HeaderComponent} from "../components/header/Header.component";
 import {packageStyle} from "./package.style"
 import {theme} from "../../App.style";
 import moment from 'moment';
+import { DadosUsuarioLogado, GetUsuarioLogadoData, MergeUsuarioLogadoData } from '../../assets/DadosUsuarioLogado/DadosUsuarioLogado';
 
 interface ScreenProps {
     navigation: any,
@@ -15,8 +16,12 @@ interface ScreenProps {
 const Package = (props: ScreenProps) => {
     const {data} = props.route.params;
 
-    const goTravelInfo = () => {
+
+
+    const goTravelInfo = async () => {
+        MergeUsuarioLogadoData({pacoteViagemEscolhido: data.id})
         props.navigation.navigate("TravelInfo")
+
     }
     return (
         <SafeAreaView>

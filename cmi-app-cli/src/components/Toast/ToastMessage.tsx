@@ -6,7 +6,7 @@ const ToastMessage = (errorMessage) => {
     Toast.show(errorMessage, {
         duration: Toast.durations.LONG,
         animation: true,
-        position: Toast.positions.TOP,
+        position: 40,
         backgroundColor: theme.toastErrorMensage.background,
         textColor: theme.toastErrorMensage.dangerTextColor,
 

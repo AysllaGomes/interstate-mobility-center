@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {Button, TextInput} from "react-native-paper";
 import {Keyboard, SafeAreaView, ScrollView, Text, View} from "react-native";
 import {registerStyle} from "./register.style";
-import {HeaderComponent} from "../components/header/header.component";
+import {HeaderComponent} from "../components/header/Header.component";
 import firebase from "../firebase/firebaseconfig";
 import createUser from "./register.service";
 import {Formik} from 'formik';
@@ -48,7 +48,6 @@ export const RegisterScreen = (props: ScreenProps) => {
         let errorMongo = await createUser(values)
         let errorMessage = "Algo muito errado aconteceu ;("
         //Toast mensagens de erro
-        console.log('errorMessage', errorMongo.data.message);
 
         if (errorMongo.status != 200) {
             return ToastMessage(errorMongo.data.message)
@@ -59,7 +58,7 @@ export const RegisterScreen = (props: ScreenProps) => {
         }
         props.navigation.navigate("TermoUso", {emailUsuario: values.email})
         //Guarda em memória - assets/
-        DadosUsuarioLogado({email: values.email})
+        DadosUsuarioLogado({email: values.email, idUsuario: errorMongo.data._id})
 
     }
 //Funções icone Hide Password kkkk
@@ -184,6 +183,7 @@ export const RegisterScreen = (props: ScreenProps) => {
                                 }
 
                                 <TextInput
+                                    maxLength={14}
                                     label="CPF"
                                     placeholder="000.000.000-00"
                                     keyboardType="numeric"
@@ -202,6 +202,7 @@ export const RegisterScreen = (props: ScreenProps) => {
                                     </Animatable.Text> : null
                                 }
                                 <TextInput
+                                    maxLength={15}
                                     label="Celular"
                                     placeholder="(99) 99999-9999"
                                     keyboardType="phone-pad"
@@ -220,6 +221,7 @@ export const RegisterScreen = (props: ScreenProps) => {
                                     </Animatable.Text> : null
                                 }
                                 <TextInput
+                                    maxLength={10}
                                     placeholder="dd/mm/aaa"
                                     label="Data nascimento"
                                     keyboardType="numeric"
