@@ -4,6 +4,7 @@ import { v1 as uuidv1 } from "uuid";
 import { logger } from "./logger";
 import Database from "../config/database";
 import { ConexaoMongoEnum } from "../model/enums/ConexaoMongo.enum";
+import VariaveisDeAmbienteModel from "../model/VariaveisDeAmbiente";
 import { ERRO_NA_CONEXAO_COM_O_MONGODB, ErroSQL } from "../errors/erro.sql";
 
 export const endpointForMiddleware = (path: string): boolean => (path !== "/metrics")
@@ -75,3 +76,15 @@ export const verificaConexaoMongoMiddleware = (async (req: Request, res: Respons
 
   next();
 });
+
+export async function nockTestes(): Promise<boolean> {
+  try {
+    if (process.env.NODE_ENV === "test") return true;
+
+    const result = await VariaveisDeAmbienteModel.find();
+
+    return result[0].habilitaNock.MSAutentica || false;
+  } catch (err) {
+    return false;
+  }
+}

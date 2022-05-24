@@ -10,9 +10,18 @@ export interface IEnvironment {
     port: number;
     env: string;
     logLevel: string;
+    tempoRequestTimeout: number;
   };
   db: {
     uri: string;
+  };
+  stranger: {
+    host?: string,
+    key?: string,
+  };
+  nock: {
+    host?: string,
+    key?: string,
   };
   isValid: () => boolean;
 }
@@ -27,9 +36,18 @@ export const environment: IEnvironment = {
     env: process.env.NODE_ENV || "local",
     port: convertNumber(process.env.API_PORT, 3000),
     logLevel: process.env.LOG_LEVEL ? process.env.LOG_LEVEL.toLowerCase() : "debug",
+    tempoRequestTimeout: convertNumber(process.env.tempo_request_timeout, 20000),
   },
   db: {
     uri: process.env.BD_URI || "mongodb+srv://mongocmi:n1E8DxRjR4INjLws@cmi.q6k96.mongodb.net/cmi",
+  },
+  nock: {
+    host: process.env.NOCK_HOST || "https://sandbox-api-corp.nockapp.com/v2",
+    key: process.env.KEY_PWD || "TOCAdtdwh63mwUPAuPQLP2bR17kAXFzY5WkzzDJL",
+  },
+  stranger: {
+    host: process.env.STRANGER_HOST || "https://qa-clientintegration.stranger.in",
+    key: process.env.STRANGER_PWD || "TOCAdtdwh63mwUPAuPQLP2bR17kAXFzY5WkzzDJL",
   },
   isValid() {
     return true;

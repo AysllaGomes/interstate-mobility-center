@@ -2,9 +2,9 @@ import mongoose, { Schema, Document } from "mongoose";
 
 export interface ICotacaoVencedora extends Document {
   parceiro: string;
-  idUsuarioParceiro: string | number;
+  idUsuarioParceiro: string;
   produto: string;
-  objIdParceiro: string;
+  objIdParceiro: object;
   valor: number;
   icone: string;
   valorEconomizado: number;
@@ -41,7 +41,6 @@ export interface ICotacaoVencedora extends Document {
  *       icone: "https://icone.com/icone.png"
  *       tsCriacao: "2021-10-01"
  */
-export class CotacaoVencedora { }
 
 const CotacaoVencedoraSchema: Schema = new Schema({
   parceiro: {
