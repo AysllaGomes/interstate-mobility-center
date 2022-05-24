@@ -1,7 +1,18 @@
 import React, {useEffect, useState} from "react";
-import {SafeAreaView, View, FlatList, TouchableOpacity, StatusBar, Text, Image, ScrollView, AsyncStorage} from "react-native";
+import {
+    SafeAreaView,
+    View,
+    FlatList,
+    TouchableOpacity,
+    StatusBar,
+    Text,
+    Image,
+    ScrollView,
+    AsyncStorage,
+    ActivityIndicator
+} from "react-native";
 import {Button} from "react-native-paper";
-import {TextInput} from "react-native-paper";
+import {TextInput} from "react-native";
 import results from "./results";
 import {indexStyle} from "./index.style";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -32,15 +43,16 @@ interface HomeScreenProps {
 // Fim
 
 
-         GetUsuarioLogadoData().then((v)=> console.log(v))
+GetUsuarioLogadoData().then((v)=> console.log(v))
 
 const TravelListItem = ({data, navigation}) => {
     const toTravelPackage = () => navigation.navigate("Package", {data: data})
     return (
         <TouchableOpacity onPress={() => toTravelPackage()}>
             <View style={indexStyle.packagesContent}>
-                <Image style={indexStyle.images} source={data.image}/>
+                <Image style={indexStyle.images} source={{uri: data.image}}/>
                 <View style={indexStyle.packagesContentInfo}>
+                    <Text style={indexStyle.packagesText}>Destino: {data.titulo}</Text>
                     <Text style={indexStyle.packagesText}>Duração: {data.duracao}</Text>
                     <Text style={indexStyle.packagesText}>Preço: {data.preco}</Text>
                 </View>
@@ -50,17 +62,39 @@ const TravelListItem = ({data, navigation}) => {
 }
 
 const HomeScreen = (props: HomeScreenProps) => {
+
     const [searchText, setSearchText] = useState('')
+    //Remover apos implementar os filtros
     const [list, setList] = useState(results)
+    //ate aqui
+
     const [dates, setDates] = useState({arrival: '', departure: ''})
     const [selectedState, setSelectedState] = useState({arrival: '', departure: ''})
     const [usuarioLogado, setUsuarioLogado] = useState({email: ''})
 
 
+    const [minhaLista, setMinhaLista] = useState();
+    const [isLoaded, setIsLoaded] = useState(true);
+    const listaPacotesViagens = async () => {
+        const urlBase = "http://192.168.0.110:3002/"
+        try {
+            const resposta = await axios.get(urlBase+'viagem/listar')
+            setMinhaLista(resposta.data)
+            setIsLoaded(false)
+        } catch (error) {
+            return error.response
+        }
+    }
+
     useEffect(() => {
-            (searchText === '') ? setList(results) : setList(results.filter(item => (item.title.toLowerCase().indexOf(searchText.toLowerCase()) > -1)))
-        }, [searchText]
-    );
+        listaPacotesViagens();
+    }, [])
+
+    //Remover apos implementar os filtros
+    // useEffect(() => {
+    //         (searchText === '') ? setList(results) : setList(results.filter(item => (item.title.toLowerCase().indexOf(searchText.toLowerCase()) > -1)))
+    //     }, [searchText]
+    // );
 
     useEffect(() => {
         // datas picker
@@ -73,12 +107,12 @@ const HomeScreen = (props: HomeScreenProps) => {
         let packagesWithDatesFiltered = results
 
         const filterByDate = () => {
-                if (dateDeparture.isValid()) {
-                    packagesFiltered = packagesFiltered.filter(travelPackages => Math.abs(moment(travelPackages.dateDeparture, dateFormat).diff(dateDeparture, "days")) <= dateDiffAccepted)
-                }
-                if (dateArrival.isValid()) {
-                    packagesFiltered = packagesFiltered.filter(travelPackages => Math.abs(moment(travelPackages.dateArrival, dateFormat).diff(dateArrival, "days")) <= dateDiffAccepted)
-                }
+            if (dateDeparture.isValid()) {
+                packagesFiltered = packagesFiltered.filter(travelPackages => Math.abs(moment(travelPackages.dateDeparture, dateFormat).diff(dateDeparture, "days")) <= dateDiffAccepted)
+            }
+            if (dateArrival.isValid()) {
+                packagesFiltered = packagesFiltered.filter(travelPackages => Math.abs(moment(travelPackages.dateArrival, dateFormat).diff(dateArrival, "days")) <= dateDiffAccepted)
+            }
         }
 
         const filterByStates = () => {
@@ -150,108 +184,115 @@ const HomeScreen = (props: HomeScreenProps) => {
 
     DropDownPicker.setTheme("DARK")
     return (
-    <SafeAreaView>
-        <View style={indexStyle.content}>
-                <View style={indexStyle.filters}>
-                    <TextInput
-                        placeholder="Pesquise um pacote"
-                        value={searchText}
-                        onChangeText={(t) => setSearchText(t)}
-                    />
-                    <View style={indexStyle.textDateFilter}>
-                        <Text  style={{
-                            ...{fontFamily: theme.fontFamily.fontFamily}, ...{
-                                fontSize: 18
-                            }}}>Periodo da Viagem</Text>
-                    </View>
-
-                    <View style={indexStyle.dateFilters}>
-                        <TouchableOpacity onPress={showDatePickerDeparture}>
-                            <View style={indexStyle.DepartureDatePickerButton}>
-                                <Text style={indexStyle.datePickerButtonText}>Partida: {dates.departure}</Text>
-                            </View>
-                        </TouchableOpacity>
-
-                        <DateTimePickerModal
-                            isVisible={isDatePickerVisible.departure}
-                            mode="date"
-                            onConfirm={handleConfirmDeparture}
-                            onCancel={hideDatePickerDeparture}
-                            locale="es-ES"
-                            minimumDate={new Date()}
-
-                        />
-                        <TouchableOpacity onPress={showDatePickerArrival}>
-
-                            <View style={indexStyle.ArrivalDatePickerButton}>
-                                <Text style={indexStyle.datePickerButtonText}>Volta: {dates.arrival}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                    <DateTimePickerModal
-                        isVisible={isDatePickerVisible.arrival}
-                        mode="date"
-                        onConfirm={handleConfirmArrival}
-                        onCancel={hideDatePickerArrival}
-                        locale="es-ES"
-                        minimumDate={new Date()}
-                    />
-
-                    <View style={indexStyle.dropdownPickerContainer}>
-                        <View style={[indexStyle.dropdownPicker, indexStyle.dropdownPickerOrigem]}>
-                            <DropDownPicker
-                                items={estadosBrasil}
-                                value={valueDropdownPartida}
-                                setItems={setEstadosBrasil}
-                                setValue={setValueDropdownPartida}
-                                open={openDropdownPartida}
-                                setOpen={setOpenDropdownPartida}
-                                searchable={true}
-                                placeholder="Origem"
-                                searchPlaceholder="Pesquise um estado"
-                                onChangeValue={value => setSelectedState({...selectedState, departure: value != null ? value.toString() : ''})}
-                                schema={{
-                                    label: 'nome',
-                                    value: 'nome'
-                                }}
-                            />
-                        </View>
-                        <View style={[indexStyle.dropdownPicker, indexStyle.dropdownPickerDestino]}>
-                            <DropDownPicker
-                                items={estadosBrasil}
-                                value={valueDropdownDestino}
-                                setItems={setEstadosBrasil}
-                                setValue={setValueDropdownDestino}
-                                open={openDropdownDestino}
-                                setOpen={setOpenDropdownDestino}
-                                searchable={true}
-                                placeholder="Destino"
-                                searchPlaceholder="Pesquise um estado"
-                                onChangeValue={value => setSelectedState({...selectedState, arrival: value != null ? value.toString() : ''})}
-                                schema={{
-                                    label: 'nome',
-                                    value: 'nome'
-                                }}
-                            />
-                        </View>
-                    </View>
+        <View>
+            {isLoaded ?
+                (<View style={indexStyle.loader}><Text > <ActivityIndicator size="large" color={theme.colors.primary} /></Text></View>)
+                :
+                (
                     <View>
-                        <Button onPress={cleanFilters} style={indexStyle.buttonCleanFilters}><Text
-                            style={indexStyle.buttonsText}>Limpar filtros</Text></Button>
+                        <View style={indexStyle.content}>
+                            <View style={indexStyle.filters}>
+                                <TextInput
+                                    placeholder="Pesquise um pacote"
+                                    value={searchText}
+                                    onChangeText={(t) => setSearchText(t)}
+                                />
+                                <View style={indexStyle.textDateFilter}>
+                                    <Text  style={{
+                                        ...{fontFamily: theme.fontFamily.fontFamily}, ...{
+                                            fontSize: 18
+                                        }}}>Periodo da Viagem</Text>
+                                </View>
+
+                                <View style={indexStyle.dateFilters}>
+                                    <TouchableOpacity onPress={showDatePickerDeparture}>
+                                        <View style={indexStyle.DepartureDatePickerButton}>
+                                            <Text style={indexStyle.datePickerButtonText}>Partida: {dates.departure}</Text>
+                                        </View>
+                                    </TouchableOpacity>
+
+                                    <DateTimePickerModal
+                                        isVisible={isDatePickerVisible.departure}
+                                        mode="date"
+                                        onConfirm={handleConfirmDeparture}
+                                        onCancel={hideDatePickerDeparture}
+                                        locale="es-ES"
+                                        minimumDate={new Date()}
+
+                                    />
+                                    <TouchableOpacity onPress={showDatePickerArrival}>
+
+                                        <View style={indexStyle.ArrivalDatePickerButton}>
+                                            <Text style={indexStyle.datePickerButtonText}>Volta: {dates.arrival}</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                                <DateTimePickerModal
+                                    isVisible={isDatePickerVisible.arrival}
+                                    mode="date"
+                                    onConfirm={handleConfirmArrival}
+                                    onCancel={hideDatePickerArrival}
+                                    locale="es-ES"
+                                    minimumDate={new Date()}
+                                />
+
+                                <View style={indexStyle.dropdownPickerContainer}>
+                                    <View style={[indexStyle.dropdownPicker, indexStyle.dropdownPickerOrigem]}>
+                                        <DropDownPicker
+                                            items={estadosBrasil}
+                                            value={valueDropdownPartida}
+                                            setItems={setEstadosBrasil}
+                                            setValue={setValueDropdownPartida}
+                                            open={openDropdownPartida}
+                                            setOpen={setOpenDropdownPartida}
+                                            searchable={true}
+                                            placeholder="Origem"
+                                            searchPlaceholder="Pesquise um estado"
+                                            onChangeValue={value => setSelectedState({...selectedState, departure: value != null ? value.toString() : ''})}
+                                            schema={{
+                                                label: 'nome',
+                                                value: 'nome'
+                                            }}
+                                        />
+                                    </View>
+                                    <View style={[indexStyle.dropdownPicker, indexStyle.dropdownPickerDestino]}>
+                                        <DropDownPicker
+                                            items={estadosBrasil}
+                                            value={valueDropdownDestino}
+                                            setItems={setEstadosBrasil}
+                                            setValue={setValueDropdownDestino}
+                                            open={openDropdownDestino}
+                                            setOpen={setOpenDropdownDestino}
+                                            searchable={true}
+                                            placeholder="Destino"
+                                            searchPlaceholder="Pesquise um estado"
+                                            onChangeValue={value => setSelectedState({...selectedState, arrival: value != null ? value.toString() : ''})}
+                                            schema={{
+                                                label: 'nome',
+                                                value: 'nome'
+                                            }}
+                                        />
+                                    </View>
+                                </View>
+                                <View>
+                                    <Button onPress={cleanFilters} style={indexStyle.buttonCleanFilters}><Text
+                                        style={indexStyle.buttonsText}>Limpar filtros</Text></Button>
+                                </View>
+                            </View>
+
+                            <View style={indexStyle.flatlist}>
+                                <FlatList data={minhaLista}
+                                          renderItem={({item}) =>
+                                              <TravelListItem navigation={props.navigation} data={item}/>
+                                          }
+                                          keyExtractor={(item) => item._id}
+                                />
+                                <StatusBar/>
+                            </View>
+                        </View>
                     </View>
-                </View>
-
-                <View style={indexStyle.flatlist}>
-                    <FlatList data={list}
-                              renderItem={({item}) => <TravelListItem navigation={props.navigation} data={item}/>}
-                              keyExtractor={(item) => item.id}
-                    />
-                    <StatusBar/>
-                </View>
-
-            </View>
-        </SafeAreaView>
-
+                )}
+        </View>
     );
 }
 export default HomeScreen;

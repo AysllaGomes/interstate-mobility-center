@@ -1,4 +1,4 @@
-import { AsyncStorage } from "react-native";
+import  AsyncStorage  from "@react-native-async-storage/async-storage";
 
 // Async Storage, guardando dados do usuario no dispositivo
 export const DadosUsuarioLogado = async (value) => {

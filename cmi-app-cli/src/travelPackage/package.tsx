@@ -16,8 +16,6 @@ interface ScreenProps {
 const Package = (props: ScreenProps) => {
     const {data} = props.route.params;
 
-
-
     const goTravelInfo = async () => {
         MergeUsuarioLogadoData({pacoteViagemEscolhido: data.id})
         props.navigation.navigate("TravelInfo")
@@ -26,18 +24,18 @@ const Package = (props: ScreenProps) => {
     return (
         <SafeAreaView>
             <HeaderComponent title="Resumo do Pacote" navigation={props.navigation}/>
-            <Image style={packageStyle.images} source={data.image}/>
+            <Image style={packageStyle.images} source={{uri: data.image}}/>
             <View style={packageStyle.content}>
-                <Text style={[packageStyle.text, packageStyle.textTitle]}>{data.title}</Text>
+                <Text style={[packageStyle.text, packageStyle.textTitle]}>{data.titulo}</Text>
                 <View style={packageStyle.titleAnPricePackageContent}>
                     <View style={packageStyle.priceContent}>
                         <Text style={packageStyle.text}>Preço final</Text>
                         <Text style={[packageStyle.text, packageStyle.textPrice]}> R$: {data.preco}</Text>
                     </View>
                     <View style={packageStyle.datesTravelContent}>
-                        <Text style={packageStyle.text}> {data.duracao}</Text>
+                        <Text style={packageStyle.text}>Duração: {data.duracao} dias</Text>
                         <Text
-                            style={packageStyle.text}> {moment(data.dateDeparture, 'DD/MM/YYYY').format('DD/MM [-] ')}{moment(data.dateArrival, 'DD/MM/YYYY').format('MM [de] YYYY')}
+                            style={packageStyle.text}> {moment(data.dataInicioVigencia).utc().format('DD/MM/YYYY -')}{moment(data.dataFimVigencia).utc().format('DD/MM/YYYY')}
                         </Text>
                     </View>
                 </View>

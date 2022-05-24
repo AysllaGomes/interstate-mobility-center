@@ -99,6 +99,12 @@ export const indexStyle = StyleSheet.create({
     text: {
         fontFamily: theme.fontFamily.fontFamily,
     },
+    loader: {
+        minHeight: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+    },
     flatlist: {
         marginBottom: 10
     }
