@@ -9,6 +9,7 @@
  *       - titulo
  *       - preco
  *       - duracao
+ *       - image
  *       - estadoOrigem
  *       - estadoDestino
  *       - dataInicioVigencia
@@ -22,6 +23,8 @@
  *         type: number
  *       duracao:
  *         type: number
+ *       image:
+ *         type: string
  *       estadoOrigem:
  *         type: string
  *       estadoDestino:
@@ -38,6 +41,7 @@
  *          "titulo": "Nome do Cliente",
  *          "preco": 2000,
  *          "duracao": 15,
+ *          "image": "https://img.ibxk.com.br/2018/9/programas/15870025155352397.png",
  *          "estadoOrigem": "São Paulo",
  *          "estadoDestino": "Rio de Janeiro",
  *          "dataInicioVigencia": "2022-04-12T17:37:03.892Z",
@@ -49,6 +53,7 @@ export interface IOutputListarViagem {
     titulo: string;
     preco: number;
     duracao: number;
+    image: string;
     estadoOrigem: string;
     estadoDestino: string;
     dataInicioVigencia: Date;

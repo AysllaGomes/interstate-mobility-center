@@ -11,6 +11,7 @@ export interface IViagem extends Document {
   titulo: string;
   preco: number;
   duracao: number;
+  image: string;
   estadoOrigem: string;
   estadoDestino: string;
   periodoDeVigencia: IPeriodoDeVigencia;
@@ -33,6 +34,10 @@ const ViagemSchema: Schema = new Schema({
     required: true,
   },
   titulo: {
+    type: String,
+    required: true,
+  },
+  image: {
     type: String,
     required: true,
   },
