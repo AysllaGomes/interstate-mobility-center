@@ -54,6 +54,7 @@ export interface IOutputListarViagem {
     preco: number;
     duracao: number;
     image: string;
+    descricao: string;
     estadoOrigem: string;
     estadoDestino: string;
     dataInicioVigencia: Date;

@@ -144,6 +144,7 @@ export class ViagemService {
       preco: viagem.preco,
       duracao: viagem.duracao,
       image: viagem.image,
+      descricao: viagem.descricao,
       estadoOrigem: viagem.estadoOrigem,
       estadoDestino: viagem.estadoDestino,
       dataInicioVigencia: viagem.periodoDeVigencia.dataInicio,
