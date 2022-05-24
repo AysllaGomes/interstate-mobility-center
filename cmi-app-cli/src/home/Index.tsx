@@ -42,9 +42,6 @@ interface HomeScreenProps {
 // }
 // Fim
 
-
-GetUsuarioLogadoData().then((v)=> console.log(v))
-
 const TravelListItem = ({data, navigation}) => {
     const toTravelPackage = () => navigation.navigate("Package", {data: data})
     return (
@@ -54,7 +51,7 @@ const TravelListItem = ({data, navigation}) => {
                 <View style={indexStyle.packagesContentInfo}>
                     <Text style={indexStyle.packagesText}>Destino: {data.titulo}</Text>
                     <Text style={indexStyle.packagesText}>Duração: {data.duracao}</Text>
-                    <Text style={indexStyle.packagesText}>Preço: {data.preco}</Text>
+                    <Text style={indexStyle.packagesText}>Preço: R$ {data.preco},00</Text>
                 </View>
             </View>
         </TouchableOpacity>
@@ -184,6 +181,7 @@ const HomeScreen = (props: HomeScreenProps) => {
 
     DropDownPicker.setTheme("DARK")
     return (
+        <ScrollView>
         <View>
             {isLoaded ?
                 (<View style={indexStyle.loader}><Text > <ActivityIndicator size="large" color={theme.colors.primary} /></Text></View>)
@@ -293,6 +291,7 @@ const HomeScreen = (props: HomeScreenProps) => {
                     </View>
                 )}
         </View>
+        </ScrollView>
     );
 }
 export default HomeScreen;
