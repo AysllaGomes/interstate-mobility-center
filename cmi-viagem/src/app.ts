@@ -9,12 +9,12 @@ import { logger } from "./util/logger";
 import { DocsApi } from "./routes/docs.api";
 import { MainApi } from "./routes/main.api";
 import { ErrorApi } from "./routes/error.api";
-import { CotacaoApi } from "./routes/Cotacao.api";
+import { ViagemApi } from "./routes/Viagem.api";
 import { environment } from "./config/environment";
 import { handleError } from "./util/error.handler";
 
-const getApiControllers = (): (ErrorApi | MainApi | DocsApi | CotacaoApi)[] => [
-  new ErrorApi(), new MainApi(), new DocsApi(), new CotacaoApi(),
+const getApiControllers = (): (ErrorApi | MainApi | DocsApi | ViagemApi)[] => [
+  new ErrorApi(), new MainApi(), new DocsApi(), new ViagemApi(),
 ];
 
 const app = express();

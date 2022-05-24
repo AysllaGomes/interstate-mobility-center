@@ -1,42 +1,154 @@
-import { NextFunction } from "express";
 import { logger } from "../util/logger";
 import { environment } from "../config/environment";
 import {
-  ErroExterno,
-  AREA_NAO_ATENDIDA_POR_NENHUM_PARCEIRO,
-} from "../errors/erro.externo";
-import { IRetornaCotacao } from "../model/interfaces/RetornaCotacao";
-import { ICotacaoVencedora } from "../model/interfaces/CotacaoVencedora";
+  retornarErroValidacao,
+  retornarInicioEFimDoDia,
+} from "../util/utils";
+import {
+  ErroSQL,
+  ERRO_SQL_AO_LISTAR_VIAGEM,
+} from "../errors/erro.sql";
+import {
+  ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS,
+} from "../errors/erro.negocial";
+import Viagem, { IViagem } from "../model/Viagem";
+import { ServiceValidator } from "../validators/Service.validator";
+import { IInputListarViagem } from "../model/interfaces/InputListarViagem";
+import { IOutputListarViagem } from "../model/interfaces/OutputListarViagem";
 
 export class ViagemService {
-  public static setaRetornoCotaco(idDaCotacao: string, cotacaoVencedora: ICotacaoVencedora, next: NextFunction): IRetornaCotacao | undefined {
-    try {
-      if (cotacaoVencedora.parceiro) {
-        const nomeFantasiaParceiro = cotacaoVencedora.parceiro;
+  private serviceValidator = new ServiceValidator();
 
-        return {
-          idViagem: idDaCotacao,
-          parceiro: nomeFantasiaParceiro,
-          produto: cotacaoVencedora.produto,
-          valor: cotacaoVencedora.valor,
-          icone: cotacaoVencedora.icone,
-        };
-      }
-      next(new ErroExterno(...AREA_NAO_ATENDIDA_POR_NENHUM_PARCEIRO).formatMessage());
-    } catch (error) {
-      logger.error(`
-      ERRO no MS "${environment.app.name}", método "setaRetornoCotaco".
-      <'ERRO'>
-        message: Houve um erro ao tentar setar retorno da cotacao...
-      Parâmetros da requisição:
-        ID COTACAO: ${idDaCotacao}
-        PARCEIRO: ${cotacaoVencedora.parceiro}
-        VALOR: ${cotacaoVencedora.valor}
-        PRODUTO: ${cotacaoVencedora.produto}
-        VALOR ECONOMIZADO: ${cotacaoVencedora.valorEconomizado}
-        OBJETO ID PARCEIRO: ${cotacaoVencedora.objIdParceiro}
-      `);
-      throw new ErroExterno(...AREA_NAO_ATENDIDA_POR_NENHUM_PARCEIRO);
+  public async listar(body: IInputListarViagem): Promise<Array<IOutputListarViagem>> {
+    const resultadoValidacao = this.serviceValidator.validarListarViagem(body);
+    retornarErroValidacao(resultadoValidacao, ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS);
+
+    const query: object = await this.formatarFiltroContrato(body);
+
+    return this.filtrarViagem(query);
+  }
+
+  public async formatarFiltroContrato(input: IInputListarViagem): Promise<object> {
+    logger.debug("Formatando filtros para as viagens...");
+
+    let filtrosFind: object = { };
+
+    if (input.titulo) {
+      filtrosFind = {
+        ...filtrosFind,
+        titulo: input.titulo,
+      };
     }
+
+    if (input.preco) {
+      filtrosFind = {
+        ...filtrosFind,
+        preco: Number(input.preco),
+      };
+    }
+
+    if (input.duracao) {
+      filtrosFind = {
+        ...filtrosFind,
+        duracao: Number(input.duracao),
+      };
+    }
+
+    if (input.estadoOrigem) {
+      filtrosFind = {
+        ...filtrosFind,
+        estadoOrigem: input.estadoOrigem,
+      };
+    }
+
+    if (input.estadoDestino) {
+      filtrosFind = {
+        ...filtrosFind,
+        estadoDestino: input.estadoDestino,
+      };
+    }
+
+    if (!input.dataInicio && input.dataFim) {
+      const result = retornarInicioEFimDoDia(input.dataFim);
+      const dataFim = result.dataFimDia;
+      filtrosFind = {
+        ...filtrosFind,
+        "periodoDeVigencia.dataFim": { $lte: dataFim }, // $lte: <=
+      };
+    }
+
+    if (input.dataInicio && !input.dataFim) {
+      const result = retornarInicioEFimDoDia(input.dataInicio);
+      const dataInicio = result.dataInicioDia;
+      filtrosFind = {
+        ...filtrosFind,
+        "periodoDeVigencia.dataInicio": { $gte: dataInicio }, // $gte: >=
+      };
+    }
+
+    if (input.dataInicio && input.dataFim) {
+      const result = retornarInicioEFimDoDia(input.dataInicio, input.dataFim);
+      const dataInicio = result.dataInicioDia;
+      const dataFim = result.dataFimDia;
+      filtrosFind = {
+        ...filtrosFind,
+        $and: [
+          { "periodoDeVigencia.dataInicio": { $gte: dataInicio } }, // $gte: >=
+          { "periodoDeVigencia.dataFim": { $lte: dataFim } }, // $lte: <=
+        ],
+      };
+    }
+
+    return filtrosFind;
+  }
+
+  public async filtrarViagem(query: object): Promise<Array<IOutputListarViagem>> {
+    try {
+      logger.debug("Listando as viagens...");
+
+      const resultado: Array<IViagem> = await Viagem.find(query);
+
+      if (resultado.length !== 0) {
+        logger.debug("Listando dados das viagens...");
+        return await this.formatarRetornoListarContrato(resultado);
+      }
+
+      return [];
+    } catch (error) {
+      const erroFormatado = (`
+        ERRO no MS "${environment.app.name}", método "filtrarViagem".
+        <'ERRO'>
+          message: Não encontrada a(s) viagem(s) na base de dados...
+        Parâmetros da requisição:
+          Esse endpoint não tem parametros de requisição obrigatórios...
+          QUERY: ${query}
+        Resposta:
+        <'ERRO'>
+          code: ${error.code}
+          message: ${error.message}.
+      `);
+
+      logger.error(erroFormatado);
+
+      throw new ErroSQL(...ERRO_SQL_AO_LISTAR_VIAGEM);
+    }
+  }
+
+  public async formatarRetornoListarContrato(viagens: Array<IViagem>): Promise<Array<IOutputListarViagem>> {
+    const retorno: Array<IOutputListarViagem> = [];
+
+    viagens.forEach((viagem: IViagem) => retorno.push({
+      // eslint-disable-next-line no-underscore-dangle
+      _id: viagem._id,
+      titulo: viagem.titulo,
+      preco: viagem.preco,
+      duracao: viagem.duracao,
+      estadoOrigem: viagem.estadoOrigem,
+      estadoDestino: viagem.estadoDestino,
+      dataInicioVigencia: viagem.periodoDeVigencia.dataInicio,
+      dataFimVigencia: viagem.periodoDeVigencia.dataFim,
+    }));
+
+    return retorno;
   }
 }
