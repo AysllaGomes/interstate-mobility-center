@@ -7,11 +7,7 @@ class Database {
   static async conectar(): Promise<number> {
     try {
       await mongoose
-        .connect(environment.db.uri, {
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-          useFindAndModify: false,
-        });
+        .connect(environment.db.uri, {});
 
       if (this.verificaConexao() === ConexaoMongoEnum.connected) {
         logger.info("Mongo DB conectado com sucesso");
@@ -19,8 +15,8 @@ class Database {
       }
 
       return ConexaoMongoEnum.disconnected;
-    } catch (err) {
-      logger.error(`Erro ao conectar ao Mongo DB \n ${err}`);
+    } catch (error) {
+      logger.error(`Erro ao conectar ao Mongo DB \n ${error}`);
       return ConexaoMongoEnum.disconnected;
     }
   }
