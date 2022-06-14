@@ -7,11 +7,7 @@ class Database {
   static async conectar(): Promise<number> {
     try {
       await mongoose
-        .connect(environment.db.uri, {
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-          useFindAndModify: false,
-        });
+        .connect(environment.db.uri, {});
 
       if (this.verificaConexao() === ConexaoMongoEnum.connected) {
         logger.info("Mongo DB conectado com sucesso");

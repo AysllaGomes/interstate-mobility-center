@@ -38,7 +38,7 @@ export class UsuarioController {
       body: IInputTermoDeUsoApi,
       dadosDoDispositivo: IDadosDoDispositivo,
       coordenadas: ICoordenadas,
-    ): Promise<IRetornoUpdateUsuarioModel> {
+    ): Promise<IRetornoUpdateUsuarioModel | null> {
       return this.service.assinaturaTermoDeUso(body, dadosDoDispositivo, coordenadas);
     }
 
@@ -46,7 +46,7 @@ export class UsuarioController {
       return this.service.usuarioAssinaturaTermoDeUso(body);
     }
 
-    public async atualizaDadosDePagamento(body: IDadosDoPagamento): Promise<IRetornoUpdateUsuarioModel> {
+    public async atualizaDadosDePagamento(body: IDadosDoPagamento): Promise<IRetornoUpdateUsuarioModel | null> {
       return this.service.atualizaDadosDePagamento(body);
     }
 }

@@ -148,7 +148,7 @@ export class UsuarioService {
     }
   }
 
-  public async assinaturaTermoDeUso(body: IInputTermoDeUsoApi, dadosDoDispositivo: IDadosDoDispositivo, coordenadas: ICoordenadas): Promise<IRetornoUpdateUsuarioModel> {
+  public async assinaturaTermoDeUso(body: IInputTermoDeUsoApi, dadosDoDispositivo: IDadosDoDispositivo, coordenadas: ICoordenadas): Promise<IRetornoUpdateUsuarioModel | null> {
     await this.retornaDadosUsuario(body.idUsuario);
     const termoDeUsoVigente: ITermoDeUso = await TermoDeUsoService.retornaTermoDeUsoSituacaoVigente();
 
@@ -169,15 +169,15 @@ export class UsuarioService {
     ];
   }
 
-  public async salvaTermoDeUso(idUsuario: string, termoDeUso: ITermosDeUso[]): Promise<IRetornoUpdateUsuarioModel> {
+  public async salvaTermoDeUso(idUsuario: string, termoDeUso: ITermosDeUso[]): Promise<IRetornoUpdateUsuarioModel | null> {
     try {
       logger.debug("Atualizando os dados do passageiro com a propriedade Termo de Uso...");
 
-      return UsuarioModel.updateOne(
+      return UsuarioModel.findOneAndUpdate(
         { _id: idUsuario },
         { termosDeUso: termoDeUso },
         { upsert: true },
-        (error: Error, document: IUsuario) => document,
+        (error, document) => document,
       );
     } catch (error) {
       logger.error(`
@@ -209,7 +209,7 @@ export class UsuarioService {
     };
   }
 
-  public async atualizaDadosDePagamento(body: IDadosDoPagamento): Promise<IRetornoUpdateUsuarioModel> {
+  public async atualizaDadosDePagamento(body: IDadosDoPagamento): Promise<IRetornoUpdateUsuarioModel | null> {
     const resultadoValidacao = this.serviceValidator.validaAtualizaDadosDePagamento(body);
     retornarErroValidacao(resultadoValidacao, ERRO_NEGOCIAL_NA_VALIDACAO);
 
@@ -231,15 +231,15 @@ export class UsuarioService {
     ];
   }
 
-  public async salvarDadosDoPagamento(dadosDePagamento: IDadosDoPagamento[]): Promise<IRetornoUpdateUsuarioModel> {
+  public async salvarDadosDoPagamento(dadosDePagamento: IDadosDoPagamento[]): Promise<IRetornoUpdateUsuarioModel | null> {
     try {
       logger.debug("Atualizando dados de pagamento do usuário...");
 
-      return UsuarioModel.updateOne(
+      return UsuarioModel.findOneAndUpdate(
         { _id: dadosDePagamento[0].idUsuario },
         { dadosDePagamento },
         { upsert: true },
-        (error: Error, document: IUsuario) => document,
+        (error, document) => document,
       );
     } catch (error) {
       logger.error(`
