@@ -8,6 +8,7 @@ import { ICoordenadas } from "../model/interfaces/Coordenadas";
 import { UsuarioController } from "../controllers/Usuario.controller";
 import { IDadosDoDispositivo } from "../model/interfaces/DadosDoDispositivo";
 import { IRetornoPassageiroAssinaturaTermoDeUso } from "../model/interfaces/RetornoPassageiroAssinaturaTermoDeUso";
+import { IDetalharUsuario } from "../model/interfaces/DetalharUsuario";
 
 export class UsuarioApi extends ApiRouter {
     private readonly path: string;
@@ -50,6 +51,40 @@ export class UsuarioApi extends ApiRouter {
       });
 
       /**
+        * @swagger
+        *   /usuario/detalhar:
+        *   get:
+        *     description: Realiza o detalhamento do usuário a partir de um e-mail informado.
+        *     summary: EndPoint que realiza detalhamento do usuário a partir de um e-mail informado.
+        *     tags:
+        *       - Usuário
+        *     parameters:
+        *      - in: body
+        *        name: IDetalharUsuario
+        *        description: Um objeto do tipo IDetalharUsuario
+        *        required: true
+        *        schema:
+        *          $ref: '#/definitions/IDetalharUsuario'
+        *     responses:
+        *       200:
+        *         description: Lista de resposta que contem todos os objetos que foram retornados pela consulta no banco de dados
+        *         schema:
+        *             $ref: '#/definitions/Usuario'
+        */
+      server.get(`${this.path}/detalhar`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
+        try {
+          const body: IDetalharUsuario = {
+            email: request.headers.email ? String(request.headers.email) : "",
+          };
+
+          if (request.headers.email) {
+            return response.json(await this.controller.detalharUsuario(body));
+          }
+          next(new ErroNegocial(...ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS));
+        } catch (error) { next(error); }
+      });
+
+      /**
        * @swagger
        *   /usuario/{idUsuario}:
        *   get:
@@ -74,36 +109,6 @@ export class UsuarioApi extends ApiRouter {
             return response.json(await this.controller.retornaDadosUsuario(request.params.idUsuario.toString()));
           }
           next(new ErroNegocial(...ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS).formatMessage("idUsuario"));
-        } catch (error) { next(error); }
-      });
-
-      /**
-        * @swagger
-        *   /usuario/detalhar:
-        *   get:
-        *     description: Realiza o detalhamento do usuário a partir de um e-mail informado.
-        *     summary: EndPoint que realiza detalhamento do usuário a partir de um e-mail informado.
-        *     tags:
-        *       - Usuário
-        *     parameters:
-        *      - in: body
-        *        name: IDetalharUsuario
-        *        description: Um objeto do tipo IDetalharUsuario
-        *        required: true
-        *        schema:
-        *          $ref: '#/definitions/IDetalharUsuario'
-        *     responses:
-        *       200:
-        *         description: Lista de resposta que contem todos os objetos que foram retornados pela consulta no banco de dados
-        *         schema:
-        *             $ref: '#/definitions/Usuario'
-        */
-      server.post(`${this.path}/detalhar`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
-        try {
-          if (request.body.email) {
-            return response.json(await this.controller.detalharUsuario(request.body));
-          }
-          next(new ErroNegocial(...ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS));
         } catch (error) { next(error); }
       });
 
@@ -172,7 +177,6 @@ export class UsuarioApi extends ApiRouter {
        *         schema:
        *             $ref: '#/definitions/IRetornoPassageiroAssinaturaTermoDeUso'
        */
-
       server.post(`${this.path}/consultaAssinaturaTermoUsuario`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
         try {
           if (request.body.idUsuario) {
