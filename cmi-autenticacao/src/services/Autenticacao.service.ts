@@ -132,6 +132,8 @@ export class AutenticacaoService {
   public async healthServices(): Promise<IHealthServices> {
     const objParceirosServices = await this.getParceirosServices();
     let objRetorno = {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // @ts-ignore
       mongoDb: mongoose.connection.readyState === ConexaoMongoEnum.connected ? "ok" : "INDISPONÍVEL",
     };
 
