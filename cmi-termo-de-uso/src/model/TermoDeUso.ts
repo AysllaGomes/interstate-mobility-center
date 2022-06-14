@@ -60,7 +60,7 @@ const TermoDeUsoSchema: Schema = new Schema({
     required: true,
   },
   estadoTermoDeUso: {
-    type: EstadoTermoDeUsoEnum,
+    type: String,
     required: true,
   },
   criticidade: {
