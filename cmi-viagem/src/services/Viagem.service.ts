@@ -71,18 +71,20 @@ export class ViagemService {
     if (!input.dataInicio && input.dataFim) {
       const result = retornarInicioEFimDoDia(input.dataFim);
       const dataFim = result.dataFimDia;
+
       filtrosFind = {
         ...filtrosFind,
-        "periodoDeVigencia.dataFim": { $lte: dataFim }, // $lte: <=
+        "periodoDeVigencia.dataFim": { $lte: new Date(dataFim) },
       };
     }
 
     if (input.dataInicio && !input.dataFim) {
       const result = retornarInicioEFimDoDia(input.dataInicio);
       const dataInicio = result.dataInicioDia;
+
       filtrosFind = {
         ...filtrosFind,
-        "periodoDeVigencia.dataInicio": { $gte: dataInicio }, // $gte: >=
+        "periodoDeVigencia.dataInicio": { $gte: new Date(dataInicio) },
       };
     }
 
@@ -90,11 +92,12 @@ export class ViagemService {
       const result = retornarInicioEFimDoDia(input.dataInicio, input.dataFim);
       const dataInicio = result.dataInicioDia;
       const dataFim = result.dataFimDia;
+
       filtrosFind = {
         ...filtrosFind,
         $and: [
-          { "periodoDeVigencia.dataInicio": { $gte: dataInicio } }, // $gte: >=
-          { "periodoDeVigencia.dataFim": { $lte: dataFim } }, // $lte: <=
+          { "periodoDeVigencia.dataInicio": { $gte: new Date(dataInicio) } },
+          { "periodoDeVigencia.dataFim": { $lte: new Date(dataFim) } },
         ],
       };
     }

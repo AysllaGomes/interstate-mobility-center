@@ -6,9 +6,9 @@ import {
 import { ApiRouter } from "./api.router";
 import { ICoordenadas } from "../model/interfaces/Coordenadas";
 import { UsuarioController } from "../controllers/Usuario.controller";
+import { IDetalharUsuario } from "../model/interfaces/DetalharUsuario";
 import { IDadosDoDispositivo } from "../model/interfaces/DadosDoDispositivo";
 import { IRetornoPassageiroAssinaturaTermoDeUso } from "../model/interfaces/RetornoPassageiroAssinaturaTermoDeUso";
-import { IDetalharUsuario } from "../model/interfaces/DetalharUsuario";
 
 export class UsuarioApi extends ApiRouter {
     private readonly path: string;
@@ -59,12 +59,12 @@ export class UsuarioApi extends ApiRouter {
         *     tags:
         *       - Usuário
         *     parameters:
-        *      - in: body
-        *        name: IDetalharUsuario
-        *        description: Um objeto do tipo IDetalharUsuario
-        *        required: true
-        *        schema:
-        *          $ref: '#/definitions/IDetalharUsuario'
+        *      - in: header
+       *        name: email
+       *        description: e-mail de indentificação do usuário no banco de dados
+       *        required: true
+       *        example:
+       *          steph.gingrich@outlook.com
         *     responses:
         *       200:
         *         description: Lista de resposta que contem todos os objetos que foram retornados pela consulta no banco de dados
