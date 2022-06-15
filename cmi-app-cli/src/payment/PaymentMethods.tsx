@@ -9,7 +9,7 @@ import {paymentForm} from './payment.form';
 import {paymentStyle} from './payment.style';
 import {theme} from '../../App.style';
 import * as Animatable from 'react-native-animatable';
-import { GetUsuarioLogadoData } from '../../assets/DadosUsuarioLogado/DadosUsuarioLogado';
+import {GetUsuarioLogadoData, MergeUsuarioLogadoData} from '../../assets/DadosUsuarioLogado/DadosUsuarioLogado';
 
 interface ScreenProps {
     navigation: NativeStackNavigatorProps,
@@ -41,11 +41,15 @@ const cvcMask = (value) => {
 
 const PaymentMethods = (props: ScreenProps) => {
 
-    const goResumoViagem = () => {
-        props.navigation.navigate("ResumoCompra")
+    const goResumoViagem = (values) => {
+        try {
+            MergeUsuarioLogadoData({DadosPagamento: values})
+            props.navigation.navigate("ResumoCompra")
+
+        }catch(error){
+
+        }
     }
-    console.log(    GetUsuarioLogadoData().then((v)=> console.log(v))
-    )
 
     return (
         <SafeAreaView>
@@ -68,7 +72,7 @@ const PaymentMethods = (props: ScreenProps) => {
                     anoCartao: '',
                     cvcCartao: ''
                 }}
-                        onSubmit={values => goResumoViagem()}
+                        onSubmit={values => goResumoViagem(values)}
                         validationSchema={paymentForm}>
                     {({
                           handleSubmit,

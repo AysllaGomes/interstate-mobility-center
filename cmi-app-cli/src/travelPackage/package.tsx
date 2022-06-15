@@ -17,7 +17,11 @@ const Package = (props: ScreenProps) => {
     const {data} = props.route.params;
 
     const goTravelInfo = async () => {
-        MergeUsuarioLogadoData({pacoteViagemEscolhido: data.id})
+       
+        MergeUsuarioLogadoData({pacoteViagemEscolhido: data.id, ImagemPacoteViagemEscolhido: data.image})
+        GetUsuarioLogadoData().then(
+            x => console.log(x)
+        )
         props.navigation.navigate("TravelInfo")
 
     }
@@ -43,8 +47,7 @@ const Package = (props: ScreenProps) => {
                     <Text style={[packageStyle.text, {textAlign: "center"}]}> {data.descricao}</Text>
                 </View>
                 <Button onPress={goTravelInfo} style={theme.buttons}><Text
-                    style={[packageStyle.text, packageStyle.buttonText]}>Efetuar
-                    Compra</Text></Button>
+                    style={[packageStyle.text, packageStyle.buttonText]}>Informar Passageiros</Text></Button>
                 </View>
         </SafeAreaView>
     );

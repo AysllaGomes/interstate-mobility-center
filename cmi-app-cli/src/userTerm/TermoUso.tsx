@@ -4,7 +4,7 @@ import {Button} from "react-native-paper";
 import {Root} from 'popup-ui'
 import {NativeStackNavigatorProps} from "react-native-screens/lib/typescript/native-stack/types";
 import axios from "axios";
-import CheckBox from '@react-native-community/checkbox';
+import CheckBox from 'expo-checkbox';
 import {useFonts, GermaniaOne_400Regular} from '@expo-google-fonts/germania-one';
 import AppLoading from "expo-app-loading"
 import {theme} from '../../App.style';
@@ -90,7 +90,6 @@ const TermoUso = (props: LoginScreenProps, route) => {
                                 disabled={false}
                                 value={toggleCheckBox}
                                 onValueChange={(newValue) => setToggleCheckBox(newValue)}
-                                tintColor="red"
                             />
                             <Text style={styles.text} onPress={() => setToggleCheckBox(!toggleCheckBox)}>Concorda com o termo?</Text>
                         </View>

@@ -21,7 +21,7 @@ import {NativeStackNavigatorProps} from "react-native-screens/lib/typescript/nat
 import axios from "axios";
 import DropDownPicker from 'react-native-dropdown-picker';
 import { NavigationContainer } from "@react-navigation/native";
-import { GetUsuarioLogadoData } from "../../assets/DadosUsuarioLogado/DadosUsuarioLogado";
+import {GetUsuarioLogadoData, MergeUsuarioLogadoData} from "../../assets/DadosUsuarioLogado/DadosUsuarioLogado";
 import { theme } from "../../App.style";
 interface HomeScreenProps {
     navigation: NativeStackNavigatorProps
@@ -43,7 +43,10 @@ interface HomeScreenProps {
 // Fim
 
 const TravelListItem = ({data, navigation}) => {
-    const toTravelPackage = () => navigation.navigate("Package", {data: data})
+
+    const toTravelPackage = () => MergeUsuarioLogadoData({pacoteViagemEscolhido: data._id}).then(
+        navigation.navigate("Package", {data: data})
+    )
     return (
         <TouchableOpacity onPress={() => toTravelPackage()}>
             <View style={indexStyle.packagesContent}>
@@ -277,16 +280,15 @@ const HomeScreen = (props: HomeScreenProps) => {
                                         style={indexStyle.buttonsText}>Limpar filtros</Text></Button>
                                 </View>
                             </View>
-
-                            <View style={indexStyle.flatlist}>
-                                <FlatList data={minhaLista}
-                                          renderItem={({item}) =>
-                                              <TravelListItem navigation={props.navigation} data={item}/>
-                                          }
-                                          keyExtractor={(item) => item._id}
-                                />
-                                <StatusBar/>
-                            </View>
+                                <View style={indexStyle.flatlist}>
+                                    <FlatList data={minhaLista}
+                                              renderItem={({item}) =>
+                                                  <TravelListItem navigation={props.navigation} data={item}/>
+                                              }
+                                              keyExtractor={(item) => item._id}
+                                    />
+                                    <StatusBar/>
+                                </View>
                         </View>
                     </View>
                 )}

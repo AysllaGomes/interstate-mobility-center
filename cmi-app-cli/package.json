@@ -10,8 +10,7 @@
   "dependencies": {
     "@expo-google-fonts/germania-one": "^0.2.0",
     "@mdi/font": "^6.1.95",
-    "@react-native-async-storage/async-storage": "^1.15.17",
-    "@react-native-community/checkbox": "^0.5.8",
+    "@react-native-async-storage/async-storage": "^1.17.6",
     "@react-native-community/datetimepicker": "3.5.2",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-firebase/app": "^12.8.0",
@@ -24,6 +23,7 @@
     "date-fns": "^2.24.0",
     "expo": "^43.0.0",
     "expo-app-loading": "~1.2.1",
+    "expo-checkbox": "^2.1.0",
     "expo-device": "~4.0.3",
     "expo-font": "~10.0.3",
     "expo-google-sign-in": "~10.0.3",

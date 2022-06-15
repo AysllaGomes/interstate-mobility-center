@@ -1,5 +1,5 @@
-import React from 'react';
-import {SafeAreaView, ScrollView, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Image, SafeAreaView, ScrollView, View} from 'react-native';
 import {Button, TextInput} from "react-native-paper";
 import {NativeStackNavigatorProps} from 'react-native-screens/lib/typescript/native-stack/types';
 import {HeaderComponent} from '../components/header/Header.component';
@@ -8,6 +8,8 @@ import {Formik} from 'formik';
 
 import {theme} from '../../App.style';
 import * as Animatable from 'react-native-animatable';
+import {packageStyle} from "../travelPackage/package.style";
+import {GetUsuarioLogadoData} from "../../assets/DadosUsuarioLogado/DadosUsuarioLogado";
 
 interface ScreenProps {
     navigation: NativeStackNavigatorProps,
@@ -16,10 +18,24 @@ interface ScreenProps {
 }
 
 const PurchaseDetails = (props: ScreenProps) => {
+    const [dadosUsuario, setDadosUsuario] = useState({})
+
+    const displayData = async ()=>{
+        try{
+            const dados = await GetUsuarioLogadoData()
+            return dados
+        }
+        catch(error){
+            console.error("Erro async, detalhe do pacote")
+        }
+    }
+    useEffect(() => {
+        displayData().then(r => setDadosUsuario(r))
+    })
 
     const goHome = () => {
         props.navigation.navigate("Home")
-    }
+            }
 
     return (
         <SafeAreaView>
@@ -27,10 +43,11 @@ const PurchaseDetails = (props: ScreenProps) => {
             <View style={{paddingHorizontal: 10}}>
                 <Text style={{fontFamily: theme.fontFamily.fontFamily, textAlign: "center", marginTop: 20, fontSize: 38}}>Parabéns !</Text>
                 <Text style={{fontFamily: theme.fontFamily.fontFamily, textAlign: "center", marginTop: 20, fontSize: 18}}>Compra realizada com sucesso :)</Text>
-
-
-            <Button onPress={goHome} mode="contained" >Home</Button>
             </View>
+            <Image style={packageStyle.images} source={{uri: dadosUsuario["ImagemPacoteViagemEscolhido"]}}/>
+            <Button onPress={goHome} mode="contained" >Home</Button>
+
+
         </SafeAreaView>
     )
 }

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Button, TextInput} from "react-native-paper";
 import {SafeAreaView, View, Text, Image, ScrollView } from "react-native";
-import CheckBox from '@react-native-community/checkbox';
+import CheckBox from 'expo-checkbox';
 import {HeaderComponent} from "../components/header/Header.component";
 import {theme} from "../../App.style";
 import {registerStyle} from '../register/register.style';
@@ -13,6 +13,7 @@ import {RootSiblingParent} from 'react-native-root-siblings';
 import ToastMessage from '../components/Toast/ToastMessage';
 import { TextInputMask } from 'react-native-masked-text';
 import axios from 'axios';
+import {packageStyle} from "../travelPackage/package.style";
 
 interface ScreenProps {
     navigation: NativeStackNavigatorProps
@@ -172,7 +173,6 @@ const TravelInfo = (props: ScreenProps) => {
             // }
         }
     }
-
 
     return (
     <RootSiblingParent>
