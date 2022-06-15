@@ -21,7 +21,7 @@ const Drawer = createDrawerNavigator();
 function DrowerRoutes() {
     return(
           <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
-              <Drawer.Screen name="Pacotes de Viagem" component={HomeScreen}></Drawer.Screen>
+              <Drawer.Screen name="VoeJá" component={HomeScreen}></Drawer.Screen>
 
           </Drawer.Navigator>
     );
