@@ -111,8 +111,6 @@ export class ViagemService {
 
       const resultado: Array<IViagem> = await Viagem.find(query);
 
-      console.log("resultado.length !== 0", resultado.length !== 0);
-
       if (resultado.length !== 0) {
         logger.debug("Listando dados das viagens...");
         return await this.formatarRetornoListarContrato(resultado);
