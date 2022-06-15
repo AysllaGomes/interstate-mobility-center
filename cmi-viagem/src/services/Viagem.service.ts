@@ -74,7 +74,7 @@ export class ViagemService {
 
       filtrosFind = {
         ...filtrosFind,
-        "periodoDeVigencia.dataFim": { $gte: new Date(dataFim) },
+        "periodoDeVigencia.dataFim": { $lte: new Date(dataFim) },
       };
     }
 
