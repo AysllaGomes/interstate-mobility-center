@@ -1,69 +1,88 @@
+import { Types } from "mongoose";
 import {
   ErroSQL,
   ERRO_SQL_AO_SALVAR_PASSAGEIRO,
 } from "../errors/erro.sql";
 import {
-  ErroNegocial,
-  ERRO_NEGOCIAL_CPF_REPETIDO,
-  ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS,
+  ERRO_NEGOCIAL_NA_VALIDACAO,
 } from "../errors/erro.negocial";
 import { logger } from "../util/logger";
 import { environment } from "../config/environment";
 import { retornarErroValidacao } from "../util/utils";
 import Passageiro, { IPassageiro } from "../model/Passageiro";
 import { ServiceValidator } from "../validators/Service.validator";
+import { IListaPassageiros } from "../model/interfaces/ListaPassageiros";
 import { IVinculoPassageiro } from "../model/interfaces/VinculoPassageiro";
 
 export class PassageiroService {
     private serviceValidator = new ServiceValidator();
 
-    public async vinculoPassageiro(body: Array<IVinculoPassageiro>): Promise<Array<IPassageiro | undefined>> {
-      logger.debug("Salvando registros de passageiros no banco de dados...");
+    public async vinculoPassageiro(body: IVinculoPassageiro): Promise<any> {
+      logger.debug("Entrando no método 'vinculoPassageiro'...");
 
-      return Promise.all(
-        body.map(async (passageiro: IVinculoPassageiro) => {
-          const resultadoValidacao = this.serviceValidator.validaVinculoPassageiro(passageiro);
-          retornarErroValidacao(resultadoValidacao, ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS);
+      const resultadoValidacao = this.serviceValidator.validarVinculoPassageiro(body);
+      retornarErroValidacao(resultadoValidacao, ERRO_NEGOCIAL_NA_VALIDACAO);
 
-          const resultadoRepeticoes = await PassageiroService.existeRepeticoesProibidas(passageiro);
+      logger.debug("Finalizando o 'resultadoValidacao'...");
 
-          if (!resultadoRepeticoes) {
-            const vinculoPassageiro = this.formataPassageiro(passageiro);
-            return this.salvarPassageiro(vinculoPassageiro);
-          }
-          return undefined;
-        }),
-      );
+      const vinculoPassageiro = this.formatarPassageiro(body);
+
+      return this.salvarPassageiro(vinculoPassageiro);
     }
 
-    public static async existeRepeticoesProibidas(passageiroCadastro: IVinculoPassageiro): Promise<boolean> {
-      const cpfCadastrado = await PassageiroService.cpfCadastrado(passageiroCadastro.cpf);
-      if (cpfCadastrado) {
-        throw new ErroNegocial(...ERRO_NEGOCIAL_CPF_REPETIDO);
-      }
+    public formatarPassageiro(body: IVinculoPassageiro): any {
+      const arrayPassageiro: Array<IListaPassageiros> = [];
 
-      return false;
-    }
-
-    public static async cpfCadastrado(cpf: string): Promise<boolean> {
-      const passageiroModel = await Passageiro.find({ cpf });
-      return passageiroModel.length !== 0;
-    }
-
-    public formataPassageiro(body: IVinculoPassageiro): IPassageiro {
-      return new Passageiro({
-        idUsuario: body.idUsuario,
-        idViagem: body.idViagem,
-        nome: body.nome,
-        cpf: body.cpf,
-        dataDeNascimento: body.dataDeNascimento,
-        numeroTelefoneCelular: body.numeroTelefoneCelular,
+      const objPassageiro = {
+        idUsuario: new Types.ObjectId(body.idUsuario),
+        idViagem: new Types.ObjectId(body.idViagem),
+        usuarioPassageiro: body.usuarioPassageiro,
+        listaPassageiro: [],
+        dadosPagamento: body.dadosPagamento,
         tsCriacao: new Date(),
-      });
+      };
+
+      console.log("objPassageiro", objPassageiro);
+
+      return objPassageiro;
+
+      //  listaPassageiro: [
+      //    {
+      //      nome: dados.nome,
+      //      cpf: dados.cpf,
+      //      dataDeNascimento: dados.dataDeNascimento,
+      //      numeroTelefoneCelular: dados.numeroTelefoneCelular,
+      //    },
+      //  ],
+
+      // if (body.listaPassageiro.length > 0) {
+      //   // const ultimoPassageiroDoArray: IPassageiro = body.listaPassageiro[body.listaPassageiro.length - 1];
+      //
+      //   arrayPassageiro.push(
+      //     ...body.listaPassageiro,
+      //       objPassageiro,
+      //   );
+      //
+      //   console.log("arrayPassageiro", arrayPassageiro);
+      //
+      //   const teste = body.listaPassageiro.map((dados: IListaPassageiros) => ({
+      //     idUsuario: body.idUsuario,
+      //     idViagem: body.idViagem,
+      //     usuarioPassageiro: body.usuarioPassageiro,
+      //     dadosPagamento: body.dadosPagamento,
+      //     tsCriacao: new Date(),
+      //   }));
+      //
+      //   console.log("teste", teste);
+      //
+      //   return teste;
+      // }
     }
 
     public async salvarPassageiro(passageiro: IPassageiro): Promise<IPassageiro> {
       try {
+        console.log("passageiro", passageiro);
+
         logger.debug("Salvando passageiro...");
         return new Passageiro(passageiro).save();
       } catch (error) {
@@ -72,10 +91,8 @@ export class PassageiroService {
         <'ERRO NEGOCIAL'>
           message:  Não foi possível salvar o usuário, na base de dados...
         Parâmetros da requisição:
-          NOME: ${passageiro.nome},
-          CPF: ${passageiro.cpf},
-          DATA DE NASCIMENTO: ${passageiro.dataDeNascimento},
-          CELULAR: ${passageiro.numeroTelefoneCelular},
+          ID USUÁRIO: ${passageiro.idUsuario},
+          ID VIAGEM: ${passageiro.idViagem},
       `);
 
         throw new ErroSQL(...ERRO_SQL_AO_SALVAR_PASSAGEIRO);
