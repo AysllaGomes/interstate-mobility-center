@@ -50,6 +50,7 @@
     "react-native-toast-notification": "^1.1.2",
     "react-native-toast-notifications": "^3.2.2",
     "react-native-vector-icons": "^9.1.0",
+    "react-native-virtualized-view": "^1.0.0",
     "react-native-webview": "^11.18.2",
     "yup": "^0.32.9"
   },

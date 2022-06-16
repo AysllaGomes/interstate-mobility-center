@@ -1,15 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {BackHandler, Image, SafeAreaView, ScrollView, View} from 'react-native';
-import {Appbar, Button, TextInput} from "react-native-paper";
+import {BackHandler, Image, SafeAreaView, View} from 'react-native';
+import {Appbar, Button} from "react-native-paper";
 import {NativeStackNavigatorProps} from 'react-native-screens/lib/typescript/native-stack/types';
 import {Text} from "react-native-paper";
-import {Formik} from 'formik';
-
-import {theme} from '../../App.style';
-import * as Animatable from 'react-native-animatable';
+import {theme} from '../../../App.style';
 import {packageStyle} from "../travelPackage/package.style";
-import {GetUsuarioLogadoData} from "../../assets/DadosUsuarioLogado/DadosUsuarioLogado";
-import {StackNavigationOptions} from "@react-navigation/stack";
+import {GetUsuarioLogadoData} from "../../../assets/DadosUsuarioLogado/DadosUsuarioLogado";
 
 interface ScreenProps {
     navigation: NativeStackNavigatorProps,
@@ -30,7 +26,7 @@ const ResumoHeaderComponent = (props) => {
     )
 }
 
-const PurchaseDetails = (props: ScreenProps) => {
+const PurchaseDetailsScreen = (props: ScreenProps) => {
     const [dadosUsuario, setDadosUsuario] = useState({})
 
     const displayData = async ()=>{
@@ -54,7 +50,7 @@ const PurchaseDetails = (props: ScreenProps) => {
 
     const goHome = () => {
         props.navigation.navigate("Home")
-            }
+    }
 
     return (
         <SafeAreaView>
@@ -71,4 +67,4 @@ const PurchaseDetails = (props: ScreenProps) => {
     )
 }
 
-export default PurchaseDetails;
+export default PurchaseDetailsScreen;

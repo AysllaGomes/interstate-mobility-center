@@ -1,18 +1,18 @@
 import React, {useState} from "react";
 import {Button, TextInput} from "react-native-paper";
-import {Keyboard, SafeAreaView, ScrollView, Text, View} from "react-native";
+import {SafeAreaView, ScrollView, Text, View} from "react-native";
 import {registerStyle} from "./register.style";
-import {HeaderComponent} from "../components/header/Header.component";
-import firebase from "../firebase/firebaseconfig";
+import {HeaderComponent} from "../../components/header/Header.component";
+import firebase from "../../firebase/firebaseconfig";
 import createUser from "./register.service";
 import {Formik} from 'formik';
 import {registerForm} from "./register.form";
 import {NativeStackNavigatorProps} from "react-native-screens/lib/typescript/native-stack/types";
 import axios from "axios";
-import {DadosUsuarioLogado} from "../../assets/DadosUsuarioLogado/DadosUsuarioLogado";
+import {DadosUsuarioLogado} from "../../../assets/DadosUsuarioLogado/DadosUsuarioLogado";
 import {RootSiblingParent} from 'react-native-root-siblings';
-import {theme} from "../../App.style";
-import ToastMessage from "../components/Toast/ToastMessage"
+import {theme} from "../../../App.style";
+import ToastMessage from "../../components/Toast/ToastMessage"
 import * as Animatable from 'react-native-animatable';
 
 interface ScreenProps {

@@ -3,18 +3,17 @@ import {SafeAreaView, View, Text} from "react-native";
 import {Button, Card, TextInput} from "react-native-paper";
 import {useValidation} from 'react-native-form-validator';
 import {resetPasswordStyle} from "./ResetPassword.style";
-import {HeaderComponent} from "../../components/header/Header.component";
-import {theme} from '../../../App.style';
+import {HeaderComponent} from "../../../components/header/Header.component";
 import firebase from 'firebase';
-import * as Animatable from 'react-native-animatable';
-import ToastMessage from '../../components/Toast/ToastMessage';
+import ToastMessage from '../../../components/Toast/ToastMessage';
 import {RootSiblingParent} from 'react-native-root-siblings';
+import {NativeStackNavigatorProps} from "react-native-screens/lib/typescript/native-stack/types";
 
 interface ScreenProps {
-    navigation: any;
+    navigation: NativeStackNavigatorProps;
 }
 
-const ResetPassword = (props: ScreenProps) => {
+const ResetPasswordScreen = (props: ScreenProps) => {
 
     const [email, setEmail] = useState('')
 
@@ -77,4 +76,4 @@ const ResetPassword = (props: ScreenProps) => {
         </RootSiblingParent>
     );
 }
-export default ResetPassword;
+export default ResetPasswordScreen;

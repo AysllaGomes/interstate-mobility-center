@@ -1,25 +1,24 @@
-import React, {useEffect, useState} from 'react';
-import {SafeAreaView, View, Text, Animated, TouchableOpacity, Alert} from "react-native";
+import React, {useState} from 'react';
+import {SafeAreaView, View, Text} from "react-native";
 import {Button, Card} from "react-native-paper";
 import { TextInput } from 'react-native-paper';
 import {loginStyle} from "./login.style";
-import firebase from "../firebase/firebaseconfig";
+import firebase from "../../firebase/firebaseconfig";
 import {Formik} from 'formik';
 import {loginForm} from "./login.form";
 import {NativeStackNavigatorProps} from "react-native-screens/lib/typescript/native-stack/types";
 import axios from "axios";
-import {DadosUsuarioLogado} from '../../assets/DadosUsuarioLogado/DadosUsuarioLogado';
+import {DadosUsuarioLogado} from '../../../assets/DadosUsuarioLogado/DadosUsuarioLogado';
 import * as Animatable from 'react-native-animatable';
-import ToastMessage from "../components/Toast/ToastMessage"
+import ToastMessage from "../../components/Toast/ToastMessage"
 import {RootSiblingParent} from 'react-native-root-siblings';
-import {theme} from "../../App.style";
-import Toast from 'react-native-root-toast';
+import {theme} from "../../../App.style";
 
 interface LoginScreenProps {
     navigation: NativeStackNavigatorProps;
 }
 
-const Login = (props: LoginScreenProps) => {
+const LoginScreen = (props: LoginScreenProps) => {
     const register = () => props.navigation.navigate("Register")
     const resetPassword = () => props.navigation.navigate("ResetPassword")
     const [errorPassword, setErrorPassword] = useState("");
@@ -188,4 +187,4 @@ const Login = (props: LoginScreenProps) => {
         </RootSiblingParent>
     );
 }
-export default Login;
+export default LoginScreen;

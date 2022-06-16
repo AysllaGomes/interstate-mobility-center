@@ -5,18 +5,16 @@ import {Root} from 'popup-ui'
 import {NativeStackNavigatorProps} from "react-native-screens/lib/typescript/native-stack/types";
 import axios from "axios";
 import CheckBox from 'expo-checkbox';
-import {useFonts, GermaniaOne_400Regular} from '@expo-google-fonts/germania-one';
-import AppLoading from "expo-app-loading"
-import {theme} from '../../App.style';
+import {theme} from '../../../App.style';
 import * as Device from 'expo-device';
-import {HeaderComponent} from '../components/header/Header.component';
+import {HeaderComponent} from '../../components/header/Header.component';
 
 interface LoginScreenProps {
     navigation: NativeStackNavigatorProps,
     route: NativeStackNavigatorProps
 }
 
-const TermoUso = (props: LoginScreenProps, route) => {
+const UseTermScreen = (props: LoginScreenProps, route) => {
     const {emailUsuario} = props.route.params;
 
     const goHome = () => props.navigation.navigate("Home") && assinarTermoDeUso()
@@ -59,7 +57,7 @@ const TermoUso = (props: LoginScreenProps, route) => {
         }
     }
     const deviceInfo = {
-        versaoDoApp: require("../../package.json"),
+        versaoDoApp: require("../../../package.json"),
         os: Device.osName,
         "os-version": Device.osVersion,
         model: Device.modelName,
@@ -103,7 +101,7 @@ const TermoUso = (props: LoginScreenProps, route) => {
         </Root>
     );
 }
-export default TermoUso;
+export default UseTermScreen;
 
 const styles = StyleSheet.create({
     container: {

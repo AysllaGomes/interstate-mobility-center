@@ -1,16 +1,16 @@
 import React from 'react';
-import {SafeAreaView, ScrollView, View} from 'react-native';
+import {SafeAreaView, View} from 'react-native';
 import {Button, TextInput} from "react-native-paper";
 import registrarViagem from './payment.service'
 import {NativeStackNavigatorProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {HeaderComponent} from '../components/header/Header.component';
+import {HeaderComponent} from '../../components/header/Header.component';
 import {Text} from "react-native-paper";
 import {Formik} from 'formik';
 import {paymentForm} from './payment.form';
 import {paymentStyle} from './payment.style';
-import {theme} from '../../App.style';
+import {theme} from '../../../App.style';
 import * as Animatable from 'react-native-animatable';
-import {GetUsuarioLogadoData, MergeUsuarioLogadoData} from '../../assets/DadosUsuarioLogado/DadosUsuarioLogado';
+import {GetUsuarioLogadoData, MergeUsuarioLogadoData} from '../../../assets/DadosUsuarioLogado/DadosUsuarioLogado';
 import moment from "moment";
 
 interface ScreenProps {
@@ -41,7 +41,7 @@ const cvcMask = (value) => {
 }
 
 
-const PaymentMethods = (props: ScreenProps) => {
+const PaymentScreen = (props: ScreenProps) => {
 
     const goResumoViagem = async (DadosPagamento) => {
         try {
@@ -259,4 +259,4 @@ const PaymentMethods = (props: ScreenProps) => {
         </SafeAreaView>
     )
 }
-export default PaymentMethods;
+export default PaymentScreen;

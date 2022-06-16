@@ -1,5 +1,5 @@
 import {StatusBar, StyleSheet} from "react-native";
-import {theme} from "../../App.style";
+import {theme} from "../../../App.style";
 import {black, red50} from "react-native-paper/lib/typescript/styles/colors";
 
 export const indexStyle = StyleSheet.create({

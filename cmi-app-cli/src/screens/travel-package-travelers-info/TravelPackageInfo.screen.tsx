@@ -1,27 +1,21 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Button, TextInput} from "react-native-paper";
 import {SafeAreaView, View, Text, Image, ScrollView } from "react-native";
 import CheckBox from 'expo-checkbox';
-import {HeaderComponent} from "../components/header/Header.component";
-import {theme} from "../../App.style";
-import {registerStyle} from '../register/register.style';
-import {FieldArray, Formik, Field, Form, swap} from 'formik';
-import travelInfo from "./travelInfo.form"
+import {HeaderComponent} from "../../components/header/Header.component";
+import {theme} from "../../../App.style";
+import {Formik} from 'formik';
 import {NativeStackNavigatorProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {GetUsuarioLogadoData, MergeUsuarioLogadoData} from '../../assets/DadosUsuarioLogado/DadosUsuarioLogado';
+import {MergeUsuarioLogadoData} from '../../../assets/DadosUsuarioLogado/DadosUsuarioLogado';
 import {RootSiblingParent} from 'react-native-root-siblings';
-import ToastMessage from '../components/Toast/ToastMessage';
-import { TextInputMask } from 'react-native-masked-text';
-import axios from 'axios';
-import {packageStyle} from "../travelPackage/package.style";
-import moment from "moment";
+import ToastMessage from '../../components/Toast/ToastMessage';
 
 interface ScreenProps {
     navigation: NativeStackNavigatorProps
     route: NativeStackNavigatorProps
 }
 
-const TravelInfo = (props: ScreenProps) => {
+const TravelPackageInfoScreen = (props: ScreenProps) => {
     const [toggleCheckBox, setToggleCheckBox] = useState(false)
 
     const formularioPassageiro = {
@@ -31,14 +25,6 @@ const TravelInfo = (props: ScreenProps) => {
         numeroTelefoneCelular: ''
     };
     const [checkBoxDisable, setCheckBoxDisable] = useState(false)
-
-
-    // // Get user email storaged on device
-    // Promise.resolve(GetUsuarioLogadoData()).then(function (value) {
-    //     console.log(value); // "Success"
-    // }, function (value) {
-    //     // not called
-    // });
 
     const maskCPF = (value) => {
         return value
@@ -164,7 +150,7 @@ const TravelInfo = (props: ScreenProps) => {
             }
 
             try {
-                 MergeUsuarioLogadoData({passageiros: values, usuarioPassageiro: toggleCheckBox}).then(() => {
+                MergeUsuarioLogadoData({passageiros: values, usuarioPassageiro: toggleCheckBox}).then(() => {
                     props.navigation.navigate("Payment")
                 })
 
@@ -357,7 +343,7 @@ const TravelInfo = (props: ScreenProps) => {
                                                 value={toggleCheckBox}
                                                 onValueChange={(newValue) => setToggleCheckBox(newValue)}
                                             />
-                                            <Text style={{fontFamily: theme.fontFamily.fontFamily}}  onPress={() => setToggleCheckBox(!toggleCheckBox)}>Você será um passageiro?</Text>
+                                            <Text style={{fontFamily: theme.fontFamily.fontFamily, marginLeft: 5}}  onPress={() => setToggleCheckBox(!toggleCheckBox)}>Você será um passageiro?</Text>
                                         </View>
                                         <Button onPress={handleSubmit}
                                                 style={{...theme.buttons, ...{marginTop: 20}}}><Text
@@ -367,12 +353,9 @@ const TravelInfo = (props: ScreenProps) => {
                                                 fontSize: 18
                                             }}>Efetuar
                                             Compra</Text></Button>
-
                                     </View>
-
                                 )
                             }}
-
                         </Formik>
                     </View>
                 </ScrollView>
@@ -382,4 +365,4 @@ const TravelInfo = (props: ScreenProps) => {
     )
 
 }
-export default TravelInfo;
+export default TravelPackageInfoScreen;

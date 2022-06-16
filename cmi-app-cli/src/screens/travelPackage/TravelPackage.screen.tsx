@@ -1,27 +1,24 @@
-import React, {useState} from 'react';
-import {SafeAreaView, View, Text, Image, ScrollView} from "react-native";
-import {Button, Card, TextInput} from "react-native-paper";
-import {useValidation} from 'react-native-form-validator';
-import {HeaderComponent} from "../components/header/Header.component";
-import {packageStyle} from "./package.style"
-import {theme} from "../../App.style";
+import React from 'react';
+import {SafeAreaView, View, Text, Image} from "react-native";
 import moment from 'moment';
-import { DadosUsuarioLogado, GetUsuarioLogadoData, MergeUsuarioLogadoData } from '../../assets/DadosUsuarioLogado/DadosUsuarioLogado';
+import {Button} from "react-native-paper";
+import {packageStyle} from "./package.style"
+import {theme} from "../../../App.style";
+import {HeaderComponent} from "../../components/header/Header.component";
+import { MergeUsuarioLogadoData } from '../../../assets/DadosUsuarioLogado/DadosUsuarioLogado';
+import {NativeStackNavigatorProps} from "react-native-screens/lib/typescript/native-stack/types";
 
 interface ScreenProps {
-    navigation: any,
-    route: any
+    navigation: NativeStackNavigatorProps,
+    route: NativeStackNavigatorProps
 }
 
-const Package = (props: ScreenProps) => {
+const TravelPackageScreen = (props: ScreenProps) => {
     const {data} = props.route.params;
 
     const goTravelInfo = async () => {
-       
+
         await MergeUsuarioLogadoData({pacoteViagemEscolhido: data.id, ImagemPacoteViagemEscolhido: data.image})
-        GetUsuarioLogadoData().then(
-            x => console.log(x)
-        )
         props.navigation.navigate("TravelInfo")
 
     }
@@ -48,9 +45,9 @@ const Package = (props: ScreenProps) => {
                 </View>
                 <Button onPress={goTravelInfo} style={theme.buttons}><Text
                     style={[packageStyle.text, packageStyle.buttonText]}>Informar Passageiros</Text></Button>
-                </View>
+            </View>
         </SafeAreaView>
     );
 }
 
-export default Package;
+export default TravelPackageScreen;

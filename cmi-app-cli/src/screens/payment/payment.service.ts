@@ -1,5 +1,5 @@
 import axios from "axios";
-import {GetUsuarioLogadoData} from "../../assets/DadosUsuarioLogado/DadosUsuarioLogado";
+import {GetUsuarioLogadoData} from "../../../assets/DadosUsuarioLogado/DadosUsuarioLogado";
 const registrarViagem = async () => {
     const urlBase = "http://192.168.0.110:3007/"
 
