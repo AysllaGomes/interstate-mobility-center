@@ -13,7 +13,7 @@ export class PassageiroController {
 
   constructor({ service = new PassageiroService() }) { this.service = service; }
 
-  public async vinculoPassageiro(body: Array<IVinculoPassageiro>): Promise<Array<IPassageiro | undefined>> {
+  public async vinculoPassageiro(body: IVinculoPassageiro): Promise<IPassageiro | undefined> {
     return this.service.vinculoPassageiro(body);
   }
 }

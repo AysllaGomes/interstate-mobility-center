@@ -4,7 +4,7 @@ import { logger } from "../util/logger";
 import { IVinculoPassageiro } from "../model/interfaces/VinculoPassageiro";
 
 export class ServiceValidator {
-  public validaVinculoPassageiro(body: IVinculoPassageiro): ValidationResult {
+  public validarVinculoPassageiro(body: IVinculoPassageiro): ValidationResult {
     logger.debug("Validando o vinculo do passageiro da viagem...");
 
     const schema = Joi.object({
@@ -16,10 +16,24 @@ export class ServiceValidator {
         .min(24)
         .max(24)
         .required(),
-      nome: Joi.string().required(),
-      cpf: Joi.string().custom(ServiceValidator.validarCPF, "validar cpf").required(),
-      dataDeNascimento: Joi.string().required(),
-      numeroTelefoneCelular: Joi.string().required(),
+      usuarioPassageiro: Joi.boolean()
+        .required(),
+      listaPassageiros: Joi.array().items(
+        Joi.object({
+          nome: Joi.string(),
+          cpf: Joi.string().custom(ServiceValidator.validarCPF, "validar cpf"),
+          dataDeNascimento: Joi.string(),
+          numeroTelefoneCelular: Joi.string(),
+        }),
+      ),
+      dadosPagamento: Joi.object({
+        anoCartao: Joi.string().required(),
+        mesCartao: Joi.string().required(),
+        cvcCartao: Joi.string().required(),
+        numeroCartao: Joi.string().required(),
+        cpfTitular: Joi.string().custom(ServiceValidator.validarCPF, "validar cpf").required(),
+        nomeTitularCartao: Joi.string().required(),
+      }),
     });
 
     return schema.validate(body, { messages });

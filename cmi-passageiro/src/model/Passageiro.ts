@@ -1,12 +1,15 @@
+import { ObjectId } from "mongodb";
 import mongoose, { Schema, Document } from "mongoose";
+import { IDadosPagamento } from "./interfaces/DadosPagamento";
+import { IListaPassageiros } from "./interfaces/ListaPassageiros";
 
 export interface IPassageiro extends Document {
     idUsuario: string;
     idViagem: string;
-    nome: string;
-    cpf: string;
-    dataDeNascimento: string;
-    numeroTelefoneCelular: string;
+    viagemCancelada: boolean;
+    usuarioPassageiro: boolean;
+    listaPassageiro: Array<IListaPassageiros>;
+    dadosPagamento: IDadosPagamento;
     tsCriacao: Date;
 }
 
@@ -62,24 +65,28 @@ export interface IPassageiro extends Document {
 
 const PassageiroSchema: Schema = new Schema({
   idUsuario: {
-    type: String,
+    type: ObjectId,
     required: true,
   },
   idViagem: {
-    type: String,
+    type: ObjectId,
     required: true,
   },
-  nome: {
-    type: String,
+  viagemCancelada: {
+    type: Boolean,
     required: true,
   },
-  dataDeNascimento: {
-    type: String,
+  usuarioPassageiro: {
+    type: Boolean,
     required: true,
   },
-  numeroTelefoneCelular: {
-    type: String,
-    required: true,
+  listaPassageiro: {
+    type: Array,
+    required: false,
+  },
+  dadosPagamento: {
+    type: Object,
+    required: false,
   },
   tsCriacao: {
     type: Date,
