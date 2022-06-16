@@ -10,11 +10,14 @@ import {theme} from '../../App.style';
 import * as Animatable from 'react-native-animatable';
 import {packageStyle} from "../travelPackage/package.style";
 import {GetUsuarioLogadoData} from "../../assets/DadosUsuarioLogado/DadosUsuarioLogado";
+import {StackNavigationOptions} from "@react-navigation/stack";
 
 interface ScreenProps {
     navigation: NativeStackNavigatorProps,
     page: string,
     route: NativeStackNavigatorProps
+    header: null,
+    headerShown: false
 }
 
 const PurchaseDetails = (props: ScreenProps) => {

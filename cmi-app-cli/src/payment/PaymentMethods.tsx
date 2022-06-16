@@ -1,6 +1,7 @@
 import React from 'react';
 import {SafeAreaView, ScrollView, View} from 'react-native';
 import {Button, TextInput} from "react-native-paper";
+import registrarViagem from './payment.service'
 import {NativeStackNavigatorProps} from 'react-native-screens/lib/typescript/native-stack/types';
 import {HeaderComponent} from '../components/header/Header.component';
 import {Text} from "react-native-paper";
@@ -57,15 +58,14 @@ const PaymentMethods = (props: ScreenProps) => {
                 x.dataDeNascimento = moment(x.dataDeNascimento, dateFormat).format('YYYY-MM-DD')
                 return x
             })
-
             dadosArmazenados.DadosPagamento.cpfTitular = dadosArmazenados.DadosPagamento.cpfTitular.replace(/[.-]/g, '')
-
             await MergeUsuarioLogadoData(dadosArmazenados)
 
             let aaa = await GetUsuarioLogadoData()
-
             console.log('DADOS PARA ENVIAR PARA MS VIAGEM', aaa);
 
+            // Executa service para cadastro da viagem
+            await registrarViagem()
             props.navigation.navigate("ResumoCompra")
 
         }catch(error){

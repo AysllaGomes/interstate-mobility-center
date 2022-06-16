@@ -18,7 +18,7 @@ const Package = (props: ScreenProps) => {
 
     const goTravelInfo = async () => {
        
-        MergeUsuarioLogadoData({pacoteViagemEscolhido: data.id, ImagemPacoteViagemEscolhido: data.image})
+        await MergeUsuarioLogadoData({pacoteViagemEscolhido: data.id, ImagemPacoteViagemEscolhido: data.image})
         GetUsuarioLogadoData().then(
             x => console.log(x)
         )
