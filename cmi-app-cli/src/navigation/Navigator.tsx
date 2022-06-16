@@ -1,6 +1,7 @@
 import React from 'react';
+import {Text} from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from '@react-navigation/native';
+import {NavigationContainer, StackRouter} from '@react-navigation/native';
 import Login from "../login/Login";
 import HomeScreen from "../home/Index";
 import {RegisterScreen} from "../register/Register.screen";
@@ -31,13 +32,13 @@ const AppNavigator = () => (
     <NavigationContainer>
 
         {/*Mudar no futuro, se usuario logado mostrar Home*/}
-        <Stack.Navigator initialRouteName="Login"   screenOptions={{headerShown: false}}>
+        <Stack.Navigator initialRouteName="Login" screenOptions={{headerShown: false}}>
             <Stack.Screen name="Login" component={Login}/>
             <Stack.Screen name="TermoUso" component={TermoUso}/>
             <Stack.Screen name="Home" component={DrowerRoutes} />
             <Stack.Screen name="ResetPassword" component={ResetPassword}/>
             <Stack.Screen name="Register" component={RegisterScreen}/>
-            <Stack.Screen name="Package" component={Package}/>
+            <Stack.Screen name="Package" component={Package}  />
             <Stack.Screen name="TravelInfo" component={TravelInfo}/>
             <Stack.Screen name="Payment" component={Payment}/>
             <Stack.Screen name="ResumoCompra" component={ResumoCompra}/>
