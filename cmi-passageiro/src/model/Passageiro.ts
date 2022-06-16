@@ -6,6 +6,7 @@ import { IListaPassageiros } from "./interfaces/ListaPassageiros";
 export interface IPassageiro extends Document {
     idUsuario: string;
     idViagem: string;
+    viagemCancelada: boolean;
     usuarioPassageiro: boolean;
     listaPassageiro: Array<IListaPassageiros>;
     dadosPagamento: IDadosPagamento;
@@ -69,6 +70,10 @@ const PassageiroSchema: Schema = new Schema({
   },
   idViagem: {
     type: ObjectId,
+    required: true,
+  },
+  viagemCancelada: {
+    type: Boolean,
     required: true,
   },
   usuarioPassageiro: {

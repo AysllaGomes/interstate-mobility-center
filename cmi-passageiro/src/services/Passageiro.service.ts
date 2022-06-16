@@ -38,6 +38,7 @@ export class PassageiroService {
         idViagem: new Types.ObjectId(body.idViagem),
         usuarioPassageiro: body.usuarioPassageiro,
         listaPassageiro: [],
+        viagemCancelada: false,
         dadosPagamento: body.dadosPagamento,
         tsCriacao: new Date(),
       };
