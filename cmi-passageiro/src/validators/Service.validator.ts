@@ -2,6 +2,7 @@ import { messages } from "joi-translation-pt-br";
 import Joi, { CustomHelpers, ValidationResult } from "@hapi/joi";
 import { logger } from "../util/logger";
 import { IVinculoPassageiro } from "../model/interfaces/VinculoPassageiro";
+import { IInputDetalhamentoViagem } from "../model/interfaces/InputDetalhamentoViagem";
 
 export class ServiceValidator {
   public validarVinculoPassageiro(body: IVinculoPassageiro): ValidationResult {
@@ -74,5 +75,24 @@ export class ServiceValidator {
     if (resto !== parseInt(cpf.substring(10, 11))) return helpers.error("any.invalid");
 
     return cpf;
+  }
+
+  public validarDetalhamentoViagem(body: IInputDetalhamentoViagem): ValidationResult {
+    logger.debug("Validando o detalhamento da viagem...");
+
+    const schema = Joi.object({
+      idUsuario: Joi.string()
+        .min(24)
+        .max(24)
+        .required(),
+      idViagem: Joi.string()
+        .min(24)
+        .max(24)
+        .required(),
+      dataRefencia: Joi.string()
+        .required(),
+    });
+
+    return schema.validate(body, { messages });
   }
 }
