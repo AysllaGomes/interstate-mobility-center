@@ -58,7 +58,7 @@ export const RegisterScreen = (props: ScreenProps) => {
         }
         props.navigation.navigate("TermoUso", {emailUsuario: values.email})
         //Guarda em memória - assets/
-        DadosUsuarioLogado({email: values.email, idUsuario: errorMongo.data._id})
+        DadosUsuarioLogado({idUsuario: errorMongo.data._id})
 
     }
 //Funções icone Hide Password kkkk

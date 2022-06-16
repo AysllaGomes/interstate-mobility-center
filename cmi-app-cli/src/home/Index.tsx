@@ -44,7 +44,7 @@ interface HomeScreenProps {
 
 const TravelListItem = ({data, navigation}) => {
 
-    const toTravelPackage = () => MergeUsuarioLogadoData({pacoteViagemEscolhido: data._id}).then(
+    const toTravelPackage = () => MergeUsuarioLogadoData({idViagem: data._id}).then(
         navigation.navigate("Package", {data: data})
     )
     return (
@@ -175,7 +175,7 @@ const HomeScreen = (props: HomeScreenProps) => {
                                         <Text  style={{
                                             ...{fontFamily: theme.fontFamily.fontFamily}, ...{
                                                 fontSize: 18
-                                            }}}>Periodo da Viagem</Text>
+                                            }}}>Período da Viagem</Text>
                                     </View>
 
                                     <View style={indexStyle.dateFilters}>

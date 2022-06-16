@@ -10,6 +10,7 @@ import {paymentStyle} from './payment.style';
 import {theme} from '../../App.style';
 import * as Animatable from 'react-native-animatable';
 import {GetUsuarioLogadoData, MergeUsuarioLogadoData} from '../../assets/DadosUsuarioLogado/DadosUsuarioLogado';
+import moment from "moment";
 
 interface ScreenProps {
     navigation: NativeStackNavigatorProps,
@@ -41,9 +42,30 @@ const cvcMask = (value) => {
 
 const PaymentMethods = (props: ScreenProps) => {
 
-    const goResumoViagem = (values) => {
+    const goResumoViagem = async (DadosPagamento) => {
         try {
-            MergeUsuarioLogadoData({DadosPagamento: values})
+            //await MergeUsuarioLogadoData({DadosPagamento: values})
+            // Modifica na memória primeiro depois envia tudo no merge
+
+            let dadosArmazenados = await GetUsuarioLogadoData()
+            dadosArmazenados.DadosPagamento = DadosPagamento
+
+            dadosArmazenados.passageiros =  dadosArmazenados.passageiros.map(x => {
+                const dateFormat = 'DD/MM/YYYY'
+                x.cpf = x.cpf.replace(/[.-]/g, '')
+                x.numeroTelefoneCelular = x.numeroTelefoneCelular.replace(/[() -]/g, '')
+                x.dataDeNascimento = moment(x.dataDeNascimento, dateFormat).format('YYYY-MM-DD')
+                return x
+            })
+
+            dadosArmazenados.DadosPagamento.cpfTitular = dadosArmazenados.DadosPagamento.cpfTitular.replace(/[.-]/g, '')
+
+            await MergeUsuarioLogadoData(dadosArmazenados)
+
+            let aaa = await GetUsuarioLogadoData()
+
+            console.log('DADOS PARA ENVIAR PARA MS VIAGEM', aaa);
+
             props.navigation.navigate("ResumoCompra")
 
         }catch(error){
@@ -65,9 +87,9 @@ const PaymentMethods = (props: ScreenProps) => {
                 }}>Digite as informações do cartão de crédito VISA que você
                     deseja usar para o pagamento</Text>
                 <Formik initialValues={{
-                    name: '',
-                    cardNumber: '',
-                    cpf: '',
+                    nomeTitularCartao: '',
+                    numeroCartao: '',
+                    cpfTitular: '',
                     mesCartao: '',
                     anoCartao: '',
                     cvcCartao: ''
@@ -91,14 +113,14 @@ const PaymentMethods = (props: ScreenProps) => {
                                 keyboardType="numeric"
                                 label="Número do Cartão"
                                 placeholder="0000 0000 0000"
-                                onChangeText={(value) => setFieldValue('cardNumber', cardMask(value))}
-                                onFocus={() => setFieldTouched('cardNumber')}
-                                onBlur={handleBlur('cardNumber')}
-                                value={values.cardNumber}
+                                onChangeText={(value) => setFieldValue('numeroCartao', cardMask(value))}
+                                onFocus={() => setFieldTouched('numeroCartao')}
+                                onBlur={handleBlur('numeroCartao')}
+                                value={values.numeroCartao}
                             />
 
                             {
-                                touched.cardNumber && errors.cardNumber ? <Animatable.Text
+                                touched.numeroCartao && errors.numeroCartao ? <Animatable.Text
                                     style={{
                                         color: theme.colors.diplayErrorMessage,
                                         display: "flex",
@@ -107,7 +129,7 @@ const PaymentMethods = (props: ScreenProps) => {
                                     animation="shake"
                                     duration={500}
                                     easing={"linear"}>
-                                    {errors.cardNumber}
+                                    {errors.numeroCartao}
                                 </Animatable.Text> : null
                             }
 
@@ -188,18 +210,18 @@ const PaymentMethods = (props: ScreenProps) => {
 
                             <TextInput
                                 label="Nome no cartão"
-                                onChangeText={handleChange('name')}
-                                onFocus={() => setFieldTouched('name')}
-                                onBlur={handleBlur('name')}
-                                value={values.name}
+                                onChangeText={handleChange('nomeTitularCartao')}
+                                onFocus={() => setFieldTouched('nomeTitularCartao')}
+                                onBlur={handleBlur('nomeTitularCartao')}
+                                value={values.nomeTitularCartao}
                             />
                             {
-                                touched.name && errors.name ? <Animatable.Text
+                                touched.nomeTitularCartao && errors.nomeTitularCartao ? <Animatable.Text
                                     style={{color: theme.colors.diplayErrorMessage}}
                                     animation="shake"
                                     duration={500}
                                     easing={"linear"}>
-                                    {errors.name}
+                                    {errors.nomeTitularCartao}
                                 </Animatable.Text> : null
                             }
 
@@ -208,18 +230,18 @@ const PaymentMethods = (props: ScreenProps) => {
                                 label="CPF do titular do cartao"
                                 placeholder="000.000.000-00"
                                 keyboardType="numeric"
-                                onChangeText={(e) => setFieldValue('cpf', maskCPF(e))}
-                                onFocus={() => setFieldTouched('cpf')}
-                                onBlur={handleBlur('cpf')}
-                                value={values.cpf}
+                                onChangeText={(e) => setFieldValue('cpfTitular', maskCPF(e))}
+                                onFocus={() => setFieldTouched('cpfTitular')}
+                                onBlur={handleBlur('cpfTitular')}
+                                value={values.cpfTitular}
                             />
                             {
-                                touched.cpf && errors.cpf ? <Animatable.Text
+                                touched.cpfTitular && errors.cpfTitular ? <Animatable.Text
                                     style={{color: theme.colors.diplayErrorMessage}}
                                     animation="shake"
                                     duration={500}
                                     easing={"linear"}>
-                                    {errors.cpf}
+                                    {errors.cpfTitular}
                                 </Animatable.Text> : null
                             }
 

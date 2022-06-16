@@ -5,7 +5,7 @@ import CheckBox from 'expo-checkbox';
 import {HeaderComponent} from "../components/header/Header.component";
 import {theme} from "../../App.style";
 import {registerStyle} from '../register/register.style';
-import {FieldArray, Formik, Field, Form} from 'formik';
+import {FieldArray, Formik, Field, Form, swap} from 'formik';
 import travelInfo from "./travelInfo.form"
 import {NativeStackNavigatorProps} from 'react-native-screens/lib/typescript/native-stack/types';
 import {GetUsuarioLogadoData, MergeUsuarioLogadoData} from '../../assets/DadosUsuarioLogado/DadosUsuarioLogado';
@@ -14,6 +14,7 @@ import ToastMessage from '../components/Toast/ToastMessage';
 import { TextInputMask } from 'react-native-masked-text';
 import axios from 'axios';
 import {packageStyle} from "../travelPackage/package.style";
+import moment from "moment";
 
 interface ScreenProps {
     navigation: NativeStackNavigatorProps
@@ -25,9 +26,9 @@ const TravelInfo = (props: ScreenProps) => {
 
     const formularioPassageiro = {
         nome: '',
-        idade: '',
+        dataDeNascimento: '',
         cpf: '',
-        telefone: ''
+        numeroTelefoneCelular: ''
     };
     const [checkBoxDisable, setCheckBoxDisable] = useState(false)
 
@@ -64,9 +65,9 @@ const TravelInfo = (props: ScreenProps) => {
     }
 
 
-    const validaDataNascimento = (idade) => {
+    const validaDataNascimento = (dataDeNascimento) => {
         const regex = new RegExp(/(^(((0[1-9]|1[0-9]|2[0-8])[\/](0[1-9]|1[012]))|((29|30|31)[\/](0[13578]|1[02]))|((29|30)[\/](0[4,6,9]|11)))[\/](19|[2-9][0-9])\d\d$)|(^29[\/]02[\/](19|[2-9][0-9])(00|04|08|12|16|20|24|28|32|36|40|44|48|52|56|60|64|68|72|76|80|84|88|92|96)$)/);
-        if(!regex.test(idade)){
+        if(!regex.test(dataDeNascimento)){
             return {
                 valid: false, errorMsg: "Data inválida!"
             }
@@ -134,20 +135,20 @@ const TravelInfo = (props: ScreenProps) => {
     };
     const goPayment = (values) => {
 
-            if(toggleCheckBox == true && values.length >2) {
-                return ToastMessage("No máximo 3 passageiros abordos, incluindo você ;)")
-            }
-            if (toggleCheckBox == false && values.length == 0){
-                return ToastMessage("Deve haver pelo menos 1 passageiro!")
-            }
+        if(toggleCheckBox == true && values.length >2) {
+            return ToastMessage("No máximo 3 passageiros abordos, incluindo você ;)")
+        }
+        if (toggleCheckBox == false && values.length == 0){
+            return ToastMessage("Deve haver pelo menos 1 passageiro!")
+        }
 
         let hasError = false
         values.map((value) => {
 
                 if (!validaNome(value.nome).valid ||
-                    !validaDataNascimento(value.idade).valid ||
+                    !validaDataNascimento(value.dataDeNascimento).valid ||
                     !validaCpf(value.cpf).valid ||
-                    !validaTelefone(value.telefone).valid
+                    !validaTelefone(value.numeroTelefoneCelular).valid
                 ) {
                     hasError = true
                 }
@@ -161,8 +162,16 @@ const TravelInfo = (props: ScreenProps) => {
                 //fazer consulta banco e trazer dados do usuario
 
             }
-            MergeUsuarioLogadoData({passageiros: values, usuarioPassageiro: toggleCheckBox})
-            props.navigation.navigate("Payment")
+
+            try {
+                 MergeUsuarioLogadoData({passageiros: values, usuarioPassageiro: toggleCheckBox}).then(() => {
+                    props.navigation.navigate("Payment")
+                })
+
+            }catch (error){
+
+            }
+
             // const enviarPassageiros = async (values) => {
             //     const urlBase = "http://192.168.0.107:3007/"
             //     try {
@@ -175,202 +184,202 @@ const TravelInfo = (props: ScreenProps) => {
     }
 
     return (
-    <RootSiblingParent>
-    <SafeAreaView>
-            <ScrollView>
-                <HeaderComponent title="Informações da Viagem" navigation={props.navigation}/>
-                <View style={{marginHorizontal: 10}}>
-                    <Text style={{
-                        ...{fontFamily: theme.fontFamily.fontFamily}, ...{
-                            textAlign: "center",
-                            marginTop: 20,
-                            marginBottom: 20,
-                            fontSize: 18
-                        }
-                    }}>Digite as informações do usuário que irá realizar a viagem</Text>
+        <RootSiblingParent>
+            <SafeAreaView>
+                <ScrollView>
+                    <HeaderComponent title="Informações da Viagem" navigation={props.navigation}/>
+                    <View style={{marginHorizontal: 10}}>
+                        <Text style={{
+                            ...{fontFamily: theme.fontFamily.fontFamily}, ...{
+                                textAlign: "center",
+                                marginTop: 20,
+                                marginBottom: 20,
+                                fontSize: 18
+                            }
+                        }}>Digite as informações do usuário que irá realizar a viagem</Text>
 
-                    <Formik
-                        initialValues={{passageiros: [],}}
-                        onSubmit={values => goPayment(values.passageiros)}
-                    >
-                        {({
-                              handleChange,
-                              handleBlur,
-                              handleSubmit,
-                              values,
-                              setFieldValue,
-                              errors,
-                              touched,
-                              setTouched,
-                              isSubmitting,
-                              setSubmitting,
-                              validateOnMount
-                          }) => {
+                        <Formik
+                            initialValues={{passageiros: [],}}
+                            onSubmit={values => goPayment(values.passageiros)}
+                        >
+                            {({
+                                  handleChange,
+                                  handleBlur,
+                                  handleSubmit,
+                                  values,
+                                  setFieldValue,
+                                  errors,
+                                  touched,
+                                  setTouched,
+                                  isSubmitting,
+                                  setSubmitting,
+                                  validateOnMount
+                              }) => {
 
-                            const adicionarFormularioPassageiro = () => {
-                                if (values.passageiros.length >1 && toggleCheckBox == true){
-                                    return ToastMessage("O limite são 3 passageiros dadasdas!")
-                                }
-                                 if(values.passageiros.length >1 && toggleCheckBox == false){
+                                const adicionarFormularioPassageiro = () => {
+                                    if (values.passageiros.length >1 && toggleCheckBox == true){
+                                        return ToastMessage("O limite são 3 passageiros dadasdas!")
+                                    }
+                                    if(values.passageiros.length >1 && toggleCheckBox == false){
                                         setFieldValue('passageiros', values.passageiros.concat(formularioPassageiro))
-                                }else {
-                                    setFieldValue('passageiros', values.passageiros.concat(formularioPassageiro))
+                                    }else {
+                                        setFieldValue('passageiros', values.passageiros.concat(formularioPassageiro))
 
+                                    }
+                                    // if (values.passageiros.length <= 2) {
+                                    //     setFieldValue('passageiros', values.passageiros.concat(formularioPassageiro))
+                                    //
+                                    // }
+                                    //
+                                    // if(values.passageiros.length === 2)   {
+                                    //     setCheckBoxDisable(true)
+                                    //     setToggleCheckBox(false)
+                                    // }
+                                    //
+                                    // if(values.passageiros.length >= 3){
+                                    //     return ToastMessage("O limite são 3 passageiros !")
+                                    // }
                                 }
-                                // if (values.passageiros.length <= 2) {
-                                //     setFieldValue('passageiros', values.passageiros.concat(formularioPassageiro))
-                                //
-                                // }
-                                //
-                                // if(values.passageiros.length === 2)   {
-                                //     setCheckBoxDisable(true)
-                                //     setToggleCheckBox(false)
-                                // }
-                                //
-                                // if(values.passageiros.length >= 3){
-                                //     return ToastMessage("O limite são 3 passageiros !")
-                                // }
-                            }
-                            const removerFormularioPassageiro = () => {
+                                const removerFormularioPassageiro = () => {
 
-                                if(values.passageiros.length <= 3){
-                                    setCheckBoxDisable(false)
-                                }
-                                if (values.passageiros.length <= 1 && toggleCheckBox == false) {
+                                    if(values.passageiros.length <= 3){
+                                        setCheckBoxDisable(false)
+                                    }
+                                    if (values.passageiros.length <= 1 && toggleCheckBox == false) {
                                         return ToastMessage("Deve haver ao menos 1 passageiro!")
+                                    }
+                                    else {
+                                        setFieldValue('passageiros', [...values.passageiros].slice(0, values.passageiros.length - 1))
+                                    }
                                 }
-                                else {
-                                    setFieldValue('passageiros', [...values.passageiros].slice(0, values.passageiros.length - 1))
-                                }
-                            }
 
-                            return (
-                                <View>
-                                    <Text style={{
-                                        ...{fontFamily: theme.fontFamily.fontFamily}, ...{
-                                            textAlign: "center",
-                                            marginBottom: 20,
-                                            fontSize: 18
-                                        }}}>Adicione ou Remova passageiros</Text>
-                                    <View style={{display: "flex", flexDirection: "row", justifyContent: "space-around"}}>
-                                        <Button style={{backgroundColor: theme.buttons.backgroundColor}} onPress={adicionarFormularioPassageiro}><Text style={{color: theme.buttons.color}}>Adicionar</Text></Button>
-                                        <Button style={{backgroundColor: theme.buttons.backgroundColor}} onPress={removerFormularioPassageiro}><Text style={{color: theme.buttons.color}}>Remover</Text></Button>
-                                    </View>
+                                return (
+                                    <View>
+                                        <Text style={{
+                                            ...{fontFamily: theme.fontFamily.fontFamily}, ...{
+                                                textAlign: "center",
+                                                marginBottom: 20,
+                                                fontSize: 18
+                                            }}}>Adicione ou Remova passageiros</Text>
+                                        <View style={{display: "flex", flexDirection: "row", justifyContent: "space-around"}}>
+                                            <Button style={{backgroundColor: theme.buttons.backgroundColor}} onPress={adicionarFormularioPassageiro}><Text style={{color: theme.buttons.color}}>Adicionar</Text></Button>
+                                            <Button style={{backgroundColor: theme.buttons.backgroundColor}} onPress={removerFormularioPassageiro}><Text style={{color: theme.buttons.color}}>Remover</Text></Button>
+                                        </View>
 
-                                    {values.passageiros.map((text, index) => {
-                                            let validations = {
-                                                nome: validaNome(values.passageiros[index].nome),
-                                                idade: validaDataNascimento(values.passageiros[index].idade),
-                                                cpf: validaCpf(values.passageiros[index].cpf),
-                                                telefone: validaTelefone(values.passageiros[index].telefone)
+                                        {values.passageiros.map((text, index) => {
+                                                let validations = {
+                                                    nome: validaNome(values.passageiros[index].nome),
+                                                    dataDeNascimento: validaDataNascimento(values.passageiros[index].dataDeNascimento),
+                                                    cpf: validaCpf(values.passageiros[index].cpf),
+                                                    numeroTelefoneCelular: validaTelefone(values.passageiros[index].numeroTelefoneCelular)
+                                                }
+
+                                                return (
+                                                    <View key={index}>
+                                                        <Text style={{
+                                                            fontFamily: theme.fontFamily.fontFamily,
+                                                            fontSize: 18,
+                                                            marginTop: 20
+                                                        }}>Passageiro {index + 1}</Text>
+                                                        <View style={{flex: 2, paddingRight: 20}}>
+                                                            <TextInput
+                                                                key={index}
+                                                                placeholder="Nome completo"
+                                                                onChangeText={handleChange(`passageiros.${index}.nome`)}
+                                                                onBlur={handleBlur(`passageiros[${index}].nome`)}
+                                                                value={values.passageiros[index].nome}
+                                                            />
+                                                            {!validations.nome.valid && isSubmitting ?
+                                                                <Text
+                                                                    style={{color: theme.colors.diplayErrorMessage}}>{validations.nome.errorMsg}</Text> : null}
+
+                                                        </View>
+                                                        <View style={{flex: 2, paddingRight: 20}}>
+                                                            <TextInput
+                                                                key={index}
+                                                                maxLength={14}
+                                                                label="CPF"
+                                                                placeholder="000.000.000-00"
+                                                                keyboardType="decimal-pad"
+                                                                onChangeText={(e) => setFieldValue(`passageiros[${index}].cpf`, maskCPF(e))}
+                                                                onBlur={handleBlur(`passageiros[${index}].cpf`)}
+                                                                value={values.passageiros[index].cpf}
+                                                            />
+                                                            {!validations.cpf.valid && isSubmitting ?
+                                                                <Text
+                                                                    style={{color: theme.colors.diplayErrorMessage}}>{validations.cpf.errorMsg}</Text> : null}
+                                                        </View>
+                                                        <View style={{display: "flex", flexDirection: "row"}}>
+                                                            <View style={{flex: 1, paddingRight: 20}}>
+                                                                <TextInput
+                                                                    key={index}
+                                                                    maxLength={15}
+                                                                    label="Celular"
+                                                                    placeholder="(99) 99999-9999"
+                                                                    keyboardType="phone-pad"
+                                                                    onChangeText={(e) => setFieldValue(`passageiros[${index}].numeroTelefoneCelular`, maskPhone(e))}
+                                                                    onBlur={handleBlur(`passageiros[${index}].numeroTelefoneCelular`)}
+                                                                    value={values.passageiros[index].numeroTelefoneCelular}
+                                                                />
+                                                                {!validations.numeroTelefoneCelular.valid && isSubmitting ?
+                                                                    <Text
+                                                                        style={{color: theme.colors.diplayErrorMessage}}>{validations.numeroTelefoneCelular.errorMsg}</Text> : null}
+                                                            </View>
+
+                                                            <View style={{flex: 1, paddingRight: 20 }}>
+                                                                <TextInput
+                                                                    key={index}
+                                                                    maxLength={10}
+                                                                    label="Data Nascimento"
+                                                                    placeholder="22/05/1982"
+                                                                    keyboardType="numeric"
+                                                                    onBlur={handleBlur(`passageiros[${index}].dataDeNascimento`)}
+                                                                    value={values.passageiros[index].dataDeNascimento}
+                                                                    onChangeText={(e) => setFieldValue(`passageiros[${index}].dataDeNascimento`, birthdayMask(e))}
+                                                                />
+                                                                {!validations.dataDeNascimento.valid && isSubmitting ?
+                                                                    <Text
+                                                                        style={{color: theme.colors.diplayErrorMessage}}>{validations.dataDeNascimento.errorMsg}</Text> : null}
+                                                            </View>
+                                                        </View>
+
+                                                    </View>)
                                             }
+                                        )}
+                                        <View  style={
+                                            {display: "flex",
+                                                flexDirection: "row",
+                                                alignItems: "center",
+                                                marginTop: 20
+                                            }}>
+                                            <CheckBox
+                                                disabled={checkBoxDisable}
+                                                value={toggleCheckBox}
+                                                onValueChange={(newValue) => setToggleCheckBox(newValue)}
+                                            />
+                                            <Text style={{fontFamily: theme.fontFamily.fontFamily}}  onPress={() => setToggleCheckBox(!toggleCheckBox)}>Você será um passageiro?</Text>
+                                        </View>
+                                        <Button onPress={handleSubmit}
+                                                style={{...theme.buttons, ...{marginTop: 20}}}><Text
+                                            style={{
+                                                color: theme.buttons.color,
+                                                fontFamily: theme.fontFamily.fontFamily,
+                                                fontSize: 18
+                                            }}>Efetuar
+                                            Compra</Text></Button>
 
-                                            return (
-                                                <View key={index}>
-                                                <Text style={{
-                                                    fontFamily: theme.fontFamily.fontFamily,
-                                                    fontSize: 18,
-                                                    marginTop: 20
-                                                }}>Passageiro {index + 1}</Text>
-                                                    <View style={{flex: 2, paddingRight: 20}}>
-                                                        <TextInput
-                                                            key={index}
-                                                            placeholder="Nome completo"
-                                                            onChangeText={handleChange(`passageiros.${index}.nome`)}
-                                                            onBlur={handleBlur(`passageiros[${index}].nome`)}
-                                                            value={values.passageiros[index].nome}
-                                                        />
-                                                        {!validations.nome.valid && isSubmitting ?
-                                                            <Text
-                                                                style={{color: theme.colors.diplayErrorMessage}}>{validations.nome.errorMsg}</Text> : null}
-
-                                                    </View>
-                                                    <View style={{flex: 2, paddingRight: 20}}>
-                                                        <TextInput
-                                                            key={index}
-                                                            maxLength={14}
-                                                            label="CPF"
-                                                            placeholder="000.000.000-00"
-                                                            keyboardType="decimal-pad"
-                                                            onChangeText={(e) => setFieldValue(`passageiros[${index}].cpf`, maskCPF(e))}
-                                                            onBlur={handleBlur(`passageiros[${index}].cpf`)}
-                                                            value={values.passageiros[index].cpf}
-                                                        />
-                                                        {!validations.cpf.valid && isSubmitting ?
-                                                            <Text
-                                                                style={{color: theme.colors.diplayErrorMessage}}>{validations.cpf.errorMsg}</Text> : null}
-                                                    </View>
-                                                <View style={{display: "flex", flexDirection: "row"}}>
-                                                    <View style={{flex: 1, paddingRight: 20}}>
-                                                        <TextInput
-                                                            key={index}
-                                                            maxLength={15}
-                                                            label="Celular"
-                                                            placeholder="(99) 99999-9999"
-                                                            keyboardType="phone-pad"
-                                                            onChangeText={(e) => setFieldValue(`passageiros[${index}].telefone`, maskPhone(e))}
-                                                            onBlur={handleBlur(`passageiros[${index}].telefone`)}
-                                                            value={values.passageiros[index].telefone}
-                                                        />
-                                                        {!validations.telefone.valid && isSubmitting ?
-                                                            <Text
-                                                                style={{color: theme.colors.diplayErrorMessage}}>{validations.telefone.errorMsg}</Text> : null}
-                                                    </View>
-
-                                                    <View style={{flex: 1, paddingRight: 20 }}>
-                                                    <TextInput
-                                                        key={index}
-                                                        maxLength={10}
-                                                        label="Data Nascimento"
-                                                        placeholder="22/05/1982"
-                                                        keyboardType="numeric"
-                                                        onBlur={handleBlur(`passageiros[${index}].idade`)}
-                                                        value={values.passageiros[index].idade}
-                                                        onChangeText={(e) => setFieldValue(`passageiros[${index}].idade`, birthdayMask(e))}
-                                                    />
-                                                        {!validations.idade.valid && isSubmitting ?
-                                                            <Text
-                                                                style={{color: theme.colors.diplayErrorMessage}}>{validations.idade.errorMsg}</Text> : null}
-                                                    </View>
-                                                </View>
-
-                                            </View>)
-                                        }
-                                    )}
-                                    <View  style={
-                                        {display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            marginTop: 20
-                                        }}>
-                                        <CheckBox
-                                            disabled={checkBoxDisable}
-                                            value={toggleCheckBox}
-                                            onValueChange={(newValue) => setToggleCheckBox(newValue)}
-                                        />
-                                        <Text style={{fontFamily: theme.fontFamily.fontFamily}}  onPress={() => setToggleCheckBox(!toggleCheckBox)}>Você será um passageiro?</Text>
                                     </View>
-                                    <Button onPress={handleSubmit}
-                                            style={{...theme.buttons, ...{marginTop: 20}}}><Text
-                                        style={{
-                                            color: theme.buttons.color,
-                                            fontFamily: theme.fontFamily.fontFamily,
-                                            fontSize: 18
-                                        }}>Efetuar
-                                        Compra</Text></Button>
 
-                                </View>
+                                )
+                            }}
 
-                            )
-                        }}
+                        </Formik>
+                    </View>
+                </ScrollView>
+            </SafeAreaView>
+        </RootSiblingParent>
 
-                    </Formik>
-                </View>
-            </ScrollView>
-        </SafeAreaView>
- </RootSiblingParent>
-
-                            )
+    )
 
 }
 export default TravelInfo;
