@@ -2,9 +2,11 @@ import { setTagSpan, traceable } from "jaeger-tracer-decorator";
 import { IPassageiro } from "../model/Passageiro";
 import { PassageiroService } from "../services/Passageiro.service";
 import { IVinculoPassageiro } from "../model/interfaces/VinculoPassageiro";
+import { IInputDetalharViagem } from "../model/interfaces/InputDetalharViagem";
 import { IInputDesativarViagem } from "../model/interfaces/InputDesativarViagem";
+import { IOutputDetalharViagem } from "../model/interfaces/OutputDetalharViagem";
 import { IOutputDesativarViagem } from "../model/interfaces/OutputDesativarViagem";
-import { IInputDetalhamentoViagem } from "../model/interfaces/InputDetalhamentoViagem";
+import { IInputListarViagensVincularAoUsario } from "../model/interfaces/InputListarViagensVincularAoUsario";
 import { IOutputListarViagensVinculadasAoUsario } from "../model/interfaces/OutputListarViagensVinculadasAoUsario";
 
 @traceable()
@@ -21,8 +23,12 @@ export class PassageiroController {
     return this.service.vinculoPassageiro(body);
   }
 
-  public async listarViagensVinculadoAoUsuario(body: IInputDetalhamentoViagem): Promise<Array<IOutputListarViagensVinculadasAoUsario>> {
+  public async listarViagensVinculadoAoUsuario(body: IInputListarViagensVincularAoUsario): Promise<Array<IOutputListarViagensVinculadasAoUsario>> {
     return this.service.listarViagensVinculadoAoUsuario(body);
+  }
+
+  public async detalharViagem(body: IInputDetalharViagem): Promise<IOutputDetalharViagem> {
+    return this.service.detalharViagem(body);
   }
 
   public async desativar(body: IInputDesativarViagem): Promise<IOutputDesativarViagem> {

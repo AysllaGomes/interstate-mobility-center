@@ -2,7 +2,7 @@
  * @swagger
  *
  * definitions:
- *   IInputDetalhamentoViagem:
+ *   IInputListarViagensVincularAoUsario:
  *     type: object
  *     required:
  *       - idUsuario
@@ -14,7 +14,7 @@
  *         idUsuario: "6186d82da341c53dcc2c4d04",
  *      }
  */
-export interface IInputDetalhamentoViagem {
+export interface IInputListarViagensVincularAoUsario {
     idUsuario: string;
 }
 

@@ -1,7 +1,8 @@
 import express from "express";
 import { ApiRouter } from "./api.router";
 import { PassageiroController } from "../controllers/Passageiro.controller";
-import { IInputDetalhamentoViagem } from "../model/interfaces/InputDetalhamentoViagem";
+import { IInputDetalharViagem } from "../model/interfaces/InputDetalharViagem";
+import { IInputListarViagensVincularAoUsario } from "../model/interfaces/InputListarViagensVincularAoUsario";
 
 export class PassageiroApi extends ApiRouter {
     private readonly path: string;
@@ -45,11 +46,21 @@ export class PassageiroApi extends ApiRouter {
 
       server.get(`${this.path}/listarViagensVinculadoAoUsuario`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
         try {
-          const body: IInputDetalhamentoViagem = {
+          const body: IInputListarViagensVincularAoUsario = {
             idUsuario: request.headers["id-usuario"] ? String(request.headers["id-usuario"]) : "",
           };
 
           return response.json(await this.passageiroController.listarViagensVinculadoAoUsuario(body));
+        } catch (error) { next(error); }
+      });
+
+      server.get(`${this.path}/detalharViagem`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
+        try {
+          const body: IInputDetalharViagem = {
+            idPassageiro: request.headers["id-passageiro"] ? String(request.headers["id-passageiro"]) : "",
+          };
+
+          return response.json(await this.passageiroController.detalharViagem(body));
         } catch (error) { next(error); }
       });
 
