@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import mongoose, { Schema, Document } from "mongoose";
+import { EstadoViagemEnum } from "./enums/EstadoViagem.enum";
 import { IDadosPagamento } from "./interfaces/DadosPagamento";
 import { IListaPassageiros } from "./interfaces/ListaPassageiros";
 
@@ -7,10 +8,12 @@ export interface IPassageiro extends Document {
     idUsuario: string;
     idViagem: string;
     viagemCancelada: boolean;
+    estado: EstadoViagemEnum;
     usuarioPassageiro: boolean;
     listaPassageiro: Array<IListaPassageiros>;
     dadosPagamento: IDadosPagamento;
-    tsCriacao: Date;
+    dataCriacao: string;
+    dataUltimaAtualizacao: Date;
 }
 
 /**
@@ -44,7 +47,7 @@ export interface IPassageiro extends Document {
  *         type: string
  *       numeroTelefoneCelular:
  *         type: string
- *       tsCriacao:
+ *       dataCriacao:
  *         type: string
  *         format: date-time
  *       __v:
@@ -58,7 +61,7 @@ export interface IPassageiro extends Document {
  *         cpf: "99999999999",
  *         dataDeNascimento: "01/01/2000",
  *         numeroTelefoneCelular: "99999999999",
- *         tsCriacao: "2021-11-15T21:57:49.871Z",
+ *         dataCriacao: "2021-11-15",
  *         __v: 0
  *      }
  */
@@ -70,6 +73,10 @@ const PassageiroSchema: Schema = new Schema({
   },
   idViagem: {
     type: ObjectId,
+    required: true,
+  },
+  estado: {
+    type: String,
     required: true,
   },
   viagemCancelada: {
@@ -88,9 +95,13 @@ const PassageiroSchema: Schema = new Schema({
     type: Object,
     required: false,
   },
-  tsCriacao: {
+  dataCriacao: {
+    type: String,
+    required: true,
+  },
+  dataUltimaAtualizacao: {
     type: Date,
-    required: false,
+    required: true,
   },
 });
 

@@ -5,24 +5,22 @@ import {
   ErroNegocial,
   ERRO_NEGOCIAL_BUSCAR_DADOS_VIAGEM_VINCULADAS_AO_PASSAGEIRO,
 } from "../errors/erro.negocial";
+import { IViagem } from "../model/Viagem";
 
 export class ViagemService {
-  public static async buscarViagem(idViagem: string): Promise<any> {
+  public static async retornaDadosViagem(idViagem: string): Promise<IViagem> {
     try {
       logger.debug(`Consulta do passageiro para buscar a viagem: ${idViagem}`);
 
       const result = await axios({
         method: "get",
-        headers: {
-          "id-viagem": `${idViagem}`,
-        },
-        url: `${environment.app.hostCMIViagem}/viagem/detalhar`,
+        url: `${environment.app.hostCMIViagem}/viagem/id/${idViagem}`,
       });
 
       return result.data;
     } catch (error) {
       const erroFormatado = (`
-        ERRO no MS "${environment.app.name}", método "buscarViagem".
+        ERRO no MS "${environment.app.name}", método "retornaDadosViagem".
         <'ERRO'>
           message: Erro na buscar a viagem: ${idViagem}
         Parâmetros da requisição:

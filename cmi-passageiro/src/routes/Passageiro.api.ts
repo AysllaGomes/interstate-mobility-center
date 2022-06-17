@@ -43,15 +43,19 @@ export class PassageiroApi extends ApiRouter {
         } catch (error) { next(error); }
       });
 
-      server.get(`${this.path}/detalhamentoViagem`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
+      server.get(`${this.path}/listarViagensVinculadoAoUsuario`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
         try {
           const body: IInputDetalhamentoViagem = {
             idUsuario: request.headers["id-usuario"] ? String(request.headers["id-usuario"]) : "",
-            idViagem: request.headers["id-viagem"] ? String(request.headers["id-viagem"]) : "",
-            dataRefencia: request.headers.data ? String(request.headers.data) : "",
           };
 
-          return response.json(await this.passageiroController.detalhamentoViagem(body));
+          return response.json(await this.passageiroController.listarViagensVinculadoAoUsuario(body));
+        } catch (error) { next(error); }
+      });
+
+      server.put(`${this.path}/desativar`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
+        try {
+          return response.json(await this.passageiroController.desativar(request.body));
         } catch (error) { next(error); }
       });
     }

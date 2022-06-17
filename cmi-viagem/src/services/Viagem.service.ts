@@ -7,6 +7,7 @@ import {
 import {
   ErroSQL,
   ERRO_SQL_AO_LISTAR_VIAGEM,
+  ERRO_SQL_BUSCA_DADOS_VIAGEM,
 } from "../errors/erro.sql";
 import {
   ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS,
@@ -155,5 +156,26 @@ export class ViagemService {
     }));
 
     return retorno;
+  }
+
+  public async retornaDadosViagem(idViagem: string): Promise<IViagem> {
+    try {
+      logger.info(`Realizando consulta para pegar dados do usuário: ${idViagem}...`);
+      const viagem = await Viagem.findById(idViagem);
+
+      if (viagem) return viagem;
+
+      logger.debug(`Não foi encontrado o ID: ${idViagem}, na base de dados...`);
+      throw new ErroSQL(...ERRO_SQL_BUSCA_DADOS_VIAGEM).formatMessage(idViagem);
+    } catch (error) {
+      logger.error(`
+        ERRO no MS "${environment.app.name}", método "retornaDadosViagem".
+        <'ERRO'>
+          message: Não foi encontrado o ID: ${idViagem}, na base de dados...
+        Parâmetros da requisição:
+          ID: ${idViagem}
+      `);
+      throw new ErroSQL(...ERRO_SQL_BUSCA_DADOS_VIAGEM).formatMessage(idViagem);
+    }
   }
 }

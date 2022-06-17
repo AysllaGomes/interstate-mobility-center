@@ -16,9 +16,12 @@ export class ErroSQL extends ErroPadrao {
 export const ERRO_NA_CONEXAO_COM_O_MONGODB: [string, string] = ["999", "Ocorreu um erro, não foi possível se conectar ao o MongoDB."];
 export const ERRO_SQL_AO_SALVAR_PASSAGEIRO: [string, string] = ["998", "Não foi possível salvar o passageiro."];
 export const ERRO_SQL_AO_BUSCAR_DADOS_DA_VIAGEM_COM_O_USUARIO: [string, string] = ["997", "Não foi encontrado os dados da viagem com o usuário vinnculado."];
+export const ERRO_SQL_AO_BUSCAR_PASSAGEIRO: [string, string] = ["996", "Não foi possível desabilitar a viagem."];
+export const ERRO_SQL_DESABILITAR_OS_DADOS_DO_PASSAGEIRO_DA_VIAGEM: [string, string] = ["995", "Não foi possível desabilitar a viagem."];
 
 export const listErroSQL = [
   new ErroSQL(...ERRO_NA_CONEXAO_COM_O_MONGODB),
   new ErroSQL(...ERRO_SQL_AO_SALVAR_PASSAGEIRO),
+  new ErroSQL(...ERRO_SQL_AO_BUSCAR_PASSAGEIRO),
   new ErroSQL(...ERRO_SQL_AO_BUSCAR_DADOS_DA_VIAGEM_COM_O_USUARIO),
 ];

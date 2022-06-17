@@ -1,7 +1,8 @@
 import { messages } from "joi-translation-pt-br";
-import Joi, { CustomHelpers, ValidationResult } from "@hapi/joi";
+import Joi, { CustomHelpers, ObjectSchema, ValidationResult } from "@hapi/joi";
 import { logger } from "../util/logger";
 import { IVinculoPassageiro } from "../model/interfaces/VinculoPassageiro";
+import { IInputDesativarViagem } from "../model/interfaces/InputDesativarViagem";
 import { IInputDetalhamentoViagem } from "../model/interfaces/InputDetalhamentoViagem";
 
 export class ServiceValidator {
@@ -85,11 +86,18 @@ export class ServiceValidator {
         .min(24)
         .max(24)
         .required(),
-      idViagem: Joi.string()
+    });
+
+    return schema.validate(body, { messages });
+  }
+
+  public validarDesativarViagem(body: IInputDesativarViagem): ValidationResult {
+    logger.debug("Validando input para desabilitar a viagem...");
+
+    const schema: ObjectSchema<IInputDesativarViagem> = Joi.object({
+      idPassageiro: Joi.string()
         .min(24)
         .max(24)
-        .required(),
-      dataRefencia: Joi.string()
         .required(),
     });
 
