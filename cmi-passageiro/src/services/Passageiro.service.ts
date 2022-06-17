@@ -19,12 +19,12 @@ import { retornarErroValidacao } from "../util/utils";
 import Passageiro, { IPassageiro } from "../model/Passageiro";
 import { ServiceValidator } from "../validators/Service.validator";
 import { EstadoViagemEnum } from "../model/enums/EstadoViagem.enum";
-// import { IListaPassageiros } from "../model/interfaces/ListaPassageiros";
 import { IVinculoPassageiro } from "../model/interfaces/VinculoPassageiro";
 import { IInputDesativarViagem } from "../model/interfaces/InputDesativarViagem";
-import { IInputDetalhamentoViagem } from "../model/interfaces/InputDetalhamentoViagem";
-import { IOutputListarViagensVinculadasAoUsario } from "../model/interfaces/OutputListarViagensVinculadasAoUsario";
+import { IOutputDetalharViagem } from "../model/interfaces/OutputDetalharViagem";
 import { IOutputDesativarViagem } from "../model/interfaces/OutputDesativarViagem";
+import { IInputListarViagensVincularAoUsario } from "../model/interfaces/InputListarViagensVincularAoUsario";
+import { IOutputListarViagensVinculadasAoUsario } from "../model/interfaces/OutputListarViagensVinculadasAoUsario";
 
 export class PassageiroService {
     private serviceValidator = new ServiceValidator();
@@ -112,7 +112,7 @@ export class PassageiroService {
       }
     }
 
-    public async listarViagensVinculadoAoUsuario(body: IInputDetalhamentoViagem): Promise<Array<IOutputListarViagensVinculadasAoUsario>> {
+    public async listarViagensVinculadoAoUsuario(body: IInputListarViagensVincularAoUsario): Promise<Array<IOutputListarViagensVinculadasAoUsario>> {
       logger.debug("Entrando no método 'listarViagensVinculadoAoUsuario'...");
 
       const resultadoValidacao = this.serviceValidator.validarDetalhamentoViagem(body);
@@ -146,7 +146,7 @@ export class PassageiroService {
       );
     }
 
-    public async retornarDadosVinculoPassageiroEViagem(body: IInputDetalhamentoViagem): Promise<Array<IPassageiro>> {
+    public async retornarDadosVinculoPassageiroEViagem(body: IInputListarViagensVincularAoUsario): Promise<Array<IPassageiro>> {
       try {
         logger.info(`Realizando consulta para pegar dados de vinculo dos passageiros: ${body.idUsuario}...`);
 
@@ -169,6 +169,32 @@ export class PassageiroService {
 
         throw new ErroSQL(...ERRO_SQL_AO_BUSCAR_DADOS_DA_VIAGEM_COM_O_USUARIO);
       }
+    }
+
+    public async detalharViagem(body: IInputDesativarViagem): Promise<IOutputDetalharViagem> {
+      logger.debug("Entrando no método 'detalharViagem'...");
+
+      const resultadoValidacao = this.serviceValidator.validarDetalharViagem(body);
+      retornarErroValidacao(resultadoValidacao, ERRO_NEGOCIAL_NA_VALIDACAO);
+      logger.debug("Finalizando o 'resultadoValidacao'...");
+
+      logger.debug("Entrando no método 'verificarExitenciaPassageiro'...");
+      const passageiro = await this.verificarExitenciaPassageiro(body);
+
+      logger.debug("Entrando no método 'retornaDadosViagem'...");
+      const viagem: IViagem = await ViagemService.retornaDadosViagem(passageiro.idViagem);
+      logger.debug("Finalizando o 'retornaDadosViagem'...");
+
+      logger.debug("Entrando no método 'formatarRetornoDetalharViagem'...");
+      return this.formatarRetornoDetalharViagem(passageiro, viagem);
+    }
+
+    public formatarRetornoDetalharViagem(passageiro: IPassageiro, viagem: IViagem): IOutputDetalharViagem {
+      return {
+        preco: viagem.preco,
+        destino: viagem.estadoDestino,
+        dataRefencia: passageiro.dataCriacao,
+      };
     }
 
     public async desativar(body: IInputDesativarViagem): Promise<IOutputDesativarViagem> {

@@ -2,8 +2,9 @@ import { messages } from "joi-translation-pt-br";
 import Joi, { CustomHelpers, ObjectSchema, ValidationResult } from "@hapi/joi";
 import { logger } from "../util/logger";
 import { IVinculoPassageiro } from "../model/interfaces/VinculoPassageiro";
+import { IInputDetalharViagem } from "../model/interfaces/InputDetalharViagem";
 import { IInputDesativarViagem } from "../model/interfaces/InputDesativarViagem";
-import { IInputDetalhamentoViagem } from "../model/interfaces/InputDetalhamentoViagem";
+import { IInputListarViagensVincularAoUsario } from "../model/interfaces/InputListarViagensVincularAoUsario";
 
 export class ServiceValidator {
   public validarVinculoPassageiro(body: IVinculoPassageiro): ValidationResult {
@@ -78,11 +79,24 @@ export class ServiceValidator {
     return cpf;
   }
 
-  public validarDetalhamentoViagem(body: IInputDetalhamentoViagem): ValidationResult {
+  public validarDetalhamentoViagem(body: IInputListarViagensVincularAoUsario): ValidationResult {
     logger.debug("Validando o detalhamento da viagem...");
 
     const schema = Joi.object({
       idUsuario: Joi.string()
+        .min(24)
+        .max(24)
+        .required(),
+    });
+
+    return schema.validate(body, { messages });
+  }
+
+  public validarDetalharViagem(body: IInputDetalharViagem): ValidationResult {
+    logger.debug("Validando input para detalhar a viagem...");
+
+    const schema: ObjectSchema<IInputDetalharViagem> = Joi.object({
+      idPassageiro: Joi.string()
         .min(24)
         .max(24)
         .required(),
