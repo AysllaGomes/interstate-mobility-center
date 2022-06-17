@@ -126,6 +126,8 @@ export class PassageiroService {
           logger.debug("Finalizando o 'retornaDadosViagem'...");
 
           return {
+            // eslint-disable-next-line no-underscore-dangle
+            idUsuario: viagem._id,
             dataReferencia: passageiro.tsCriacao,
             destino: viagem.estadoDestino,
             preco: viagem.preco,
