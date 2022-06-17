@@ -1,6 +1,7 @@
 import express from "express";
 import { ApiRouter } from "./api.router";
 import { PassageiroController } from "../controllers/Passageiro.controller";
+import { IInputDetalhamentoViagem } from "../model/interfaces/InputDetalhamentoViagem";
 
 export class PassageiroApi extends ApiRouter {
     private readonly path: string;
@@ -39,6 +40,18 @@ export class PassageiroApi extends ApiRouter {
       server.post(`${this.path}/vinculoPassageiro`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
         try {
           return response.json(await this.passageiroController.vinculoPassageiro(request.body));
+        } catch (error) { next(error); }
+      });
+
+      server.get(`${this.path}/detalhamentoViagem`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
+        try {
+          const body: IInputDetalhamentoViagem = {
+            idUsuario: request.headers["id-usuario"] ? String(request.headers["id-usuario"]) : "",
+            idViagem: request.headers["id-viagem"] ? String(request.headers["id-viagem"]) : "",
+            dataRefencia: request.headers.data ? String(request.headers.data) : "",
+          };
+
+          return response.json(await this.passageiroController.detalhamentoViagem(body));
         } catch (error) { next(error); }
       });
     }

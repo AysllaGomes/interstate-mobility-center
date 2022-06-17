@@ -2,6 +2,7 @@ import { setTagSpan, traceable } from "jaeger-tracer-decorator";
 import { IPassageiro } from "../model/Passageiro";
 import { PassageiroService } from "../services/Passageiro.service";
 import { IVinculoPassageiro } from "../model/interfaces/VinculoPassageiro";
+import { IInputDetalhamentoViagem } from "../model/interfaces/InputDetalhamentoViagem";
 
 @traceable()
 export class PassageiroController {
@@ -15,5 +16,9 @@ export class PassageiroController {
 
   public async vinculoPassageiro(body: IVinculoPassageiro): Promise<IPassageiro | undefined> {
     return this.service.vinculoPassageiro(body);
+  }
+
+  public async detalhamentoViagem(body: IInputDetalhamentoViagem): Promise<IPassageiro | undefined> {
+    return this.service.detalhamentoViagem(body);
   }
 }
