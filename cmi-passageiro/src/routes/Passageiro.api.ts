@@ -52,5 +52,11 @@ export class PassageiroApi extends ApiRouter {
           return response.json(await this.passageiroController.listarViagensVinculadoAoUsuario(body));
         } catch (error) { next(error); }
       });
+
+      server.put(`${this.path}/desativar`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
+        try {
+          return response.json(await this.passageiroController.desativar(request.body));
+        } catch (error) { next(error); }
+      });
     }
 }

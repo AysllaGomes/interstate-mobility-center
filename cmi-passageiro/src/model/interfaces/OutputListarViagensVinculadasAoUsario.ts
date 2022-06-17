@@ -6,11 +6,14 @@
  *     type: object
  *     required:
  *       - idUsuario
+ *       - idPassageiro
  *       - dataReferencia
  *       - destino
  *       - preco
  *     properties:
  *       idUsuario:
+ *         type: string
+ *       idPassageiro:
  *         type: string
  *       dataReferencia:
  *         type: string
@@ -28,6 +31,7 @@
  */
 export interface IOutputListarViagensVinculadasAoUsario {
     idUsuario: string;
+    idPassageiro: string;
     dataReferencia: string;
     destino: string;
     preco: number;

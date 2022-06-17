@@ -5,8 +5,10 @@ import {
 } from "../errors/erro.negocial";
 import {
   ErroSQL,
+  ERRO_SQL_AO_BUSCAR_PASSAGEIRO,
   ERRO_SQL_AO_SALVAR_PASSAGEIRO,
   ERRO_SQL_AO_BUSCAR_DADOS_DA_VIAGEM_COM_O_USUARIO,
+  ERRO_SQL_DESABILITAR_OS_DADOS_DO_PASSAGEIRO_DA_VIAGEM,
 } from "../errors/erro.sql";
 import { logger } from "../util/logger";
 import { IViagem } from "../model/Viagem";
@@ -16,8 +18,10 @@ import { environment } from "../config/environment";
 import { retornarErroValidacao } from "../util/utils";
 import Passageiro, { IPassageiro } from "../model/Passageiro";
 import { ServiceValidator } from "../validators/Service.validator";
-import { IListaPassageiros } from "../model/interfaces/ListaPassageiros";
+import { EstadoViagemEnum } from "../model/enums/EstadoViagem.enum";
+// import { IListaPassageiros } from "../model/interfaces/ListaPassageiros";
 import { IVinculoPassageiro } from "../model/interfaces/VinculoPassageiro";
+import { IInputDesativarViagem } from "../model/interfaces/InputDesativarViagem";
 import { IInputDetalhamentoViagem } from "../model/interfaces/InputDetalhamentoViagem";
 import { IOutputListarViagensVinculadasAoUsario } from "../model/interfaces/OutputListarViagensVinculadasAoUsario";
 
@@ -38,7 +42,7 @@ export class PassageiroService {
     }
 
     public formatarPassageiro(body: IVinculoPassageiro): any {
-      const arrayPassageiro: Array<IListaPassageiros> = [];
+      // const arrayPassageiro: Array<IListaPassageiros> = [];
 
       const objPassageiro = {
         idUsuario: new Types.ObjectId(body.idUsuario),
@@ -46,8 +50,10 @@ export class PassageiroService {
         usuarioPassageiro: body.usuarioPassageiro,
         listaPassageiro: [],
         viagemCancelada: false,
+        estado: EstadoViagemEnum.VIGENTE,
         dadosPagamento: body.dadosPagamento,
-        tsCriacao: moment(new Date()).format("DD/MM/YYYY"),
+        dataCriacao: moment(new Date()).format("DD/MM/YYYY"),
+        dataUltimaAtualizacao: moment(new Date()),
       };
 
       console.log("objPassageiro", objPassageiro);
@@ -129,7 +135,9 @@ export class PassageiroService {
           return {
             // eslint-disable-next-line no-underscore-dangle
             idUsuario: viagem._id,
-            dataReferencia: passageiro.tsCriacao,
+            // eslint-disable-next-line no-underscore-dangle
+            idPassageiro: passageiro._id,
+            dataReferencia: passageiro.dataCriacao,
             destino: viagem.estadoDestino,
             preco: viagem.preco,
           };
@@ -159,6 +167,80 @@ export class PassageiroService {
         `);
 
         throw new ErroSQL(...ERRO_SQL_AO_BUSCAR_DADOS_DA_VIAGEM_COM_O_USUARIO);
+      }
+    }
+
+    public async desativar(body: IInputDesativarViagem): Promise<IPassageiro | null> {
+      logger.debug("Entrando no método 'desativar'...");
+
+      const resultadoValidacao = this.serviceValidator.validarDesativarViagem(body);
+      retornarErroValidacao(resultadoValidacao, ERRO_NEGOCIAL_NA_VALIDACAO);
+      logger.debug("Finalizando o 'resultadoValidacao'...");
+
+      logger.debug("Entrando no método 'verificarExitenciaPassageiro'...");
+      await this.verificarExitenciaPassageiro(body);
+      logger.debug("Finalizando o 'verificarExitenciaPassageiro'...");
+
+      logger.debug("Entrando no método 'desativarViagemVinculadoAoPassageiro'...");
+      return this.desativarViagemVinculadoAoPassageiro(body);
+    }
+
+    public async verificarExitenciaPassageiro(body: IInputDesativarViagem): Promise<IPassageiro> {
+      try {
+        logger.info(`Verificando a exitência do passageiro '${body.idPassageiro}', na base de dados...`);
+
+        const passageiro: IPassageiro | null = await Passageiro.findOne(
+          {
+            _id: body.idPassageiro,
+          },
+        );
+
+        if (passageiro) { return passageiro; }
+
+        throw new ErroSQL(...ERRO_SQL_AO_BUSCAR_PASSAGEIRO);
+      } catch (error) {
+        logger.error(`
+          ERRO no MS "${environment.app.name}", método "verificarExitenciaPassageiro".
+          <'ERRO NEGOCIAL'>
+            message:  Não foi possível encontrar o passageiro, na base de dados...
+          Parâmetros da requisição:
+            ID: ${body.idPassageiro},
+        `);
+
+        throw new ErroSQL(...ERRO_SQL_AO_BUSCAR_PASSAGEIRO);
+      }
+    }
+
+    public async desativarViagemVinculadoAoPassageiro(body: IInputDesativarViagem): Promise<IPassageiro | null> {
+      try {
+        logger.info(`Desativando a viagem do passageiro: ${body.idPassageiro}...`);
+
+        const desativar: IPassageiro | null = await Passageiro.findOneAndUpdate(
+          {
+            _id: body.idPassageiro,
+          },
+          {
+            estado: EstadoViagemEnum.SUSPENSO,
+            viagemCancelada: true,
+            dataUltimaAtualizacao: moment(new Date()),
+          },
+          { upsert: true },
+          (error, passageiro: IPassageiro | null) => passageiro,
+        ).clone();
+
+        if (desativar) { return desativar; }
+
+        throw new ErroSQL(...ERRO_SQL_DESABILITAR_OS_DADOS_DO_PASSAGEIRO_DA_VIAGEM);
+      } catch (error) {
+        logger.error(`
+          ERRO no MS "${environment.app.name}", método "desativarViagemVinculadoAoPassageiro".
+          <'ERRO NEGOCIAL'>
+            message:  Não foi possível desativar a viagem vinculada ao passageiro os dados, na base de dados...
+          Parâmetros da requisição:
+            ID: ${body.idPassageiro},
+        `);
+
+        throw new ErroSQL(...ERRO_SQL_DESABILITAR_OS_DADOS_DO_PASSAGEIRO_DA_VIAGEM);
       }
     }
 }
