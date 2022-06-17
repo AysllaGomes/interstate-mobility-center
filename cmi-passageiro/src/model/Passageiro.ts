@@ -10,7 +10,7 @@ export interface IPassageiro extends Document {
     viagemCancelada: boolean;
     estado: EstadoViagemEnum;
     usuarioPassageiro: boolean;
-    listaPassageiro: Array<IListaPassageiros>;
+    listaPassageiros: Array<IListaPassageiros>;
     dadosPagamento: IDadosPagamento;
     dataCriacao: string;
     dataUltimaAtualizacao: Date;
@@ -87,7 +87,7 @@ const PassageiroSchema: Schema = new Schema({
     type: Boolean,
     required: true,
   },
-  listaPassageiro: {
+  listaPassageiros: {
     type: Array,
     required: false,
   },

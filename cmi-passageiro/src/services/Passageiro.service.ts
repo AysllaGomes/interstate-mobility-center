@@ -20,6 +20,7 @@ import { retornarErroValidacao } from "../util/utils";
 import Passageiro, { IPassageiro } from "../model/Passageiro";
 import { ServiceValidator } from "../validators/Service.validator";
 import { EstadoViagemEnum } from "../model/enums/EstadoViagem.enum";
+import { IListaPassageiros } from "../model/interfaces/ListaPassageiros";
 import { IVinculoPassageiro } from "../model/interfaces/VinculoPassageiro";
 import { IInputDesativarViagem } from "../model/interfaces/InputDesativarViagem";
 import { IOutputDetalharViagem } from "../model/interfaces/OutputDetalharViagem";
@@ -30,27 +31,29 @@ import { IOutputListarViagensVinculadasAoUsario } from "../model/interfaces/Outp
 export class PassageiroService {
     private serviceValidator = new ServiceValidator();
 
-    public async vinculoPassageiro(body: IVinculoPassageiro): Promise<any> {
+    public async vinculoPassageiro(body: IVinculoPassageiro): Promise<IPassageiro> {
       logger.debug("Entrando no método 'vinculoPassageiro'...");
 
       const resultadoValidacao = this.serviceValidator.validarVinculoPassageiro(body);
       retornarErroValidacao(resultadoValidacao, ERRO_NEGOCIAL_NA_VALIDACAO);
-
       logger.debug("Finalizando o 'resultadoValidacao'...");
 
+      logger.debug("Entrando no método 'formatarPassageiro'...");
       const vinculoPassageiro = this.formatarPassageiro(body);
+      logger.debug("Finalizando o 'formatarPassageiro'...");
 
+      logger.debug("Entrando no método 'salvarPassageiro'...");
       return this.salvarPassageiro(vinculoPassageiro);
     }
 
     public formatarPassageiro(body: IVinculoPassageiro): any {
-      // const arrayPassageiro: Array<IListaPassageiros> = [];
+      const listaPassageiros: Array<IListaPassageiros> = [];
 
-      const objPassageiro = {
+      let objPassageiro = {
         idUsuario: new Types.ObjectId(body.idUsuario),
         idViagem: new Types.ObjectId(body.idViagem),
         usuarioPassageiro: body.usuarioPassageiro,
-        listaPassageiro: [],
+        listaPassageiros,
         viagemCancelada: false,
         estado: EstadoViagemEnum.VIGENTE,
         dadosPagamento: body.dadosPagamento,
@@ -58,41 +61,21 @@ export class PassageiroService {
         dataUltimaAtualizacao: moment(new Date()),
       };
 
-      console.log("objPassageiro", objPassageiro);
+      if (body.listaPassageiros?.length > 0) {
+        const passageirosAdicionais = body.listaPassageiros.map((dados: IListaPassageiros) => ({
+          nome: dados.nome,
+          cpf: dados.cpf,
+          dataDeNascimento: dados.dataDeNascimento,
+          numeroTelefoneCelular: dados.numeroTelefoneCelular,
+        }));
+
+        objPassageiro = {
+          ...objPassageiro,
+          listaPassageiros: passageirosAdicionais,
+        };
+      }
 
       return objPassageiro;
-
-      //  listaPassageiro: [
-      //    {
-      //      nome: dados.nome,
-      //      cpf: dados.cpf,
-      //      dataDeNascimento: dados.dataDeNascimento,
-      //      numeroTelefoneCelular: dados.numeroTelefoneCelular,
-      //    },
-      //  ],
-
-      // if (body.listaPassageiro.length > 0) {
-      //   // const ultimoPassageiroDoArray: IPassageiro = body.listaPassageiro[body.listaPassageiro.length - 1];
-      //
-      //   arrayPassageiro.push(
-      //     ...body.listaPassageiro,
-      //       objPassageiro,
-      //   );
-      //
-      //   console.log("arrayPassageiro", arrayPassageiro);
-      //
-      //   const teste = body.listaPassageiro.map((dados: IListaPassageiros) => ({
-      //     idUsuario: body.idUsuario,
-      //     idViagem: body.idViagem,
-      //     usuarioPassageiro: body.usuarioPassageiro,
-      //     dadosPagamento: body.dadosPagamento,
-      //     tsCriacao: new Date(),
-      //   }));
-      //
-      //   console.log("teste", teste);
-      //
-      //   return teste;
-      // }
     }
 
     public async salvarPassageiro(passageiro: IPassageiro): Promise<IPassageiro> {
