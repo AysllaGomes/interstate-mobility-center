@@ -3,6 +3,7 @@ import { IPassageiro } from "../model/Passageiro";
 import { PassageiroService } from "../services/Passageiro.service";
 import { IVinculoPassageiro } from "../model/interfaces/VinculoPassageiro";
 import { IInputDetalhamentoViagem } from "../model/interfaces/InputDetalhamentoViagem";
+import { IOutputListarViagensVinculadasAoUsario } from "../model/interfaces/OutputListarViagensVinculadasAoUsario";
 
 @traceable()
 export class PassageiroController {
@@ -18,7 +19,7 @@ export class PassageiroController {
     return this.service.vinculoPassageiro(body);
   }
 
-  public async listarViagensVinculadoAoUsuario(body: IInputDetalhamentoViagem): Promise<IPassageiro | undefined> {
+  public async listarViagensVinculadoAoUsuario(body: IInputDetalhamentoViagem): Promise<Array<IOutputListarViagensVinculadasAoUsario>> {
     return this.service.listarViagensVinculadoAoUsuario(body);
   }
 }

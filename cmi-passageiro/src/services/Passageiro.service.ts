@@ -19,6 +19,7 @@ import { ServiceValidator } from "../validators/Service.validator";
 import { IListaPassageiros } from "../model/interfaces/ListaPassageiros";
 import { IVinculoPassageiro } from "../model/interfaces/VinculoPassageiro";
 import { IInputDetalhamentoViagem } from "../model/interfaces/InputDetalhamentoViagem";
+import { IOutputListarViagensVinculadasAoUsario } from "../model/interfaces/OutputListarViagensVinculadasAoUsario";
 
 export class PassageiroService {
     private serviceValidator = new ServiceValidator();
@@ -104,7 +105,7 @@ export class PassageiroService {
       }
     }
 
-    public async listarViagensVinculadoAoUsuario(body: IInputDetalhamentoViagem): Promise<any> {
+    public async listarViagensVinculadoAoUsuario(body: IInputDetalhamentoViagem): Promise<Array<IOutputListarViagensVinculadasAoUsario>> {
       logger.debug("Entrando no método 'listarViagensVinculadoAoUsuario'...");
 
       const resultadoValidacao = this.serviceValidator.validarDetalhamentoViagem(body);
