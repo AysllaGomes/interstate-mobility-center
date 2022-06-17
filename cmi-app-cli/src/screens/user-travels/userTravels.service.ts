@@ -1,17 +1,18 @@
 import axios from "axios";
 import {GetUsuarioLogadoData} from "../../../assets/DadosUsuarioLogado/DadosUsuarioLogado";
 
-const UserTravels = async () => {
-    const urlBase = "http://192.168.0.110:3002/"
-
+const UserTravelsService = async (values) => {
+    const urlBase = "http://192.168.0.110:3007/"
     try {
-        const values = await GetUsuarioLogadoData()
-        const res = await axios.get(urlBase+'viagem/listar', {})
-        console.log('tudo Certooo', res.status);
+        const res = await axios.get(urlBase+'passageiro/listarViagensVinculadoAoUsuario', {
+            headers:{"id-usuario": values.idUsuario}
+        })
+        console.log('Lista de viagens ok', res.status);
+
 
         return res
     } catch (error) {
         return error.response
     }
 }
-export default UserTravels;
+export default UserTravelsService;

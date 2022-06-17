@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet, Button} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import firebase from "../firebase/firebaseconfig"
@@ -13,9 +13,13 @@ import {
     DrawerItem,
     DrawerItemList
 } from '@react-navigation/drawer'
+import {GetUsuarioLogadoData} from "../../assets/DadosUsuarioLogado/DadosUsuarioLogado";
+import UserTravelsService from "../screens/user-travels/userTravels.service";
 
 
 function DrawerContent(props) {
+    const [listaViagens, setListaViagens] = useState();
+
 
     const signOutUser = async () => {
         try {
@@ -39,8 +43,17 @@ function DrawerContent(props) {
             ToastMessage(e)
         }
     }
-    const goToTermoDeUso = () => {
-        props.navigation.navigate("UserTravels")
+    const goToTermoDeUso = async () => {
+
+            try {
+                const values = await GetUsuarioLogadoData()
+                const travelList = await UserTravelsService(values)
+                setListaViagens(travelList.data);
+                props.navigation.navigate("UserTravels", {"listaViagensUsuario": listaViagens})
+
+            }catch (e) {
+                console.error("Erro ao buscar as viagens do usuário!", e)
+            }
 
     }
 

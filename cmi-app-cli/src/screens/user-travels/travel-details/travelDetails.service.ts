@@ -1,15 +1,14 @@
 import axios from "axios";
 
-const BuscarDetalhesViagem = async (idViagem, idUsuario) => {
+const BuscarDetalhesViagem = async (idPassageiro) => {
     const urlBase = "http://192.168.0.110:3007"
     try {
-        const res = await axios.get(urlBase+'/passageiro/detalhamentoViagem', {
+        const res = await axios.get(urlBase+'/passageiro/detalharViagem', {
             headers: {
-                "id-usuario": idUsuario,
-                "id-viagem": idViagem
+                "id-passageiro": idPassageiro
             }
         })
-        console.log('tudo Certooo', res.status);
+        console.log('tudo Certooo com os detalhes', res.status);
 
         return res
     } catch (error) {

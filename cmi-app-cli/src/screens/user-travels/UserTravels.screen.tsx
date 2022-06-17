@@ -9,27 +9,37 @@ import {ScrollView} from "react-native-virtualized-view";
 import moment from "moment";
 import axios from "axios";
 import UserTravels from "./userTravels.service";
+import BuscarDetalhesViagem from "./travel-details/travelDetails.service";
 
 interface ScreenProps {
     navigation: NativeStackNavigatorProps,
-    route: NativeStackNavigatorProps
+    route: any
 }
+
 
 const TravelList = ({data, navigation}) => {
 
-    const toTravelPackage = () => MergeUsuarioLogadoData({idViagem: data._id}).then(
-        navigation.navigate("TravelDetails", {data: data})
-    )
+    const toTravelPackage = async () => {
+        try {
+            const dadosViagemDoUsuario = await BuscarDetalhesViagem(data.idPassageiro)
+
+            console.log('dadosViagemDoUsuario', dadosViagemDoUsuario.data);
+
+            navigation.navigate("TravelDetails", {"dadosDaViagem": dadosViagemDoUsuario.data})
+
+        }catch (error){
+            console.error("Erro busca detalhes viagem do usuario", error)
+    }
+}
     return (
         <TouchableOpacity onPress={() => toTravelPackage()}>
             <View style={indexStyle.packagesContent}>
-                <Image style={indexStyle.images} source={{uri: data.image}}/>
+                <Image style={indexStyle.images} source={{uri: data.imagem}}/>
                 <View style={indexStyle.packagesContentInfo}>
-                    <Text style={indexStyle.packagesText}>Origem: {data.estadoOrigem}</Text>
-                    <Text style={indexStyle.packagesText}>Destino: {data.estadoDestino}</Text>
+                    <Text style={indexStyle.packagesText}>Destino: {data.destino}</Text>
                 </View>
                 <View style={indexStyle.packagesContentInfo}>
-                    <Text style={indexStyle.packagesText}>Período: {data.duracao} dias</Text>
+                    <Text style={indexStyle.packagesText}>Período: {data.dataReferencia}</Text>
                     <Text style={indexStyle.packagesText}>R$ {data.preco},00</Text>
                 </View>
             </View>
@@ -40,31 +50,17 @@ const TravelList = ({data, navigation}) => {
 const UserTravelsScreen = (props: ScreenProps) => {
     const [minhaLista, setMinhaLista] = useState();
     const [isLoaded, setIsLoaded] = useState(true);
-
-    const listaPacotes = async () => {
-
-        try {
-            let res = await UserTravels()
-            setMinhaLista(res.data)
-            setIsLoaded(false)
-        } catch (error) {
-            return console.error('Erro carregar viagens!')
-        }
-    }
-    useEffect(() => {
-        listaPacotes().then(r => r);
-    }, [])
+    const listaViagensUsuario = props.route.params.listaViagensUsuario
 
     return (
-        <><HeaderComponent title="Minhas viagens" navigation={props.navigation}/><ScrollView>
-
-
-            <View>
+            <ScrollView>
+                <HeaderComponent title="Minhas viagens" navigation={props.navigation}/>
+                <View>
                 <Text>My travels</Text>
                 <View style={indexStyle.flatlist}>
                     <FlatList
                         listKey="key1"
-                        data={minhaLista}
+                        data={listaViagensUsuario}
                         renderItem={({item}) => (
                             <TravelList navigation={props.navigation} data={item}/>
 
@@ -73,7 +69,7 @@ const UserTravelsScreen = (props: ScreenProps) => {
                 </View>
             </View>
 
-        </ScrollView></>
+        </ScrollView>
     )
 }
 export default UserTravelsScreen;
