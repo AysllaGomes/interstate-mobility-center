@@ -6,6 +6,7 @@ import {Text} from "react-native-paper";
 import {theme} from '../../../App.style';
 import {packageStyle} from "../travelPackage/package.style";
 import {GetUsuarioLogadoData} from "../../../assets/DadosUsuarioLogado/DadosUsuarioLogado";
+import {registerStyle} from "../register/register.style";
 
 interface ScreenProps {
     navigation: NativeStackNavigatorProps,
@@ -29,6 +30,7 @@ const ResumoHeaderComponent = (props) => {
 const PurchaseDetailsScreen = (props: ScreenProps) => {
     const [dadosUsuario, setDadosUsuario] = useState({})
 
+
     const displayData = async ()=>{
         try{
             const dados = await GetUsuarioLogadoData()
@@ -48,6 +50,7 @@ const PurchaseDetailsScreen = (props: ScreenProps) => {
         displayData().then(r => setDadosUsuario(r))
     })
 
+
     const goHome = () => {
         props.navigation.navigate("Home")
     }
@@ -60,7 +63,28 @@ const PurchaseDetailsScreen = (props: ScreenProps) => {
                 <Text style={{fontFamily: theme.fontFamily.fontFamily, textAlign: "center", marginTop: 20, fontSize: 18}}>Compra realizada com sucesso :)</Text>
             </View>
             <Image style={packageStyle.images} source={{uri: dadosUsuario["ImagemPacoteViagemEscolhido"]}}/>
-            <Button onPress={goHome} mode="contained" >Home</Button>
+
+            <Text>{}</Text>
+
+
+            <View style={{
+            }}>
+                <View style={{
+                    alignSelf: 'flex-end',
+                    position: 'absolute',
+                    bottom: -370,
+                    left: 10,
+                    width: 370,
+                    flex: 1,
+
+                    marginRight: 22
+                }}>
+                    <Button onPress={goHome} mode="contained" style={registerStyle.button} >Home</Button>
+                </View>
+
+            </View>
+
+
 
 
         </SafeAreaView>

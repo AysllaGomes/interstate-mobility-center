@@ -13,6 +13,7 @@ import ResumoCompra from '../screens/resume-purchase/PurchaseDetails.screen';
 import UserTravelsScreen from '../screens/user-travels/UserTravels.screen';
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import DrawerContent from "../drawer/DrowerContent"
+import TravelDetailsScreen from "../screens/user-travels/travel-details/TravelDetails.screen";
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +38,7 @@ const AppNavigator = () => (
             <Stack.Screen name="ResetPassword" component={ResetPasswordScreen}/>
             <Stack.Screen name="Register" component={RegisterScreen}/>
             <Stack.Screen name="Package" component={TravelPackageScreen}  />
+            <Stack.Screen name="TravelDetails" component={TravelDetailsScreen}  />
             <Stack.Screen name="TravelInfo" component={TravelPackageInfoScreen}/>
             <Stack.Screen name="Payment" component={PaymentScreen}/>
             <Stack.Screen name="ResumoCompra" component={ResumoCompra}/>

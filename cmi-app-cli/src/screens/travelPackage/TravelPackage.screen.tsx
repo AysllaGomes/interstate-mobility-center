@@ -27,7 +27,7 @@ const TravelPackageScreen = (props: ScreenProps) => {
             <HeaderComponent title="Resumo do Pacote" navigation={props.navigation}/>
             <Image style={packageStyle.images} source={{uri: data.image}}/>
             <View style={packageStyle.content}>
-                <Text style={[packageStyle.text, packageStyle.textTitle]}>{data.titulo}</Text>
+                <Text style={[packageStyle.text, packageStyle.textTitle]}>{data.estadoDestino}</Text>
                 <View style={packageStyle.titleAnPricePackageContent}>
                     <View style={packageStyle.priceContent}>
                         <Text style={packageStyle.text}>Preço final</Text>

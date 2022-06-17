@@ -64,7 +64,7 @@ const LoginScreen = (props: LoginScreenProps) => {
             }
             //Guarda em memória - assets/
 
-            DadosUsuarioLogado({"idUsuario": idUsuario})
+            await DadosUsuarioLogado({"idUsuario": idUsuario})
 
         } catch (error) {
             // Só esse switch maravilhoso porque o Firebase não retorna erro como numérico kk :)

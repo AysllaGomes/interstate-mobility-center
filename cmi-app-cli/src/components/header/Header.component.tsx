@@ -9,6 +9,7 @@ interface HeaderComponentParams {
 export const HeaderComponent = (props: HeaderComponentParams) => {
     const signUp = () => props.navigation.goBack()
     return (
+
         <Appbar>
             <Appbar.BackAction onPress={() => {
                 signUp()
