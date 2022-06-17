@@ -9,6 +9,7 @@ import {
   ERRO_SQL_AO_SALVAR_PASSAGEIRO,
   ERRO_SQL_AO_BUSCAR_DADOS_DA_VIAGEM_COM_O_USUARIO,
   ERRO_SQL_DESABILITAR_OS_DADOS_DO_PASSAGEIRO_DA_VIAGEM,
+  ERRO_SQL_AO_VERIFICAR_SE_O_CONTRATO_TEM_CONDICOES_PARA_DESATIVAR_MODO_SUSPENSO,
 } from "../errors/erro.sql";
 import { logger } from "../util/logger";
 import { IViagem } from "../model/Viagem";
@@ -208,6 +209,10 @@ export class PassageiroService {
       await this.verificarExitenciaPassageiro(body);
       logger.debug("Finalizando o 'verificarExitenciaPassageiro'...");
 
+      logger.debug("Entrando no método 'verificarPassageiroParaDesabilitarViagemEstadoSuspenso'...");
+      await this.verificarPassageiroParaDesabilitarViagemEstadoSuspenso(body.idPassageiro);
+      logger.debug("Finalizando o 'verificarPassageiroParaDesabilitarViagemEstadoSuspenso'...");
+
       logger.debug("Entrando no método 'desativarViagemVinculadoAoPassageiro'...");
       return this.desativarViagemVinculadoAoPassageiro(body);
     }
@@ -224,7 +229,7 @@ export class PassageiroService {
 
         if (passageiro) { return passageiro; }
 
-        throw new ErroSQL(...ERRO_SQL_AO_BUSCAR_PASSAGEIRO);
+        throw new ErroSQL(...ERRO_SQL_AO_BUSCAR_PASSAGEIRO).formatMessage(body.idPassageiro);
       } catch (error) {
         logger.error(`
           ERRO no MS "${environment.app.name}", método "verificarExitenciaPassageiro".
@@ -234,7 +239,42 @@ export class PassageiroService {
             ID: ${body.idPassageiro},
         `);
 
-        throw new ErroSQL(...ERRO_SQL_AO_BUSCAR_PASSAGEIRO);
+        throw new ErroSQL(...ERRO_SQL_AO_BUSCAR_PASSAGEIRO).formatMessage(body.idPassageiro);
+      }
+    }
+
+    public async verificarPassageiroParaDesabilitarViagemEstadoSuspenso(idPassageiro: string): Promise<IPassageiro> {
+      try {
+        logger.debug(`Verificando dados do passageiro: ${idPassageiro}, se está 'Suspenso' na base de dados...`);
+
+        const passageiro: IPassageiro | null = await Passageiro
+          .findOne({
+            _id: idPassageiro,
+            $nor: [
+              { estado: EstadoViagemEnum.SUSPENSO },
+            ],
+          });
+
+        if (passageiro) { return passageiro; }
+
+        throw new ErroSQL(...ERRO_SQL_AO_VERIFICAR_SE_O_CONTRATO_TEM_CONDICOES_PARA_DESATIVAR_MODO_SUSPENSO).formatMessage(idPassageiro);
+      } catch (error) {
+        const erroFormatado = (`
+        ERRO no MS "${environment.app.name}", método "verificarPassageiroParaDesabilitarViagemEstadoSuspenso".
+        <'ERRO'>
+          message: O contrato: '${idPassageiro}, não tem condições apropriadas para se atualizar na base de dados...
+          Favor verificar o estado que o contrato se encontra, para tratar as devidas providências.
+        Parâmetros da requisição:
+          ID Passageiro: ${idPassageiro}
+        Resposta:
+        <'ERRO'>
+          code: ${error.code}
+          message: ${error.message}.
+      `);
+
+        logger.error(erroFormatado);
+
+        throw new ErroSQL(...ERRO_SQL_AO_VERIFICAR_SE_O_CONTRATO_TEM_CONDICOES_PARA_DESATIVAR_MODO_SUSPENSO).formatMessage(idPassageiro);
       }
     }
 

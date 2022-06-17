@@ -64,6 +64,39 @@ export class PassageiroApi extends ApiRouter {
         } catch (error) { next(error); }
       });
 
+      /**
+       * @swagger
+       *   /passageiro/desativar:
+       *   put:
+       *     description: Busca um passageiro e desativa a viagem, caso se possível
+       *     summary: Realiza a busca de um passageiro e realiza a desativação da viagem, caso seja possível
+       *     parameters:
+       *      - in: body
+       *        name: IInputDesativarViagem
+       *        description: Objeto do tipo IInputDesativarViagem
+       *        required: true
+       *        schema:
+       *          $ref: '#/definitions/IInputDesativarViagem'
+       *     tags:
+       *       - Passageiro
+       *     responses:
+       *       200:
+       *         description: Retorna os dados do passageiro.
+       *         schema:
+       *             $ref: '#/definitions/IOutputDesativarViagem'
+       *       422-1:
+       *         description: Erro Negocial
+       *         schema:
+       *            $ref: '#/definitions/Erro_SQL_ao_Desativar_Passageiro'
+       *       422-2:
+       *         description: Erro SQL não encontrando o passageiro informado.
+       *         schema:
+       *            $ref: '#/definitions/Erro_SQL_ao_Verificar_se_Passageiro_Existe_na_base_de_dados'
+       *       422-3:
+       *         description: Erro SQL estado Suspenso.
+       *         schema:
+       *            $ref: '#/definitions/Erro_SQL_ao_Verificar_se_Passageiro_tem_Condicoes_para_Desativar'
+       */
       server.put(`${this.path}/desativar`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
         try {
           return response.json(await this.passageiroController.desativar(request.body));
