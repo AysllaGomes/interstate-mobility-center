@@ -1,19 +1,14 @@
 import React from 'react';
-import {SafeAreaView, ScrollView, View} from 'react-native';
-import {Button, TextInput} from "react-native-paper";
+import {SafeAreaView, View} from 'react-native';
 import {NativeStackNavigatorProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {HeaderComponent} from '../components/header/Header.component';
+import {HeaderComponent} from '../../components/header/Header.component';
 import {Text} from "react-native-paper";
-import {Formik} from 'formik';
-import {theme} from '../../App.style';
-import * as Animatable from 'react-native-animatable';
 
 interface ScreenProps {
     navigation: NativeStackNavigatorProps,
-    page: string,
     route: NativeStackNavigatorProps
 }
-const UserTravels = (props: ScreenProps) => {
+const UserTravelsScreen = (props: ScreenProps) => {
 
     return (
         <SafeAreaView>
@@ -24,4 +19,4 @@ const UserTravels = (props: ScreenProps) => {
         </SafeAreaView>
     )
 }
-export default UserTravels;
+export default UserTravelsScreen;

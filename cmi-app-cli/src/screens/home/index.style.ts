@@ -1,16 +1,20 @@
 import {StatusBar, StyleSheet} from "react-native";
-import {theme} from "../../App.style";
-import {red50} from "react-native-paper/lib/typescript/styles/colors";
+import {theme} from "../../../App.style";
+import {black, red50} from "react-native-paper/lib/typescript/styles/colors";
 
 export const indexStyle = StyleSheet.create({
 
     content: {
         // View principal
+
     },
-    filters: {
+    filtersContent: {
+        marginLeft: 5,
+        marginRight: 5,
         marginBottom: 10,
-        marginLeft: 10,
-        marginRight: 10
+    },
+     botaoBuscaLivre: {
+
     },
     packagesContent: {
         marginBottom: 10,
@@ -33,6 +37,7 @@ export const indexStyle = StyleSheet.create({
         color: "white",
         borderRadius: 4,
         backgroundColor: theme.colors.primary,
+        marginBottom: 4
 
     },
     buttonsText: {
@@ -98,6 +103,12 @@ export const indexStyle = StyleSheet.create({
     },
     text: {
         fontFamily: theme.fontFamily.fontFamily,
+    },
+    loader: {
+        minHeight: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
     },
     flatlist: {
         marginBottom: 10

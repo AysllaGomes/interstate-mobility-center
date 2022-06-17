@@ -1,6 +1,8 @@
-import { AsyncStorage } from "react-native";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {replace} from "formik";
+import moment from "moment";
 // Async Storage, guardando dados do usuario no dispositivo
+
 export const DadosUsuarioLogado = async (value) => {
     try {
         const jsonValue = JSON.stringify(value)
@@ -11,15 +13,17 @@ export const DadosUsuarioLogado = async (value) => {
 }
 
 export const GetUsuarioLogadoData = async () => {
-        try {
-            const value = await AsyncStorage.getItem('@DadosUsuarioLogado_Key')
-            if(value !== null) {
-                // value previously stored
-            }
-            return Promise.resolve(value)
-        } catch(e) {
-            // error reading value
+    try {
+
+        const value = await AsyncStorage.getItem('@DadosUsuarioLogado_Key')
+        if(value !== null) {
+            // value previously stored
         }
+
+        return JSON.parse(value)
+    } catch(e) {
+        // error reading value
+    }
 }
 
 export const MergeUsuarioLogadoData = async (value) => {

@@ -1,34 +1,38 @@
-import React, {useEffect, useState} from 'react';
-import {SafeAreaView, View, Text, Animated, TouchableOpacity, Alert} from "react-native";
-import {Button, Card, TextInput} from "react-native-paper";
+import React, {useState} from 'react';
+import {SafeAreaView, View, Text} from "react-native";
+import {Button, Card} from "react-native-paper";
+import { TextInput } from 'react-native-paper';
 import {loginStyle} from "./login.style";
-import firebase from "../firebase/firebaseconfig";
+import firebase from "../../firebase/firebaseconfig";
 import {Formik} from 'formik';
 import {loginForm} from "./login.form";
 import {NativeStackNavigatorProps} from "react-native-screens/lib/typescript/native-stack/types";
 import axios from "axios";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {DadosUsuarioLogado} from '../../assets/DadosUsuarioLogado/DadosUsuarioLogado';
+import {DadosUsuarioLogado} from '../../../assets/DadosUsuarioLogado/DadosUsuarioLogado';
 import * as Animatable from 'react-native-animatable';
-import ToastMessage from "../components/Toast/ToastMessage"
+import ToastMessage from "../../components/Toast/ToastMessage"
 import {RootSiblingParent} from 'react-native-root-siblings';
-import {theme} from "../../App.style";
-import Toast from 'react-native-root-toast';
+import {theme} from "../../../App.style";
 
 interface LoginScreenProps {
     navigation: NativeStackNavigatorProps;
 }
 
-const Login = (props: LoginScreenProps) => {
+const LoginScreen = (props: LoginScreenProps) => {
     const register = () => props.navigation.navigate("Register")
     const resetPassword = () => props.navigation.navigate("ResetPassword")
     const [errorPassword, setErrorPassword] = useState("");
 
     // Consula se usuario possui termo de uso 
     const buscarIDUsuarioPorEmail = async (email: string) => {
-        const urlBase = "http://192.168.0.107:3001"
+        const urlBase = "http://192.168.0.110:3001"
+        const config = {
+            headers: {
+                email: email
+            }
+        }
         try {
-            let res = await axios.post(urlBase + "/usuario/detalhar", {"email": email})
+            let res = await axios.get(urlBase + "/usuario/detalhar", config)
             return res.data._id
         } catch (error) {
             return error.response
@@ -36,7 +40,7 @@ const Login = (props: LoginScreenProps) => {
     }
 
     const verificaTermoDeUso = async (id) => {
-        const urlBase = "http://192.168.0.107:3001"
+        const urlBase = "http://192.168.0.110:3008"
         try {
             let res = await axios.post(urlBase + "/usuario/consultaAssinaturaTermoUsuario", {"idUsuario": id})
             return res.data.assinado;
@@ -47,15 +51,21 @@ const Login = (props: LoginScreenProps) => {
     // Consula se usuario possui termo de uso -Fim
 
     const LoginFirebase = async (email: string, password: string) => {
+
         try {
             await firebase.auth().signInWithEmailAndPassword(email, password)
+
             let idUsuario = await buscarIDUsuarioPorEmail(email)
+
             let termoAssinado = await verificaTermoDeUso(idUsuario)
+
             {
                 (termoAssinado === false) ? props.navigation.navigate("TermoUso", {emailUsuario: email}) : props.navigation.navigate("Home", {emailUsuario: email})
             }
             //Guarda em memória - assets/
-            DadosUsuarioLogado({email: email, idUsuario: idUsuario})
+
+            DadosUsuarioLogado({"idUsuario": idUsuario})
+
         } catch (error) {
             // Só esse switch maravilhoso porque o Firebase não retorna erro como numérico kk :)
             let errorMessage = "Erro"
@@ -177,4 +187,4 @@ const Login = (props: LoginScreenProps) => {
         </RootSiblingParent>
     );
 }
-export default Login;
+export default LoginScreen;
