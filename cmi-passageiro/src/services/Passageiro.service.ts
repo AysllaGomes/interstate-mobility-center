@@ -175,6 +175,7 @@ export class PassageiroService {
 
     public formatarRetornoDetalharViagem(passageiro: IPassageiro, viagem: IViagem): IOutputDetalharViagem {
       return {
+        imagem: viagem.image,
         preco: viagem.preco,
         destino: viagem.estadoDestino,
         dataRefencia: passageiro.dataCriacao,
