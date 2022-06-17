@@ -2,6 +2,7 @@ import express from "express";
 import { ApiRouter } from "./api.router";
 import { ViagemController } from "../controllers/Viagem.controller";
 import { IInputListarViagem } from "../model/interfaces/InputListarViagem";
+import { ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS, ErroNegocial } from "../errors/erro.negocial";
 
 export class ViagemApi extends ApiRouter {
   private readonly path: string;
@@ -29,6 +30,16 @@ export class ViagemApi extends ApiRouter {
         };
 
         return response.json(await this.controller.listar(body));
+      } catch (error) { next(error); }
+    });
+
+    server.get(`${this.path}/id/:idViagem`, async (request: express.Request, response: express.Response, next: express.NextFunction) => {
+      try {
+        if (request.params.idViagem) {
+          return response.json(await this.controller.retornaDadosViagem(request.params.idViagem.toString()));
+        }
+
+        next(new ErroNegocial(...ERRO_NEGOCIAL_PROPRIEDADES_NAO_INFORMADAS).formatMessage("idViagem"));
       } catch (error) { next(error); }
     });
   }

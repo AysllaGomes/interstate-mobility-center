@@ -1,4 +1,5 @@
 import { setTagSpan, traceable } from "jaeger-tracer-decorator";
+import { IViagem } from "../model/Viagem";
 import { ViagemService } from "../services/Viagem.service";
 import { IInputListarViagem } from "../model/interfaces/InputListarViagem";
 import { IOutputListarViagem } from "../model/interfaces/OutputListarViagem";
@@ -15,5 +16,9 @@ export class ViagemController {
 
   public async listar(body: IInputListarViagem): Promise<Array<IOutputListarViagem>> {
     return this.service.listar(body);
+  }
+
+  public async retornaDadosViagem(idViagem: string): Promise<IViagem> {
+    return this.service.retornaDadosViagem(idViagem);
   }
 }

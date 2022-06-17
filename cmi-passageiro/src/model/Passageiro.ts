@@ -10,7 +10,7 @@ export interface IPassageiro extends Document {
     usuarioPassageiro: boolean;
     listaPassageiro: Array<IListaPassageiros>;
     dadosPagamento: IDadosPagamento;
-    tsCriacao: Date;
+    tsCriacao: string;
 }
 
 /**
@@ -58,7 +58,7 @@ export interface IPassageiro extends Document {
  *         cpf: "99999999999",
  *         dataDeNascimento: "01/01/2000",
  *         numeroTelefoneCelular: "99999999999",
- *         tsCriacao: "2021-11-15T21:57:49.871Z",
+ *         tsCriacao: "2021-11-15",
  *         __v: 0
  *      }
  */
@@ -89,8 +89,8 @@ const PassageiroSchema: Schema = new Schema({
     required: false,
   },
   tsCriacao: {
-    type: Date,
-    required: false,
+    type: String,
+    required: true,
   },
 });
 

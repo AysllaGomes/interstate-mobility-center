@@ -1,10 +1,12 @@
 import { Types } from "mongoose";
+import moment from "moment";
 import {
   ERRO_NEGOCIAL_NA_VALIDACAO,
 } from "../errors/erro.negocial";
 import {
   ErroSQL,
-  ERRO_SQL_AO_SALVAR_PASSAGEIRO, ERRO_SQL_AO_BUSCAR_DADOS_DA_VIAGEM_COM_O_USUARIO,
+  ERRO_SQL_AO_SALVAR_PASSAGEIRO,
+  ERRO_SQL_AO_BUSCAR_DADOS_DA_VIAGEM_COM_O_USUARIO,
 } from "../errors/erro.sql";
 import { logger } from "../util/logger";
 import { IViagem } from "../model/Viagem";
@@ -44,7 +46,7 @@ export class PassageiroService {
         listaPassageiro: [],
         viagemCancelada: false,
         dadosPagamento: body.dadosPagamento,
-        tsCriacao: new Date(),
+        tsCriacao: moment(new Date()).format("DD/MM/YYYY"),
       };
 
       console.log("objPassageiro", objPassageiro);
@@ -102,58 +104,56 @@ export class PassageiroService {
       }
     }
 
-    public async detalhamentoViagem(body: IInputDetalhamentoViagem): Promise<any> {
-      logger.debug("Entrando no método 'detalhamentoViagem'...");
+    public async listarViagensVinculadoAoUsuario(body: IInputDetalhamentoViagem): Promise<any> {
+      logger.debug("Entrando no método 'listarViagensVinculadoAoUsuario'...");
 
       const resultadoValidacao = this.serviceValidator.validarDetalhamentoViagem(body);
       retornarErroValidacao(resultadoValidacao, ERRO_NEGOCIAL_NA_VALIDACAO);
       logger.debug("Finalizando o 'resultadoValidacao'...");
 
       logger.debug("Entrando no método 'retornarDadosUsuario'...");
-      const usuario = await UsuarioService.retornarDadosUsuario(body.idUsuario);
+      await UsuarioService.retornarDadosUsuario(body.idUsuario);
       logger.debug("Finalizando o 'retornarDadosUsuario'...");
 
-      console.log("usuario", usuario);
+      logger.debug("Entrando no método 'retornarDadosVinculoPassageiroEViagem'...");
+      const vinculoDadosPassageirosEViagem: Array<IPassageiro> = await this.retornarDadosVinculoPassageiroEViagem(body);
+      logger.debug("Finalizando o 'retornarDadosVinculoPassageiroEViagem'...");
 
-      // logger.debug("Entrando no método 'buscarViagem'...");
-      // const viagem: IViagem = await ViagemService.buscarViagem(body.idViagem);
-      // logger.debug("Finalizando o 'buscarViagem'...");
-      //
-      // console.log("viagem", viagem);
+      return Promise.all(
+        vinculoDadosPassageirosEViagem.map(async (passageiro) => {
+          logger.debug("Entrando no método 'retornaDadosViagem'...");
+          const viagem: IViagem = await ViagemService.retornaDadosViagem(passageiro.idViagem);
+          logger.debug("Finalizando o 'retornaDadosViagem'...");
 
-      logger.debug("Entrando no método 'retornarDadosVinculoViagem'...");
-      const passageiro: IPassageiro = await this.retornarDadosVinculoViagem(body);
-      logger.debug("Finalizando o 'retornarDadosVinculoViagem'...");
-
-      console.log("passageiro", passageiro);
-
-      // throw new ErroSQL(...ERRO_SQL_EMAIL_INFORMADO_DO_USUARIO_NAO_ENCONTRADO);
+          return {
+            dataReferencia: passageiro.tsCriacao,
+            destino: viagem.estadoDestino,
+            preco: viagem.preco,
+          };
+        }),
+      );
     }
 
-    public async retornarDadosVinculoViagem(body: IInputDetalhamentoViagem): Promise<IPassageiro> {
+    public async retornarDadosVinculoPassageiroEViagem(body: IInputDetalhamentoViagem): Promise<Array<IPassageiro>> {
       try {
-        logger.info(`Realizando consulta para pegar dados de vinculo dos passageiros com a viagem: ${body.idUsuario}...`);
+        logger.info(`Realizando consulta para pegar dados de vinculo dos passageiros: ${body.idUsuario}...`);
 
-        const passageiro = await Passageiro.findOne({
+        const passageiro: Array<IPassageiro> | null = await Passageiro.find({
           idUsuario: new Types.ObjectId(body.idUsuario),
-          idViagem: new Types.ObjectId(body.idViagem),
-          // tsCriacao: new Date(body.dataRefencia),
         });
 
         if (passageiro) return passageiro;
 
-        logger.debug(`Não foi encontrado a viagem: '${body.idViagem}', vinculada ao seguinte usuário: '${body.idUsuario}', na base de dados...`);
+        logger.debug(`Não foi encontrado o vinculo ao seguinte usuário: '${body.idUsuario}', na base de dados...`);
         throw new ErroSQL(...ERRO_SQL_AO_BUSCAR_DADOS_DA_VIAGEM_COM_O_USUARIO);
       } catch (error) {
         logger.error(`
-        ERRO no MS "${environment.app.name}", método "retornarDadosVinculoViagem".
-        <'ERRO NEGOCIAL'>
-          message:  Não foi possível encontrar os dados, na base de dados...
-        Parâmetros da requisição:
-          ID USUÁRIO: ${body.idUsuario},
-          ID VIAGEM: ${body.idViagem},
-          DATA REFERÊNCIA: ${body.dataRefencia},
-      `);
+          ERRO no MS "${environment.app.name}", método "retornarDadosVinculoViagem".
+          <'ERRO NEGOCIAL'>
+            message:  Não foi possível encontrar os dados, na base de dados...
+          Parâmetros da requisição:
+            ID USUÁRIO: ${body.idUsuario},
+        `);
 
         throw new ErroSQL(...ERRO_SQL_AO_BUSCAR_DADOS_DA_VIAGEM_COM_O_USUARIO);
       }

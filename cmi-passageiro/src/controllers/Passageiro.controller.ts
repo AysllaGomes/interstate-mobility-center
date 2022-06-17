@@ -18,7 +18,7 @@ export class PassageiroController {
     return this.service.vinculoPassageiro(body);
   }
 
-  public async detalhamentoViagem(body: IInputDetalhamentoViagem): Promise<IPassageiro | undefined> {
-    return this.service.detalhamentoViagem(body);
+  public async listarViagensVinculadoAoUsuario(body: IInputDetalhamentoViagem): Promise<IPassageiro | undefined> {
+    return this.service.listarViagensVinculadoAoUsuario(body);
   }
 }

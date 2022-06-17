@@ -85,12 +85,6 @@ export class ServiceValidator {
         .min(24)
         .max(24)
         .required(),
-      idViagem: Joi.string()
-        .min(24)
-        .max(24)
-        .required(),
-      dataRefencia: Joi.string()
-        .required(),
     });
 
     return schema.validate(body, { messages });
