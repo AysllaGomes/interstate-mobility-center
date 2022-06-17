@@ -24,6 +24,7 @@ import { IVinculoPassageiro } from "../model/interfaces/VinculoPassageiro";
 import { IInputDesativarViagem } from "../model/interfaces/InputDesativarViagem";
 import { IInputDetalhamentoViagem } from "../model/interfaces/InputDetalhamentoViagem";
 import { IOutputListarViagensVinculadasAoUsario } from "../model/interfaces/OutputListarViagensVinculadasAoUsario";
+import { IOutputDesativarViagem } from "../model/interfaces/OutputDesativarViagem";
 
 export class PassageiroService {
     private serviceValidator = new ServiceValidator();
@@ -170,7 +171,7 @@ export class PassageiroService {
       }
     }
 
-    public async desativar(body: IInputDesativarViagem): Promise<IPassageiro | null> {
+    public async desativar(body: IInputDesativarViagem): Promise<IOutputDesativarViagem> {
       logger.debug("Entrando no método 'desativar'...");
 
       const resultadoValidacao = this.serviceValidator.validarDesativarViagem(body);
@@ -211,7 +212,7 @@ export class PassageiroService {
       }
     }
 
-    public async desativarViagemVinculadoAoPassageiro(body: IInputDesativarViagem): Promise<IPassageiro | null> {
+    public async desativarViagemVinculadoAoPassageiro(body: IInputDesativarViagem): Promise<IOutputDesativarViagem> {
       try {
         logger.info(`Desativando a viagem do passageiro: ${body.idPassageiro}...`);
 
@@ -228,7 +229,7 @@ export class PassageiroService {
           (error, passageiro: IPassageiro | null) => passageiro,
         ).clone();
 
-        if (desativar) { return desativar; }
+        if (desativar) { return this.formatarRetornoDesativarViagemVinculadoAoPassageiro(desativar); }
 
         throw new ErroSQL(...ERRO_SQL_DESABILITAR_OS_DADOS_DO_PASSAGEIRO_DA_VIAGEM);
       } catch (error) {
@@ -242,5 +243,15 @@ export class PassageiroService {
 
         throw new ErroSQL(...ERRO_SQL_DESABILITAR_OS_DADOS_DO_PASSAGEIRO_DA_VIAGEM);
       }
+    }
+
+    public formatarRetornoDesativarViagemVinculadoAoPassageiro(passageiro: IPassageiro): IOutputDesativarViagem {
+      return {
+        // eslint-disable-next-line no-underscore-dangle
+        id: passageiro._id,
+        estado: passageiro.estado,
+        viagemCancelada: passageiro.viagemCancelada,
+        dataUltimaAtualizacao: passageiro.dataUltimaAtualizacao,
+      };
     }
 }

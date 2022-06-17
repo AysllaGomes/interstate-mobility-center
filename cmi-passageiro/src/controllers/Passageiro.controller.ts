@@ -3,6 +3,7 @@ import { IPassageiro } from "../model/Passageiro";
 import { PassageiroService } from "../services/Passageiro.service";
 import { IVinculoPassageiro } from "../model/interfaces/VinculoPassageiro";
 import { IInputDesativarViagem } from "../model/interfaces/InputDesativarViagem";
+import { IOutputDesativarViagem } from "../model/interfaces/OutputDesativarViagem";
 import { IInputDetalhamentoViagem } from "../model/interfaces/InputDetalhamentoViagem";
 import { IOutputListarViagensVinculadasAoUsario } from "../model/interfaces/OutputListarViagensVinculadasAoUsario";
 
@@ -24,7 +25,7 @@ export class PassageiroController {
     return this.service.listarViagensVinculadoAoUsuario(body);
   }
 
-  public async desativar(body: IInputDesativarViagem): Promise<IPassageiro | null> {
+  public async desativar(body: IInputDesativarViagem): Promise<IOutputDesativarViagem> {
     return this.service.desativar(body);
   }
 }
