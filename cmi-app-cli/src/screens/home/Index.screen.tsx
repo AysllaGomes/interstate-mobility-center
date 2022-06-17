@@ -3,12 +3,11 @@ import {
     View,
     FlatList,
     TouchableOpacity,
-    StatusBar,
     Text,
     Image,
-    ActivityIndicator, SafeAreaView
+    ActivityIndicator
 } from "react-native";
-import { ScrollView } from 'react-native-virtualized-view';
+import {  ScrollView } from 'react-native-virtualized-view';
 import {Button, TextInput} from "react-native-paper";
 import {indexStyle} from "./index.style";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -18,27 +17,9 @@ import axios from "axios";
 import DropDownPicker from 'react-native-dropdown-picker';
 import {MergeUsuarioLogadoData} from "../../../assets/DadosUsuarioLogado/DadosUsuarioLogado";
 import { theme } from "../../../App.style";
+import TravelListComponent from "../../components/travel-list/TravelListComponent";
 interface HomeScreenProps {
     navigation: NativeStackNavigatorProps
-}
-
-const TravelListItem = ({data, navigation}) => {
-
-    const toTravelPackage = () => MergeUsuarioLogadoData({idViagem: data._id}).then(
-        navigation.navigate("Package", {data: data})
-    )
-    return (
-        <TouchableOpacity onPress={() => toTravelPackage()}>
-            <View style={indexStyle.packagesContent}>
-                <Image style={indexStyle.images} source={{uri: data.image}}/>
-                <View style={indexStyle.packagesContentInfo}>
-                    <Text style={indexStyle.packagesText}>Destino: {data.titulo}</Text>
-                    <Text style={indexStyle.packagesText}>Duração: {data.duracao}</Text>
-                    <Text style={indexStyle.packagesText}>Preço: R$ {data.preco},00</Text>
-                </View>
-            </View>
-        </TouchableOpacity>
-    );
 }
 
 const HomeScreen = (props: HomeScreenProps) => {
@@ -88,7 +69,7 @@ const HomeScreen = (props: HomeScreenProps) => {
     }
 
     useEffect(() => {
-        listaPacotesViagensFiltrados();
+        listaPacotesViagensFiltrados().then(r => r);
     }, [])
 
     const [isDatePickerVisible, setDatePickerVisibility] = useState({departure: false, arrival: false});
@@ -112,15 +93,7 @@ const HomeScreen = (props: HomeScreenProps) => {
         setDates({...dates, arrival: dateArrival})
     }
 
-    const cleanFilters = () => {
-        setSearchText('')
-        setDates({arrival: null, departure: null})
-        setValueDropdownPartida(null)
-        setValueDropdownDestino(null)
-        setSelectedState({arrival: null, departure: null})
-    }
-
-    useEffect(() => {
+     useEffect(() => {
         const buscarEstadosApiGov = async () => {
             try {
                 let res = await axios.get("https://servicodados.ibge.gov.br/api/v1/localidades/estados")
@@ -132,10 +105,20 @@ const HomeScreen = (props: HomeScreenProps) => {
         buscarEstadosApiGov().then(r => r)
     }, []);
 
+    const cleanFilters = () => {
+        setSearchText('')
+        setDates({arrival: null, departure: null})
+        setValueDropdownPartida(null)
+        setValueDropdownDestino(null)
+        setSelectedState({arrival: null, departure: null})
+
+    }
+
     DropDownPicker.setTheme("DARK")
     return (
-        <SafeAreaView>
-            <ScrollView>
+
+        <ScrollView overScrollMode={"always"}>
+
                 <View>
                     {isLoaded ?
                         (<View style={indexStyle.loader}><Text > <ActivityIndicator size="large" color={theme.colors.primary} /></Text></View>)
@@ -144,19 +127,11 @@ const HomeScreen = (props: HomeScreenProps) => {
                             <View>
                                 <View style={indexStyle.content}>
                                     <View style={indexStyle.filtersContent}>
-                                        <View style={indexStyle.botaoBuscaLivre}>
-                                            <TextInput
-                                                placeholder="Pesquise um pacote"
-                                                value={searchText}
-                                                onChangeText={(t) => setSearchText(t)}
-                                            />
-                                        </View>
-
                                         <View style={indexStyle.textDateFilter}>
                                             <Text  style={{
                                                 ...{fontFamily: theme.fontFamily.fontFamily}, ...{
                                                     fontSize: 18
-                                                }}}>Período da Viagem</Text>
+                                                }}}>Periodo da Viagem</Text>
                                         </View>
 
                                         <View style={indexStyle.dateFilters}>
@@ -193,7 +168,10 @@ const HomeScreen = (props: HomeScreenProps) => {
 
                                         <View style={indexStyle.dropdownPickerContainer}>
                                             <View style={[indexStyle.dropdownPicker, indexStyle.dropdownPickerOrigem]}>
+
                                                 <DropDownPicker
+                                                    listMode="SCROLLVIEW"
+                                                    scrollViewProps={{nestedScrollEnabled: true,}}
                                                     items={estadosBrasil}
                                                     value={valueDropdownPartida}
                                                     setItems={setEstadosBrasil}
@@ -212,6 +190,8 @@ const HomeScreen = (props: HomeScreenProps) => {
                                             </View>
                                             <View style={[indexStyle.dropdownPicker, indexStyle.dropdownPickerDestino]}>
                                                 <DropDownPicker
+                                                    listMode="SCROLLVIEW"
+                                                    scrollViewProps={{nestedScrollEnabled: true,}}
                                                     items={estadosBrasil}
                                                     value={valueDropdownDestino}
                                                     setItems={setEstadosBrasil}
@@ -238,22 +218,28 @@ const HomeScreen = (props: HomeScreenProps) => {
                                                 style={indexStyle.buttonsText}>Buscar</Text></Button>
                                         </View>
                                     </View>
-                                    <View style={indexStyle.flatlist}>
-                                        <FlatList data={minhaLista}
-                                                  renderItem={({item}) =>
-                                                      <TravelListItem navigation={props.navigation} data={item}/>
-                                                  }
-                                                  keyExtractor={(item) => item._id}
-                                        />
-                                        <StatusBar/>
-                                    </View>
                                 </View>
                             </View>
                         )}
-                </View>
-            </ScrollView>
 
-        </SafeAreaView>
+                        <View style={indexStyle.flatlist}>
+                            <FlatList
+
+                                listKey="key1"
+                                data={minhaLista}
+                                      renderItem={({item}) => (
+                                          <TravelListComponent navigation={props.navigation} data={item}/>
+
+                                      )}
+                                      keyExtractor={(item, index) => `_key${index.toString()}`}
+                            />
+
+                        </View>
+
+                </View>
+</ScrollView>
+
+
     );
 }
 export default HomeScreen;

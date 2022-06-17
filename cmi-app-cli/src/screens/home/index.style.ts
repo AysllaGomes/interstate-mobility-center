@@ -63,7 +63,7 @@ export const indexStyle = StyleSheet.create({
         marginBottom: 10,
     },
     textDateFilter: {
-        marginTop: 20,
+        marginTop: 10
     },
     DepartureDatePickerButton: {
         flexGrow: 1
