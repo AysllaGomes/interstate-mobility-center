@@ -19,7 +19,7 @@ export class PassageiroController {
 
   constructor({ service = new PassageiroService() }) { this.service = service; }
 
-  public async vinculoPassageiro(body: IVinculoPassageiro): Promise<IPassageiro | undefined> {
+  public async vinculoPassageiro(body: IVinculoPassageiro): Promise<IPassageiro> {
     return this.service.vinculoPassageiro(body);
   }
 

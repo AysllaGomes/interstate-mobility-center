@@ -53,6 +53,6 @@ export interface IVinculoPassageiro {
     idUsuario: string;
     idViagem: string;
     usuarioPassageiro: boolean;
-    listaPassageiro: Array<IListaPassageiros>;
+    listaPassageiros: Array<IListaPassageiros>;
     dadosPagamento: IDadosPagamento;
 }
