@@ -122,6 +122,7 @@ export class PassageiroService {
             idUsuario: viagem._id,
             // eslint-disable-next-line no-underscore-dangle
             idPassageiro: passageiro._id,
+            imagem: viagem.image,
             dataReferencia: passageiro.dataCriacao,
             destino: viagem.estadoDestino,
             preco: viagem.preco,
