@@ -197,8 +197,8 @@ export class PassageiroService {
       const quantidadePassageiro = passageiro.listaPassageiros?.length;
 
       const isUsuarioLogadoPassageiro = passageiro.usuarioPassageiro
-        ? usuario.nome
-        : "-";
+        ? "Sim"
+        : "Não";
 
       return {
         imagem: viagem.image,
