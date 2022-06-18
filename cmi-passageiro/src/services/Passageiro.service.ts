@@ -13,6 +13,7 @@ import {
 } from "../errors/erro.sql";
 import { logger } from "../util/logger";
 import { IViagem } from "../model/Viagem";
+import { IUsuario } from "../model/Usuario";
 import { ViagemService } from "./Viagem.service";
 import { UsuarioService } from "./Usuario.service";
 import { environment } from "../config/environment";
@@ -22,6 +23,7 @@ import { ServiceValidator } from "../validators/Service.validator";
 import { EstadoViagemEnum } from "../model/enums/EstadoViagem.enum";
 import { IListaPassageiros } from "../model/interfaces/ListaPassageiros";
 import { IVinculoPassageiro } from "../model/interfaces/VinculoPassageiro";
+import { IInputDetalharViagem } from "../model/interfaces/InputDetalharViagem";
 import { IInputDesativarViagem } from "../model/interfaces/InputDesativarViagem";
 import { IOutputDetalharViagem } from "../model/interfaces/OutputDetalharViagem";
 import { IOutputDesativarViagem } from "../model/interfaces/OutputDesativarViagem";
@@ -164,7 +166,7 @@ export class PassageiroService {
       }
     }
 
-    public async detalharViagem(body: IInputDesativarViagem): Promise<IOutputDetalharViagem> {
+    public async detalharViagem(body: IInputDetalharViagem): Promise<IOutputDetalharViagem> {
       logger.debug("Entrando no método 'detalharViagem'...");
 
       const resultadoValidacao = this.serviceValidator.validarDetalharViagem(body);
@@ -173,21 +175,40 @@ export class PassageiroService {
 
       logger.debug("Entrando no método 'verificarExitenciaPassageiro'...");
       const passageiro = await this.verificarExitenciaPassageiro(body);
+      logger.debug("Finalizando o 'verificarExitenciaPassageiro'...");
+
+      logger.debug("Entrando no método 'retornarDadosUsuario'...");
+      const usuario: IUsuario = await UsuarioService.retornarDadosUsuario(passageiro.idUsuario);
+      logger.debug("Finalizando o 'retornarDadosUsuario'...");
 
       logger.debug("Entrando no método 'retornaDadosViagem'...");
       const viagem: IViagem = await ViagemService.retornaDadosViagem(passageiro.idViagem);
       logger.debug("Finalizando o 'retornaDadosViagem'...");
 
       logger.debug("Entrando no método 'formatarRetornoDetalharViagem'...");
-      return this.formatarRetornoDetalharViagem(passageiro, viagem);
+      return this.formatarRetornoDetalharViagem(passageiro, usuario, viagem);
     }
 
-    public formatarRetornoDetalharViagem(passageiro: IPassageiro, viagem: IViagem): IOutputDetalharViagem {
+    public formatarRetornoDetalharViagem(passageiro: IPassageiro, usuario: IUsuario, viagem: IViagem): IOutputDetalharViagem {
+      const dadosPassageiros = passageiro.listaPassageiros?.length > 0
+        ? passageiro.listaPassageiros.map((item) => item.nome)
+        : [];
+
+      const quantidadePassageiro = passageiro.listaPassageiros?.length;
+
+      const isUsuarioLogadoPassageiro = passageiro.usuarioPassageiro
+        ? usuario.nome
+        : "-";
+
       return {
         imagem: viagem.image,
         preco: viagem.preco,
         destino: viagem.estadoDestino,
-        dataRefencia: passageiro.dataCriacao,
+        usuarioLogado: isUsuarioLogadoPassageiro,
+        listarPassageiros: dadosPassageiros,
+        quantidadePassageiro,
+        periodoReferenciaViagem: viagem.periodoDeVigencia,
+        dataRefenciaSolicitacao: passageiro.dataCriacao,
       };
     }
 

@@ -1,3 +1,5 @@
+import { IPeriodoDeVigencia } from "./PeriodoDeVigencia";
+
 /**
  * @swagger
  *
@@ -8,7 +10,11 @@
  *       - imagem
  *       - preco
  *       - destino
- *       - dataRefencia
+ *       - usuarioLogado
+ *       - listarPassageiros
+ *       - quantidadePassageiro
+ *       - periodoReferenciaViagem
+ *       - dataRefenciaSolicitacao
  *     properties:
  *       imagem:
  *         type: string
@@ -16,19 +22,37 @@
  *         type: number
  *       destino:
  *         type: string
- *       dataRefencia:
+ *       usuarioLogado:
+ *         type: string
+ *       listarPassageiros:
+ *         type: string
+ *       quantidadePassageiro:
+ *         type: number
+ *       periodoReferenciaViagem:
+ *         $ref: '#/definitions/IPeriodoDeVigencia'
+ *       dataRefenciaSolicitacao:
  *         type: string
  *     example:
  *      {
  *          "imagem": "https://firebasestorage.googleapis.com/v0/b/tcc-react-9a14e.appspot.com/o/imgs-tcc-project%2Fbrasilia.jpeg?alt=media&token=b20d2065-9268-4d0f-a8fa-68752d624511",
  *          "preco": 2000,
  *          "destino": "Encerrado",
- *          "dataRefencia": true,
+ *          "usuarioLogado": "Some Chick",
+ *          "listarPassageiros": [],
+ *          "periodoReferenciaViagem": {
+ *              "dataInicio": "2022-10-11T06:30:20.202Z",
+ *              "dataFim": "2022-10-31T06:50:20.202Z"
+ *          },
+ *          "dataRefenciaSolicitacao": 17/06/2022
  *      }
  */
 export interface IOutputDetalharViagem {
     imagem: string;
     preco: number;
     destino: string;
-    dataRefencia: string;
+    usuarioLogado: string;
+    listarPassageiros: string[];
+    quantidadePassageiro: number;
+    periodoReferenciaViagem: IPeriodoDeVigencia;
+    dataRefenciaSolicitacao: string;
 }
