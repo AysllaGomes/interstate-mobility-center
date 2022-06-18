@@ -7,9 +7,6 @@ const UserTravelsService = async (values) => {
         const res = await axios.get(urlBase+'passageiro/listarViagensVinculadoAoUsuario', {
             headers:{"id-usuario": values.idUsuario}
         })
-        console.log('Lista de viagens ok', res.status);
-
-
         return res
     } catch (error) {
         return error.response

@@ -8,8 +8,6 @@ const BuscarDetalhesViagem = async (idPassageiro) => {
                 "id-passageiro": idPassageiro
             }
         })
-        console.log('tudo Certooo com os detalhes', res.status);
-
         return res
     } catch (error) {
         return error.response

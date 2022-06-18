@@ -18,9 +18,6 @@ import UserTravelsService from "../screens/user-travels/userTravels.service";
 
 
 function DrawerContent(props) {
-    const [listaViagens, setListaViagens] = useState();
-
-
     const signOutUser = async () => {
         try {
             await firebase.auth().signOut();
@@ -43,17 +40,18 @@ function DrawerContent(props) {
             ToastMessage(e)
         }
     }
-    const goToTermoDeUso = async () => {
+    const goToTermoDeUso = async () => { }
+    const goToViagens = async () => {
 
-            try {
-                const values = await GetUsuarioLogadoData()
-                const travelList = await UserTravelsService(values)
-                setListaViagens(travelList.data);
-                props.navigation.navigate("UserTravels", {"listaViagensUsuario": listaViagens})
+        try {
+            const values = await GetUsuarioLogadoData()
+            const travelList = await UserTravelsService(values)
 
-            }catch (e) {
-                console.error("Erro ao buscar as viagens do usuário!", e)
-            }
+            props.navigation.navigate("UserTravels", {listaViagensUsuario: travelList.data})
+
+        }catch (e) {
+            console.error("Erro ao buscar as viagens do usuário!", e)
+        }
 
     }
 
@@ -70,7 +68,7 @@ function DrawerContent(props) {
                         />
                     )}
                     label="Minhas viagens"
-                    onPress={goToTermoDeUso}
+                    onPress={goToViagens}
                 />
 
                 <DrawerItem
