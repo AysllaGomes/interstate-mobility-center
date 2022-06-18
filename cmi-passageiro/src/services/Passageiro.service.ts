@@ -38,6 +38,14 @@ export class PassageiroService {
       retornarErroValidacao(resultadoValidacao, ERRO_NEGOCIAL_NA_VALIDACAO);
       logger.debug("Finalizando o 'resultadoValidacao'...");
 
+      logger.debug("Entrando no método 'retornarDadosUsuario'...");
+      await UsuarioService.retornarDadosUsuario(body.idUsuario);
+      logger.debug("Finalizando o 'retornarDadosUsuario'...");
+
+      logger.debug("Entrando no método 'retornaDadosViagem'...");
+      await ViagemService.retornaDadosViagem(body.idViagem);
+      logger.debug("Finalizando o 'retornaDadosViagem'...");
+
       logger.debug("Entrando no método 'formatarPassageiro'...");
       const vinculoPassageiro = this.formatarPassageiro(body);
       logger.debug("Finalizando o 'formatarPassageiro'...");
