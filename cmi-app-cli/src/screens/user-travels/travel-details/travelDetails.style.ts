@@ -39,7 +39,6 @@ export const travelDetailsStyle = StyleSheet.create({
             color: "#339E00"
         },
         buttonText: {
-
             color: "white"
         }
     }

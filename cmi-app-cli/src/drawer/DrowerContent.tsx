@@ -40,13 +40,21 @@ function DrawerContent(props) {
             ToastMessage(e)
         }
     }
-    const goToTermoDeUso = async () => { }
+    const goToTermoDeUso = async () => {
+        try {
+            const values = await GetUsuarioLogadoData()
+            props.navigation.navigate("TermoUso", {emailUsuario: values.emailUsuario})
+
+        }catch (e) {
+            console.error('Erro ao abrir termo de uso', e);
+        }
+    }
+
     const goToViagens = async () => {
 
         try {
             const values = await GetUsuarioLogadoData()
             const travelList = await UserTravelsService(values)
-
             props.navigation.navigate("UserTravels", {listaViagensUsuario: travelList.data})
 
         }catch (e) {
@@ -71,6 +79,18 @@ function DrawerContent(props) {
                     onPress={goToViagens}
                 />
 
+
+                <DrawerItem
+                    icon={({color, size}) => (
+                        <Icon
+                            name="book-open"
+                            color={color}
+                            size={size}
+                        />
+                    )}
+                    label="Termo de Uso"
+                    onPress={goToTermoDeUso}
+                />
                 <DrawerItem
                     icon={({color, size}) => (
                         <Icon
@@ -82,7 +102,6 @@ function DrawerContent(props) {
                     label="Sign out"
                     onPress={signOutUser}
                 />
-
                 <DrawerItem
                     icon={({color, size}) => (
                         <Icon
@@ -94,6 +113,7 @@ function DrawerContent(props) {
                     label="Deletar Conta"
                     onPress={deleteProfile}
                 />
+
             </View>
         </DrawerContentScrollView>
     );

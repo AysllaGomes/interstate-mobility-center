@@ -40,7 +40,7 @@ const LoginScreen = (props: LoginScreenProps) => {
     }
 
     const verificaTermoDeUso = async (id) => {
-        const urlBase = "http://192.168.0.110:3008"
+        const urlBase = "http://192.168.0.110:3001"
         try {
             let res = await axios.post(urlBase + "/usuario/consultaAssinaturaTermoUsuario", {"idUsuario": id})
             return res.data.assinado;
@@ -64,7 +64,7 @@ const LoginScreen = (props: LoginScreenProps) => {
             }
             //Guarda em memória - assets/
 
-            await DadosUsuarioLogado({"idUsuario": idUsuario})
+            await DadosUsuarioLogado({"idUsuario": idUsuario, "emailUsuario": email})
 
         } catch (error) {
             // Só esse switch maravilhoso porque o Firebase não retorna erro como numérico kk :)

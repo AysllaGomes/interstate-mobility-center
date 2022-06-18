@@ -32,11 +32,10 @@ const TravelList = ({data, navigation}) => {
                         <Image style={userTravelsStyle.images} source={{uri: data.imagem}}/>
                         <View style={userTravelsStyle.packagesContentInfo}>
                             <Text style={userTravelsStyle.packagesText}>Destino: {data.destino}</Text>
-                            <Text style={userTravelsStyle.packagesText}>Período: {data.dataReferencia}</Text>
+                            <Text style={userTravelsStyle.packagesText}>Data de Compra: {data.dataReferencia}</Text>
 
                         </View>
                         <View style={userTravelsStyle.packagesContentInfo}>
-                            <Text style={userTravelsStyle.packagesText}>Preço: R$ {data.preco},00</Text>
                         </View>
                     </View>
                 </TouchableOpacity>

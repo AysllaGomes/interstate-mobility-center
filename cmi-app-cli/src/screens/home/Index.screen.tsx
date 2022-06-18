@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {
     View,
     FlatList,
     TouchableOpacity,
     Text,
     Image,
-    ActivityIndicator
+    ActivityIndicator, Animated
 } from "react-native";
 import {  ScrollView } from 'react-native-virtualized-view';
 import {Button, TextInput} from "react-native-paper";
@@ -22,6 +22,8 @@ interface HomeScreenProps {
     navigation: NativeStackNavigatorProps
 }
 
+
+
 const HomeScreen = (props: HomeScreenProps) => {
     const [estadosBrasil, setEstadosBrasil] = useState([])
     const [valueDropdownPartida, setValueDropdownPartida] = useState(null)
@@ -33,12 +35,15 @@ const HomeScreen = (props: HomeScreenProps) => {
     const [selectedState, setSelectedState] = useState({arrival: '', departure: ''})
     const [minhaLista, setMinhaLista] = useState();
     const [isLoaded, setIsLoaded] = useState(true);
+    const [isScrolling, setIsScrolling] = useState(true);
 
     const listaPacotesViagensFiltrados = async () => {
         const urlBase = "http://192.168.0.110:3002"
         const dateFormat = 'DD/MM/YYYY'
         const dateDepartureUTC = moment(dates.departure, dateFormat)
         const dateArrivalUTC = moment(dates.arrival, dateFormat)
+        console.log('dates', dates);
+        console.log('selectedState', selectedState);
 
         let config = {
             headers: {}
@@ -49,15 +54,17 @@ const HomeScreen = (props: HomeScreenProps) => {
         if(dateArrivalUTC.isValid()) {
             config.headers["data-fim"] = dateArrivalUTC.format("YYYY-MM-DD")
         }
-        if(selectedState.departure != null) {
-            config.headers["estado-origem"] = selectedState.departure
+        if(valueDropdownPartida != null) {
+            config.headers["estado-origem"] = valueDropdownPartida
         }
-        if(selectedState.arrival != null) {
-            config.headers["estado-destino"] = selectedState.arrival
+        if(valueDropdownDestino != null) {
+            config.headers["estado-destino"] = valueDropdownDestino
         }
         if(searchText != ''){
             config.headers["titulo"] = searchText
         }
+
+        console.log('config.headers', config.headers);
 
         try {
             let res = await axios.get(urlBase + "/viagem/listar", config)
@@ -66,6 +73,7 @@ const HomeScreen = (props: HomeScreenProps) => {
         } catch (error) {
             return console.error('Erro carregar viagens!')
         }
+
     }
 
     useEffect(() => {
@@ -93,7 +101,7 @@ const HomeScreen = (props: HomeScreenProps) => {
         setDates({...dates, arrival: dateArrival})
     }
 
-     useEffect(() => {
+    useEffect(() => {
         const buscarEstadosApiGov = async () => {
             try {
                 let res = await axios.get("https://servicodados.ibge.gov.br/api/v1/localidades/estados")
@@ -114,132 +122,129 @@ const HomeScreen = (props: HomeScreenProps) => {
 
     }
 
-    DropDownPicker.setTheme("DARK")
-    return (
+    const searchComponent = (isLoaded) => {
 
-        <ScrollView overScrollMode={"always"}>
+        return(
+            isLoaded ?
+                (<View style={indexStyle.loader}><Text > <ActivityIndicator size="large" color={theme.colors.primary} /></Text></View>)
+                :
+                (
+                    <View>
+                        <View style={indexStyle.content}>
+                            <View style={indexStyle.filtersContent}>
+                                <View style={indexStyle.textDateFilter}>
+                                    <Text  style={{
+                                        ...{fontFamily: theme.fontFamily.fontFamily}, ...{
+                                            fontSize: 18
+                                        }}}>Periodo da Viagem</Text>
+                                </View>
 
-                <View>
-                    {isLoaded ?
-                        (<View style={indexStyle.loader}><Text > <ActivityIndicator size="large" color={theme.colors.primary} /></Text></View>)
-                        :
-                        (
-                            <View>
-                                <View style={indexStyle.content}>
-                                    <View style={indexStyle.filtersContent}>
-                                        <View style={indexStyle.textDateFilter}>
-                                            <Text  style={{
-                                                ...{fontFamily: theme.fontFamily.fontFamily}, ...{
-                                                    fontSize: 18
-                                                }}}>Periodo da Viagem</Text>
+                                <View style={indexStyle.dateFilters}>
+                                    <TouchableOpacity onPress={showDatePickerDeparture}>
+                                        <View style={indexStyle.DepartureDatePickerButton}>
+                                            <Text style={indexStyle.datePickerButtonText}>Partida: {dates.departure}</Text>
                                         </View>
+                                    </TouchableOpacity>
 
-                                        <View style={indexStyle.dateFilters}>
-                                            <TouchableOpacity onPress={showDatePickerDeparture}>
-                                                <View style={indexStyle.DepartureDatePickerButton}>
-                                                    <Text style={indexStyle.datePickerButtonText}>Partida: {dates.departure}</Text>
-                                                </View>
-                                            </TouchableOpacity>
-
-                                            <DateTimePickerModal
-                                                isVisible={isDatePickerVisible.departure}
-                                                mode="date"
-                                                onConfirm={handleConfirmDeparture}
-                                                onCancel={hideDatePickerDeparture}
-                                                locale="es-ES"
-                                                minimumDate={new Date()}
-
-                                            />
-                                            <TouchableOpacity onPress={showDatePickerArrival}>
-
-                                                <View style={indexStyle.ArrivalDatePickerButton}>
-                                                    <Text style={indexStyle.datePickerButtonText}>Volta: {dates.arrival}</Text>
-                                                </View>
-                                            </TouchableOpacity>
+                                    <DateTimePickerModal
+                                        isVisible={isDatePickerVisible.departure}
+                                        mode="date"
+                                        onConfirm={handleConfirmDeparture}
+                                        onCancel={hideDatePickerDeparture}
+                                        locale="es-ES"
+                                        minimumDate={new Date()}
+                                    />
+                                    <TouchableOpacity onPress={showDatePickerArrival}>
+                                        <View style={indexStyle.ArrivalDatePickerButton}>
+                                            <Text style={indexStyle.datePickerButtonText}>Volta: {dates.arrival}</Text>
                                         </View>
-                                        <DateTimePickerModal
-                                            isVisible={isDatePickerVisible.arrival}
-                                            mode="date"
-                                            onConfirm={handleConfirmArrival}
-                                            onCancel={hideDatePickerArrival}
-                                            locale="es-ES"
-                                            minimumDate={new Date()}
+                                    </TouchableOpacity>
+                                </View>
+                                <DateTimePickerModal
+                                    isVisible={isDatePickerVisible.arrival}
+                                    mode="date"
+                                    onConfirm={handleConfirmArrival}
+                                    onCancel={hideDatePickerArrival}
+                                    locale="es-ES"
+                                    minimumDate={new Date()}
+                                />
+                                <View style={indexStyle.dropdownPickerContainer}>
+                                    <View style={[indexStyle.dropdownPicker, indexStyle.dropdownPickerOrigem]}>
+                                        <DropDownPicker
+                                            listMode="MODAL"
+                                            scrollViewProps={{nestedScrollEnabled: true,}}
+                                            items={estadosBrasil}
+                                            value={valueDropdownPartida}
+                                            setItems={setEstadosBrasil}
+                                            setValue={setValueDropdownPartida}
+                                            open={openDropdownPartida}
+                                            setOpen={setOpenDropdownPartida}
+                                            searchable={true}
+                                            placeholder="Origem"
+                                            searchPlaceholder="Pesquise um estado"
+                                            schema={{
+                                                label: 'nome',
+                                                value: 'nome'
+                                            }}
                                         />
-
-                                        <View style={indexStyle.dropdownPickerContainer}>
-                                            <View style={[indexStyle.dropdownPicker, indexStyle.dropdownPickerOrigem]}>
-
-                                                <DropDownPicker
-                                                    listMode="SCROLLVIEW"
-                                                    scrollViewProps={{nestedScrollEnabled: true,}}
-                                                    items={estadosBrasil}
-                                                    value={valueDropdownPartida}
-                                                    setItems={setEstadosBrasil}
-                                                    setValue={setValueDropdownPartida}
-                                                    open={openDropdownPartida}
-                                                    setOpen={setOpenDropdownPartida}
-                                                    searchable={true}
-                                                    placeholder="Origem"
-                                                    searchPlaceholder="Pesquise um estado"
-                                                    onChangeValue={value => setSelectedState({...selectedState, departure: value != null ? value.toString() : ''})}
-                                                    schema={{
-                                                        label: 'nome',
-                                                        value: 'nome'
-                                                    }}
-                                                />
-                                            </View>
-                                            <View style={[indexStyle.dropdownPicker, indexStyle.dropdownPickerDestino]}>
-                                                <DropDownPicker
-                                                    listMode="SCROLLVIEW"
-                                                    scrollViewProps={{nestedScrollEnabled: true,}}
-                                                    items={estadosBrasil}
-                                                    value={valueDropdownDestino}
-                                                    setItems={setEstadosBrasil}
-                                                    setValue={setValueDropdownDestino}
-                                                    open={openDropdownDestino}
-                                                    setOpen={setOpenDropdownDestino}
-                                                    searchable={true}
-                                                    placeholder="Destino"
-                                                    searchPlaceholder="Pesquise um estado"
-                                                    onChangeValue={value => setSelectedState({...selectedState, arrival: value != null ? value.toString() : ''})}
-                                                    schema={{
-                                                        label: 'nome',
-                                                        value: 'nome'
-                                                    }}
-                                                />
-                                            </View>
-                                        </View>
-                                        <View>
-                                            <Button onPress={cleanFilters} style={indexStyle.buttonCleanFilters}><Text
-                                                style={indexStyle.buttonsText}>Limpar filtros</Text></Button>
-                                        </View>
-                                        <View>
-                                            <Button onPress={listaPacotesViagensFiltrados} style={indexStyle.buttonCleanFilters}><Text
-                                                style={indexStyle.buttonsText}>Buscar</Text></Button>
-                                        </View>
+                                    </View>
+                                    <View style={[indexStyle.dropdownPicker, indexStyle.dropdownPickerDestino]}>
+                                        <DropDownPicker
+                                            listMode="MODAL"
+                                            scrollViewProps={{nestedScrollEnabled: true,}}
+                                            items={estadosBrasil}
+                                            value={valueDropdownDestino}
+                                            setItems={setEstadosBrasil}
+                                            setValue={setValueDropdownDestino}
+                                            open={openDropdownDestino}
+                                            setOpen={setOpenDropdownDestino}
+                                            searchable={true}
+                                            placeholder="Destino"
+                                            searchPlaceholder="Pesquise um estado"
+                                            schema={{
+                                                label: 'nome',
+                                                value: 'nome'
+                                            }}
+                                        />
                                     </View>
                                 </View>
+                                <View>
+                                    <Button onPress={cleanFilters} style={indexStyle.buttonCleanFilters}><Text
+                                        style={indexStyle.buttonsText}>Limpar filtros</Text></Button>
+                                </View>
+                                <View>
+                                    <Button onPress={listaPacotesViagensFiltrados} style={indexStyle.buttonCleanFilters}><Text
+                                        style={indexStyle.buttonsText}>Buscar</Text></Button>
+                                </View>
                             </View>
-                        )}
-
-                        <View style={indexStyle.flatlist}>
-                            <FlatList
-
-                                listKey="key1"
-                                data={minhaLista}
-                                      renderItem={({item}) => (
-                                          <TravelListComponent navigation={props.navigation} data={item}/>
-
-                                      )}
-                                      keyExtractor={(item, index) => `_key${index.toString()}`}
-                            />
-
                         </View>
+                    </View>
+                )
 
+
+        )
+    }
+
+    DropDownPicker.setTheme("DARK")
+
+    return (
+        <View>
+            <ScrollView style={{zIndex: 0}}>
+                {
+                    searchComponent(isLoaded)
+                }
+                <View style={[indexStyle.flatlist]}>
+                    <FlatList
+                        listKey="key1"
+                        data={minhaLista}
+                        renderItem={({item}) => (
+                            <TravelListComponent navigation={props.navigation} data={item}/>
+                        )}
+                        keyExtractor={(item, index) => `_key${index.toString()}`}
+                    />
                 </View>
-</ScrollView>
-
-
+            </ScrollView>
+        </View>
     );
 }
 export default HomeScreen;

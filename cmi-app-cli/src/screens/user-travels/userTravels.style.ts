@@ -14,7 +14,9 @@ export const userTravelsStyle = StyleSheet.create({
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
-            padding: 10,
+            paddingLeft: 10,
+            paddingRight: 10,
+            paddingTop: 10,
             // borderBottomRightRadius: 10,
             // borderBottomLeftRadius: 10,
             backgroundColor: theme.colors.secondary,
@@ -23,7 +25,6 @@ export const userTravelsStyle = StyleSheet.create({
             color: "white"
         },
         flatlist: {
-            marginBottom: 10
         }
     }
 )

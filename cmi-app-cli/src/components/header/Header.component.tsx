@@ -10,11 +10,11 @@ export const HeaderComponent = (props: HeaderComponentParams) => {
     const signUp = () => props.navigation.goBack()
     return (
 
-        <Appbar>
+        <Appbar.Header>
             <Appbar.BackAction onPress={() => {
                 signUp()
             }}/>
             <Appbar.Content title={props.title}/>
-        </Appbar>
+        </Appbar.Header>
     )
 }

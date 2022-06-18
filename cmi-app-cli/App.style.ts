@@ -27,6 +27,14 @@ export const theme = {
         borderRadius: 4,
         // backgroundColor: "#FE7700",
         backgroundColor: primary,
+    },
+    deleteButton: {
+        color: "white",
+        borderRadius: 4,
+        backgroundColor: "#AA3939",
+        width: "50%",
+        display: "flex",
+        alignSelf: "center"
     }
 }
 

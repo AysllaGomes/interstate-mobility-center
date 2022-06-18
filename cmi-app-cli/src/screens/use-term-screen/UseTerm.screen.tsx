@@ -36,7 +36,7 @@ const UseTermScreen = (props: LoginScreenProps, route) => {
 
     useEffect(() => {
         const exibirTermoDeUso = async () => {
-            const urlBase = "http://192.168.0.107:3008"
+            const urlBase = "http://192.168.0.110:3008"
             try {
                 let res = await axios.post(urlBase + "/termoDeUso/verificaSituacaoVigencia")
                 setTermoUso(res.data.conteudo)
@@ -91,9 +91,11 @@ const UseTermScreen = (props: LoginScreenProps, route) => {
                             />
                             <Text style={styles.text} onPress={() => setToggleCheckBox(!toggleCheckBox)}>Concorda com o termo?</Text>
                         </View>
-                        <Button disabled={!toggleCheckBox} style={{...styles.button, ...{opacity: buttonOpacity}}}
-                                onPress={() => assinarTermoDeUso() && goHome()}><Text
-                            style={styles.buttonText}>Concordar</Text></Button>
+
+                            <Button disabled={!toggleCheckBox} style={{...styles.button, ...{opacity: buttonOpacity}}}
+                                    onPress={() => assinarTermoDeUso() && goHome()}><Text
+                                style={styles.buttonText}>Concordar</Text></Button>
+
 
                     </View>
                 </ScrollView>
@@ -137,9 +139,10 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         fontFamily: theme.fontFamily.fontFamily,
+        marginLeft: 10
     },
     text: {
         fontFamily: theme.fontFamily.fontFamily,
-
+        marginLeft: 5
     }
 });

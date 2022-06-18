@@ -7,6 +7,7 @@ import {theme} from '../../../App.style';
 import {packageStyle} from "../travelPackage/package.style";
 import {GetUsuarioLogadoData} from "../../../assets/DadosUsuarioLogado/DadosUsuarioLogado";
 import {registerStyle} from "../register/register.style";
+import {travelDetailsStyle} from "../user-travels/travel-details/travelDetails.style";
 
 interface ScreenProps {
     navigation: NativeStackNavigatorProps,
@@ -29,26 +30,28 @@ const ResumoHeaderComponent = (props) => {
 
 const PurchaseDetailsScreen = (props: ScreenProps) => {
     const [dadosUsuario, setDadosUsuario] = useState({})
+    const dadosDaCompra = props.route.params.dadosDaCompra
 
+    console.log('dadosDaCompra', dadosDaCompra);
 
-    const displayData = async ()=>{
-        try{
-            const dados = await GetUsuarioLogadoData()
-            return dados
-        }
-        catch(error){
-            console.error("Erro async, detalhe do pacote")
-        }
-    }
+    // const displayData = async ()=>{
+    //     try{
+    //         const dados = await GetUsuarioLogadoData()
+    //         return dados
+    //     }
+    //     catch(error){
+    //         console.error("Erro async, detalhe do pacote")
+    //     }
+    // }
 
     useEffect(() => {
         const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true)
         return () => backHandler.remove()
     }, [])
 
-    useEffect(() => {
-        displayData().then(r => setDadosUsuario(r))
-    })
+    // useEffect(() => {
+    //     displayData().then(r => setDadosUsuario(r))
+    // })
 
 
     const goHome = () => {
@@ -62,9 +65,28 @@ const PurchaseDetailsScreen = (props: ScreenProps) => {
                 <Text style={{fontFamily: theme.fontFamily.fontFamily, textAlign: "center", marginTop: 20, fontSize: 38}}>Parabéns !</Text>
                 <Text style={{fontFamily: theme.fontFamily.fontFamily, textAlign: "center", marginTop: 20, fontSize: 18}}>Compra realizada com sucesso :)</Text>
             </View>
-            <Image style={packageStyle.images} source={{uri: dadosUsuario["ImagemPacoteViagemEscolhido"]}}/>
+            {/*<Image style={packageStyle.images} source={{uri: dadosDaCompra.ImagemPacoteViagemEscolhido}}/>*/}
 
-            <Text>{}</Text>
+            {/*<View style={travelDetailsStyle.titleAnPricePackageContent}>*/}
+            {/*    <View>*/}
+            {/*        <Text style={travelDetailsStyle.text}>Destino: {listaViagensUsuario.destino}</Text>*/}
+            {/*        <Text style={travelDetailsStyle.text}>Data de Compra: {listaViagensUsuario.dataRefenciaSolicitacao}</Text>*/}
+
+            {/*    </View>*/}
+            {/*    <View style={{marginTop: 10, marginBottom: 10}}>*/}
+            {/*        <Text style={travelDetailsStyle.text}>Período de vigência: </Text>*/}
+            {/*        <Text style={travelDetailsStyle.text}>Data inicio: {listaViagensUsuario.dataInicio}</Text>*/}
+            {/*        <Text style={travelDetailsStyle.text}>Data encerramento: {listaViagensUsuario.dataFim}</Text>*/}
+            {/*    </View>*/}
+            {/*    <View style={travelDetailsStyle.priceContent}>*/}
+            {/*        <Text style={[travelDetailsStyle.text, travelDetailsStyle.textPrice]}> R$: {listaViagensUsuario.preco}</Text>*/}
+            {/*        <Text style={travelDetailsStyle.text}>Preço final: </Text>*/}
+            {/*    </View>*/}
+
+            {/*</View>*/}
+            {/*<View>*/}
+
+            {/*<Text>{}</Text>*/}
 
 
             <View style={{

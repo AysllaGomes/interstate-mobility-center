@@ -12,6 +12,8 @@ import {theme} from '../../../App.style';
 import * as Animatable from 'react-native-animatable';
 import {GetUsuarioLogadoData, MergeUsuarioLogadoData} from '../../../assets/DadosUsuarioLogado/DadosUsuarioLogado';
 import moment from "moment";
+import BuscarDetalhesViagem from "../user-travels/travel-details/travelDetails.service";
+import UserTravelsService from "../user-travels/userTravels.service";
 
 interface ScreenProps {
     navigation: NativeStackNavigatorProps,
@@ -61,12 +63,18 @@ const PaymentScreen = (props: ScreenProps) => {
             dadosArmazenados.DadosPagamento.cpfTitular = dadosArmazenados.DadosPagamento.cpfTitular.replace(/[.-]/g, '')
             await MergeUsuarioLogadoData(dadosArmazenados)
 
-            let aaa = await GetUsuarioLogadoData()
-            console.log('DADOS PARA ENVIAR PARA MS VIAGEM', aaa);
+            let dadosDaCompraDoUsuario = await GetUsuarioLogadoData()
+            console.log('DADOS PARA ENVIAR PARA MS VIAGEM', dadosDaCompraDoUsuario);
 
             // Executa service para cadastro da viagem
             await registrarViagem()
-            props.navigation.navigate("ResumoCompra")
+//
+//             const idViagem = await UserTravelsService(dadosDaCompraDoUsuario.idUsuario)
+// console.log('idViagem', idViagem);
+//             const dadosCompraEmBanco = await BuscarDetalhesViagem(idViagem.idPassageiro)
+//
+
+            // props.navigation.navigate("ResumoCompra", {dadosDaCompra: dadosCompraEmBanco})
 
         }catch(error){
 
