@@ -207,7 +207,8 @@ export class PassageiroService {
         usuarioLogado: isUsuarioLogadoPassageiro,
         listarPassageiros: dadosPassageiros,
         quantidadePassageiro,
-        periodoReferenciaViagem: viagem.periodoDeVigencia,
+        dataInicio: moment(viagem.periodoDeVigencia.dataInicio).format("DD/MM/YYYY"),
+        dataFim: moment(viagem.periodoDeVigencia.dataFim).format("DD/MM/YYYY"),
         dataRefenciaSolicitacao: passageiro.dataCriacao,
       };
     }

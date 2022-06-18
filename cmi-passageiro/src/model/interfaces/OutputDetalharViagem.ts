@@ -1,5 +1,3 @@
-import { IPeriodoDeVigencia } from "./PeriodoDeVigencia";
-
 /**
  * @swagger
  *
@@ -13,7 +11,8 @@ import { IPeriodoDeVigencia } from "./PeriodoDeVigencia";
  *       - usuarioLogado
  *       - listarPassageiros
  *       - quantidadePassageiro
- *       - periodoReferenciaViagem
+ *       - dataInicio
+ *       - dataFim
  *       - dataRefenciaSolicitacao
  *     properties:
  *       imagem:
@@ -28,8 +27,10 @@ import { IPeriodoDeVigencia } from "./PeriodoDeVigencia";
  *         type: string
  *       quantidadePassageiro:
  *         type: number
- *       periodoReferenciaViagem:
- *         $ref: '#/definitions/IPeriodoDeVigencia'
+ *       dataInicio:
+ *         type: string
+ *       dataFim:
+ *         type: string
  *       dataRefenciaSolicitacao:
  *         type: string
  *     example:
@@ -39,10 +40,8 @@ import { IPeriodoDeVigencia } from "./PeriodoDeVigencia";
  *          "destino": "Encerrado",
  *          "usuarioLogado": "Some Chick",
  *          "listarPassageiros": [],
- *          "periodoReferenciaViagem": {
- *              "dataInicio": "2022-10-11T06:30:20.202Z",
- *              "dataFim": "2022-10-31T06:50:20.202Z"
- *          },
+ *          "dataInicio": "11/10/2022",
+ *          "dataFim": "31/10/2022",
  *          "dataRefenciaSolicitacao": 17/06/2022
  *      }
  */
@@ -53,6 +52,7 @@ export interface IOutputDetalharViagem {
     usuarioLogado: string;
     listarPassageiros: string[];
     quantidadePassageiro: number;
-    periodoReferenciaViagem: IPeriodoDeVigencia;
+    dataInicio: string;
+    dataFim: string;
     dataRefenciaSolicitacao: string;
 }
