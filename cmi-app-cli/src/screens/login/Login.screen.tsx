@@ -13,6 +13,7 @@ import * as Animatable from 'react-native-animatable';
 import ToastMessage from "../../components/Toast/ToastMessage"
 import {RootSiblingParent} from 'react-native-root-siblings';
 import {theme} from "../../../App.style";
+import {HOST_API_USUARIO} from "@env";
 
 interface LoginScreenProps {
     navigation: NativeStackNavigatorProps;
@@ -25,14 +26,13 @@ const LoginScreen = (props: LoginScreenProps) => {
 
     // Consula se usuario possui termo de uso 
     const buscarIDUsuarioPorEmail = async (email: string) => {
-        const urlBase = "http://192.168.0.110:3001"
         const config = {
             headers: {
                 email: email
             }
         }
         try {
-            let res = await axios.get(urlBase + "/usuario/detalhar", config)
+            let res = await axios.get(HOST_API_USUARIO + "/usuario/detalhar", config)
             return res.data._id
         } catch (error) {
             return error.response
@@ -40,9 +40,8 @@ const LoginScreen = (props: LoginScreenProps) => {
     }
 
     const verificaTermoDeUso = async (id) => {
-        const urlBase = "http://192.168.0.110:3001"
         try {
-            let res = await axios.post(urlBase + "/usuario/consultaAssinaturaTermoUsuario", {"idUsuario": id})
+            let res = await axios.post(HOST_API_USUARIO + "/usuario/consultaAssinaturaTermoUsuario", {"idUsuario": id})
             return res.data.assinado;
         } catch (error) {
             return error.response

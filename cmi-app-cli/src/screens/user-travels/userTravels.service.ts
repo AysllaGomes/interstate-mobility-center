@@ -1,10 +1,10 @@
 import axios from "axios";
 import {GetUsuarioLogadoData} from "../../../assets/DadosUsuarioLogado/DadosUsuarioLogado";
+import {HOST_API_PASSAGEIRO} from "@env";
 
 const UserTravelsService = async (values) => {
-    const urlBase = "http://192.168.0.110:3007/"
     try {
-        const res = await axios.get(urlBase+'passageiro/listarViagensVinculadoAoUsuario', {
+        const res = await axios.get(HOST_API_PASSAGEIRO + '/passageiro/listarViagensVinculadoAoUsuario', {
             headers:{"id-usuario": values.idUsuario}
         })
         return res

@@ -10,6 +10,7 @@ import ToastMessage from "../../../components/Toast/ToastMessage";
 import axios from "axios";
 import {GetUsuarioLogadoData} from "../../../../assets/DadosUsuarioLogado/DadosUsuarioLogado";
 import UserTravelsService from "../userTravels.service";
+import {HOST_API_PASSAGEIRO} from "@env";
 
 
 interface ScreenProps {
@@ -26,7 +27,7 @@ const TravelDetailsScreen = (props: ScreenProps) => {
 
 
         try {
-            await axios.put('http://192.168.0.110:3007/passageiro/desativar', {idPassageiro: idViagemCancelamento})
+            await axios.put(HOST_API_PASSAGEIRO + '/passageiro/desativar', {idPassageiro: idViagemCancelamento})
             const values = await GetUsuarioLogadoData()
             const viagensUsuario = await UserTravelsService(values)
             let viagens = viagensUsuario.data.filter((r) => {

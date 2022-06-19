@@ -1,9 +1,9 @@
 import axios from "axios";
+import {HOST_API_PASSAGEIRO} from "@env";
 
 const BuscarDetalhesViagem = async (idPassageiro) => {
-    const urlBase = "http://192.168.0.110:3007"
     try {
-        const res = await axios.get(urlBase+'/passageiro/detalharViagem', {
+        const res = await axios.get(HOST_API_PASSAGEIRO + '/passageiro/detalharViagem', {
             headers: {
                 "id-passageiro": idPassageiro
             }

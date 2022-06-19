@@ -29,10 +29,10 @@ const ResumoHeaderComponent = (props) => {
 }
 
 const PurchaseDetailsScreen = (props: ScreenProps) => {
-    const [dadosUsuario, setDadosUsuario] = useState({})
-    const dadosDaCompra = props.route.params.dadosDaCompra
-
-    console.log('dadosDaCompra', dadosDaCompra);
+    // const [dadosUsuario, setDadosUsuario] = useState({})
+    // const dadosDaCompra = props.route.params.dadosDaCompra
+    //
+    // console.log('dadosDaCompra', dadosDaCompra);
 
     // const displayData = async ()=>{
     //     try{
@@ -53,10 +53,13 @@ const PurchaseDetailsScreen = (props: ScreenProps) => {
     //     displayData().then(r => setDadosUsuario(r))
     // })
 
-
-    const goHome = () => {
+    setTimeout(function () {
         props.navigation.navigate("Home")
-    }
+    }, 3000);
+
+    // const goHome = () => {
+    //     props.navigation.navigate("Home")
+    // }
 
     const FixedBotton = ({children}) => {
         return (
@@ -117,10 +120,10 @@ const PurchaseDetailsScreen = (props: ScreenProps) => {
                     {/*<View>*/}
 
                     {/*<Text>{}</Text>*/}
-                    <View style={{
-                    }}>
-                        <Button onPress={goHome} mode="contained" style={registerStyle.button} >Home</Button>
-                    </View>
+                    {/*<View style={{*/}
+                    {/*}}>*/}
+                    {/*    <Button onPress={goHome} mode="contained" style={registerStyle.button} >Home</Button>*/}
+                    {/*</View>*/}
                 </View>
             </ScrollView>
         </SafeAreaView>

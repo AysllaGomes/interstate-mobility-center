@@ -8,6 +8,8 @@ import CheckBox from 'expo-checkbox';
 import {theme} from '../../../App.style';
 import * as Device from 'expo-device';
 import {HeaderComponent} from '../../components/header/Header.component';
+import {HOST_API_TERMO_DE_USO, HOST_API_USUARIO} from "@env";
+
 
 interface LoginScreenProps {
     navigation: NativeStackNavigatorProps,
@@ -16,7 +18,6 @@ interface LoginScreenProps {
 
 const UseTermScreen = (props: LoginScreenProps, route) => {
     const {emailUsuario} = props.route.params;
-
     const goHome = () => props.navigation.navigate("Home") && assinarTermoDeUso()
     const [toggleCheckBox, setToggleCheckBox] = useState(false)
     const [termoUso, setTermoUso] = useState("")
@@ -36,9 +37,8 @@ const UseTermScreen = (props: LoginScreenProps, route) => {
 
     useEffect(() => {
         const exibirTermoDeUso = async () => {
-            const urlBase = "http://192.168.0.110:3008"
             try {
-                let res = await axios.post(urlBase + "/termoDeUso/verificaSituacaoVigencia")
+                let res = await axios.post(HOST_API_TERMO_DE_USO + "/termoDeUso/verificaSituacaoVigencia")
                 setTermoUso(res.data.conteudo)
             } catch (error) {
                 return error.response
@@ -48,9 +48,8 @@ const UseTermScreen = (props: LoginScreenProps, route) => {
     }, []);
 
     const buscarIDUsuarioPorEmail = async () => {
-        const urlBase = "http://192.168.0.107:3001"
         try {
-            let res = await axios.post(urlBase + "/usuario/detalhar", {"email": emailUsuario})
+            let res = await axios.post(HOST_API_USUARIO + "/usuario/detalhar", {"email": emailUsuario})
             return res.data._id
         } catch (error) {
             return error.response
@@ -66,9 +65,8 @@ const UseTermScreen = (props: LoginScreenProps, route) => {
 
     const assinarTermoDeUso = async () => {
         let idUsuario = await buscarIDUsuarioPorEmail();
-        const urlBase = "http://192.168.0.107:3001"
         try {
-            await axios.post(urlBase + "/usuario/assinaturaTermoDeUso", {"idUsuario": idUsuario}, {headers: deviceInfo})
+            await axios.post(HOST_API_USUARIO + "/usuario/assinaturaTermoDeUso", {"idUsuario": idUsuario}, {headers: deviceInfo})
         } catch (error) {
             return error.response
         }

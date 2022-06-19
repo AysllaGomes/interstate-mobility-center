@@ -109,16 +109,14 @@ export const RegisterScreen = (props: ScreenProps) => {
             .replace(/(-\d{4})(\d+?)$/, "$1");
     };
 
-    const buscarIDUsuarioPoEmail = async (email: string) => {
-        const urlBase = "http://192.168.0.107:3001"
-        try {
-            let res = await axios.post(urlBase + "/usuario/detalhar", {"email": email})
-            return res.data._id
-        } catch (error) {
-            return error.response
-        }
-    }
-
+    // const buscarIDUsuarioPoEmail = async (email: string) => {
+    //     try {
+    //         let res = await axios.post(HOST_API_USUARIO + "/usuario/detalhar", {"email": email})
+    //         return res.data._id
+    //     } catch (error) {
+    //         return error.response
+    //     }
+    // }
 
     return (
         <RootSiblingParent>

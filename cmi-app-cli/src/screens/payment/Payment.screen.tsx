@@ -61,17 +61,20 @@ const PaymentScreen = (props: ScreenProps) => {
                 return x
             })
             dadosArmazenados.DadosPagamento.cpfTitular = dadosArmazenados.DadosPagamento.cpfTitular.replace(/[.-]/g, '')
-            await MergeUsuarioLogadoData(dadosArmazenados)
 
-            let dadosDaCompraDoUsuario = await GetUsuarioLogadoData()
-            console.log('DADOS PARA ENVIAR PARA MS VIAGEM', dadosDaCompraDoUsuario);
+            await registrarViagem(dadosArmazenados)
+
+            // await MergeUsuarioLogadoData(dadosArmazenados)
 
             // Executa service para cadastro da viagem
-            await registrarViagem()
 //
-            const idViagem = await UserTravelsService(dadosDaCompraDoUsuario.idUsuario)
-            const dadosCompraEmBanco = await BuscarDetalhesViagem(idViagem.idPassageiro)
-            props.navigation.navigate("ResumoCompra", {dadosDaCompra: dadosCompraEmBanco})
+
+            props.navigation.navigate("PurchaseDetailsScreen")
+            // let dadosDaCompraDoUsuario = await GetUsuarioLogadoData()
+            // const idViagem = await UserTravelsService(dadosDaCompraDoUsuario.idUsuario)
+            // const dadosCompraEmBanco = await BuscarDetalhesViagem(idViagem.idPassageiro)
+            // props.navigation.navigate("PurchaseDetailsScreen", {"dadosDaCompra": dadosCompraEmBanco})
+
 
         }catch(error){
 

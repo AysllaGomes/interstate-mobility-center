@@ -159,9 +159,8 @@ const TravelPackageInfoScreen = (props: ScreenProps) => {
             }
 
             // const enviarPassageiros = async (values) => {
-            //     const urlBase = "http://192.168.0.107:3007/"
             //     try {
-            //         return await axios.post(urlBase+'passageiro/vinculoPassageiro', {"nome": values.name, "email": values.email, "dataDeNascimento": values.birthDate, "numeroTelefoneCelular": values.phoneNumber.replace(/\D/g,''), "cpf": values.cpf})
+            //         return await axios.post(HOST_API_PASSAGEIRO + '/passageiro/vinculoPassageiro', {"nome": values.name, "email": values.email, "dataDeNascimento": values.birthDate, "numeroTelefoneCelular": values.phoneNumber.replace(/\D/g,''), "cpf": values.cpf})
             //     } catch (error) {
             //         return error.response
             //     }
@@ -350,7 +349,8 @@ const TravelPackageInfoScreen = (props: ScreenProps) => {
                                             style={{
                                                 color: theme.buttons.color,
                                                 fontFamily: theme.fontFamily.fontFamily,
-                                                fontSize: 18
+                                                fontSize: 18,
+                                                marginBottom: 20
                                             }}>Efetuar
                                             Compra</Text></Button>
                                     </View>

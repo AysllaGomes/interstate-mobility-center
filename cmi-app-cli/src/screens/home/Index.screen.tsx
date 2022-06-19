@@ -1,4 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
+import {HOST_API_VIAGEM} from "@env";
 import {
     View,
     FlatList,
@@ -18,11 +19,10 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import {MergeUsuarioLogadoData} from "../../../assets/DadosUsuarioLogado/DadosUsuarioLogado";
 import { theme } from "../../../App.style";
 import TravelListComponent from "../../components/travel-list/TravelListComponent";
+
 interface HomeScreenProps {
     navigation: NativeStackNavigatorProps
 }
-
-
 
 const HomeScreen = (props: HomeScreenProps) => {
     const [estadosBrasil, setEstadosBrasil] = useState([])
@@ -38,13 +38,12 @@ const HomeScreen = (props: HomeScreenProps) => {
     const [isScrolling, setIsScrolling] = useState(true);
 
     const listaPacotesViagensFiltrados = async () => {
-        const urlBase = "http://192.168.0.110:3002"
         const dateFormat = 'DD/MM/YYYY'
         const dateDepartureUTC = moment(dates.departure, dateFormat)
         const dateArrivalUTC = moment(dates.arrival, dateFormat)
 
-        console.log('valueDropdownPartida', valueDropdownPartida);
-        console.log('valueDropdownDestino', valueDropdownDestino);
+        // console.log('valueDropdownPartida', valueDropdownPartida);
+        // console.log('valueDropdownDestino', valueDropdownDestino);
 
         let config = {
             headers: {
@@ -70,11 +69,11 @@ const HomeScreen = (props: HomeScreenProps) => {
         }
 
         try {
-            let res = await axios.get(urlBase + "/viagem/listar", config)
+            let res = await axios.get(HOST_API_VIAGEM + "/viagem/listar", config)
             setMinhaLista(res.data)
             setIsLoaded(false)
         } catch (error) {
-            return console.error('Erro carregar viagens!')
+            return console.error('Erro carregar viagens!', error)
         }
 
     }

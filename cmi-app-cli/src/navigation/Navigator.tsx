@@ -9,7 +9,7 @@ import TravelPackageScreen from "../screens/travelPackage/TravelPackage.screen";
 import UseTermScreen from "../screens/use-term-screen/UseTerm.screen";
 import TravelPackageInfoScreen from '../screens/travel-package-travelers-info/TravelPackageInfo.screen';
 import PaymentScreen from '../screens/payment/Payment.screen';
-import ResumoCompra from '../screens/resume-purchase/PurchaseDetails.screen';
+import PurchaseDetailsScreen from '../screens/resume-purchase/PurchaseDetails.screen';
 import UserTravelsScreen from '../screens/user-travels/UserTravels.screen';
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import DrawerContent from "../drawer/DrowerContent"
@@ -41,7 +41,7 @@ const AppNavigator = () => (
             <Stack.Screen name="TravelDetails" component={TravelDetailsScreen}  />
             <Stack.Screen name="TravelInfo" component={TravelPackageInfoScreen}/>
             <Stack.Screen name="Payment" component={PaymentScreen}/>
-            <Stack.Screen name="ResumoCompra" component={ResumoCompra}/>
+            <Stack.Screen name="PurchaseDetailsScreen" component={PurchaseDetailsScreen}/>
             <Stack.Screen name="UserTravels" component={UserTravelsScreen}/>
         </Stack.Navigator>
     </NavigationContainer>
