@@ -10,6 +10,14 @@ export const userTravelsStyle = StyleSheet.create({
             width: 480,
             height: 209
         },
+        textSemviagens: {
+            alignSelf: "center",
+            fontFamily: theme.fontFamily.fontFamily,
+            fontSize: 18,
+            color: theme.colors.textColor,
+            marginBottom: 5,
+            marginTop: 20
+        },
         packagesContentInfo: {
             display: "flex",
             flexDirection: "row",

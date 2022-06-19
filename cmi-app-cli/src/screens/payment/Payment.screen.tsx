@@ -69,12 +69,9 @@ const PaymentScreen = (props: ScreenProps) => {
             // Executa service para cadastro da viagem
             await registrarViagem()
 //
-//             const idViagem = await UserTravelsService(dadosDaCompraDoUsuario.idUsuario)
-// console.log('idViagem', idViagem);
-//             const dadosCompraEmBanco = await BuscarDetalhesViagem(idViagem.idPassageiro)
-//
-
-            // props.navigation.navigate("ResumoCompra", {dadosDaCompra: dadosCompraEmBanco})
+            const idViagem = await UserTravelsService(dadosDaCompraDoUsuario.idUsuario)
+            const dadosCompraEmBanco = await BuscarDetalhesViagem(idViagem.idPassageiro)
+            props.navigation.navigate("ResumoCompra", {dadosDaCompra: dadosCompraEmBanco})
 
         }catch(error){
 

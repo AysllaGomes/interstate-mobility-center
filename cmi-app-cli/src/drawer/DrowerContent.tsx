@@ -48,19 +48,25 @@ function DrawerContent(props) {
         }catch (e) {
             console.error('Erro ao abrir termo de uso', e);
         }
+        props.navigation.toggleDrawer()
     }
 
     const goToViagens = async () => {
-
         try {
             const values = await GetUsuarioLogadoData()
-            const travelList = await UserTravelsService(values)
-            props.navigation.navigate("UserTravels", {listaViagensUsuario: travelList.data})
+            let viagensUsuario = await UserTravelsService(values)
 
+            viagensUsuario = viagensUsuario.data.filter((r) => {
+                if(!r.viagemCancelada) {
+                    return r
+                }
+            })
+
+            props.navigation.navigate("UserTravels", {"listaViagensDoUsuario": viagensUsuario})
         }catch (e) {
             console.error("Erro ao buscar as viagens do usuário!", e)
         }
-
+        props.navigation.toggleDrawer()
     }
 
     return (

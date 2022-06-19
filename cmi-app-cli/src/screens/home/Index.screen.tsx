@@ -42,12 +42,17 @@ const HomeScreen = (props: HomeScreenProps) => {
         const dateFormat = 'DD/MM/YYYY'
         const dateDepartureUTC = moment(dates.departure, dateFormat)
         const dateArrivalUTC = moment(dates.arrival, dateFormat)
-        console.log('dates', dates);
-        console.log('selectedState', selectedState);
+
+        console.log('valueDropdownPartida', valueDropdownPartida);
+        console.log('valueDropdownDestino', valueDropdownDestino);
 
         let config = {
-            headers: {}
+            headers: {
+
+            }
         }
+        config.headers['Accept-Encoding'] = "gzip, deflate, br"
+        config.headers['Content-Type'] = 'application/json; charset=UTF-8'
         if(dateDepartureUTC.isValid()) {
             config.headers["data-inicio"] = dateDepartureUTC.format("YYYY-MM-DD")
         }
@@ -63,8 +68,6 @@ const HomeScreen = (props: HomeScreenProps) => {
         if(searchText != ''){
             config.headers["titulo"] = searchText
         }
-
-        console.log('config.headers', config.headers);
 
         try {
             let res = await axios.get(urlBase + "/viagem/listar", config)

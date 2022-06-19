@@ -29,10 +29,10 @@ export const theme = {
         backgroundColor: primary,
     },
     deleteButton: {
+        margin: 20,
         color: "white",
         borderRadius: 4,
         backgroundColor: "#AA3939",
-        width: "50%",
         display: "flex",
         alignSelf: "center"
     }

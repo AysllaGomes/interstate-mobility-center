@@ -4,9 +4,10 @@ import {NativeStackNavigatorProps} from 'react-native-screens/lib/typescript/nat
 import {HeaderComponent} from '../../components/header/Header.component';
 import {Text} from "react-native-paper";
 import {ScrollView} from "react-native-virtualized-view";
-
 import BuscarDetalhesViagem from "./travel-details/travelDetails.service";
 import {userTravelsStyle} from "./userTravels.style";
+import {GetUsuarioLogadoData} from "../../../assets/DadosUsuarioLogado/DadosUsuarioLogado";
+import UserTravelsService from "./userTravels.service";
 
 interface ScreenProps {
     navigation: NativeStackNavigatorProps,
@@ -18,7 +19,8 @@ const TravelList = ({data, navigation}) => {
     const toTravelPackage = async () => {
         try {
             const dadosViagemDoUsuario = await BuscarDetalhesViagem(data.idPassageiro)
-            navigation.navigate("TravelDetails", {"dadosDaViagem": dadosViagemDoUsuario.data})
+
+            navigation.navigate("TravelDetails", {"dadosDaViagem": dadosViagemDoUsuario.data, "idViagemParaCancelamento": data.idPassageiro, "listaDasViagens": data})
 
         }catch (error){
             console.error("Erro busca detalhes viagem do usuario", error)
@@ -46,8 +48,27 @@ const TravelList = ({data, navigation}) => {
 
 const UserTravelsScreen = (props: ScreenProps) => {
     // const [isLoaded, setIsLoaded] = useState(true);
+    // const  [listaViagensUsuario, setListaViagensUsuario] = useState([])
 
-    const listaViagensUsuario = props.route.params.listaViagensUsuario
+    const listaViagensUsuario = props.route.params.listaViagensDoUsuario
+
+
+        // async function buscarViagens() {
+    //     const values = await GetUsuarioLogadoData()
+    //     let viagensUsuario = await UserTravelsService(values)
+    //
+    //     viagensUsuario = viagensUsuario.data.filter((r) => {
+    //         if(!r.viagemCancelada) {
+    //             return r
+    //         }
+    //     })
+    //     setListaViagensUsuario(viagensUsuario)
+    //     console.log('listaViagensUsuario', listaViagensUsuario);
+    // }
+    //
+    // useEffect(() => {
+    //     buscarViagens().then(r => r);
+    // }, [])
 
     return (
         <ScrollView>
@@ -55,6 +76,7 @@ const UserTravelsScreen = (props: ScreenProps) => {
             <View>
                 <View style={{marginBottom: 10}}/>
                 <View style={userTravelsStyle.flatlist}>
+                    {listaViagensUsuario.length == 0 ? <Text style={userTravelsStyle.textSemviagens}>Você não possui viagens!</Text>: <></>}
                     <FlatList
                         listKey="key1"
                         data={listaViagensUsuario}

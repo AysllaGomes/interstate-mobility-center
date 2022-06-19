@@ -14,3 +14,4 @@ const BuscarDetalhesViagem = async (idPassageiro) => {
     }
 }
 export default BuscarDetalhesViagem;
+
