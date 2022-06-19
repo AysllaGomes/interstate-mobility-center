@@ -8,6 +8,7 @@
  *       - imagem
  *       - preco
  *       - destino
+ *       - viagemCancelada
  *       - usuarioLogado
  *       - listarPassageiros
  *       - quantidadePassageiro
@@ -20,6 +21,8 @@
  *       preco:
  *         type: number
  *       destino:
+ *         type: string
+ *       viagemCancelada:
  *         type: string
  *       usuarioLogado:
  *         type: string
@@ -38,7 +41,8 @@
  *          "imagem": "https://firebasestorage.googleapis.com/v0/b/tcc-react-9a14e.appspot.com/o/imgs-tcc-project%2Fbrasilia.jpeg?alt=media&token=b20d2065-9268-4d0f-a8fa-68752d624511",
  *          "preco": 2000,
  *          "destino": "Encerrado",
- *          "usuarioLogado": "Some Chick",
+ *          "viagemCancelada": "Sim",
+ *          "usuarioLogado": "Não",
  *          "listarPassageiros": [],
  *          "dataInicio": "11/10/2022",
  *          "dataFim": "31/10/2022",
@@ -49,6 +53,7 @@ export interface IOutputDetalharViagem {
     imagem: string;
     preco: number;
     destino: string;
+    viagemCancelada: string;
     usuarioLogado: string;
     listarPassageiros: string[];
     quantidadePassageiro: number;

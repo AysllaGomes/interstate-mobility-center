@@ -200,10 +200,15 @@ export class PassageiroService {
         ? "Sim"
         : "Não";
 
+      const isViagemCancelada = passageiro.viagemCancelada
+        ? "Sim"
+        : "Não";
+
       return {
         imagem: viagem.image,
         preco: viagem.preco,
         destino: viagem.estadoDestino,
+        viagemCancelada: isViagemCancelada,
         usuarioLogado: isUsuarioLogadoPassageiro,
         listarPassageiros: dadosPassageiros,
         quantidadePassageiro,
