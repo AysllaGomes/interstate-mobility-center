@@ -136,6 +136,7 @@ export class PassageiroService {
             dataReferencia: passageiro.dataCriacao,
             destino: viagem.estadoDestino,
             preco: viagem.preco,
+            viagemCancelada: passageiro.viagemCancelada,
           };
         }),
       );
