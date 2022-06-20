@@ -110,7 +110,7 @@ export class ViagemService {
     try {
       logger.debug("Listando as viagens...");
 
-      const resultado: Array<IViagem> = await Viagem.find(query);
+      const resultado: Array<IViagem> = await Viagem.find(query).sort({ preco: 1 });
 
       if (resultado.length !== 0) {
         logger.debug("Listando dados das viagens...");
@@ -148,6 +148,7 @@ export class ViagemService {
       preco: viagem.preco,
       duracao: viagem.duracao,
       image: viagem.image,
+      parceiro: viagem.nomeParceiro,
       descricao: viagem.descricao,
       estadoOrigem: viagem.estadoOrigem,
       estadoDestino: viagem.estadoDestino,
