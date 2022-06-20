@@ -10,6 +10,8 @@
  *       - preco
  *       - duracao
  *       - image
+ *       - parceiro
+ *       - descricao
  *       - estadoOrigem
  *       - estadoDestino
  *       - dataInicioVigencia
@@ -24,6 +26,10 @@
  *       duracao:
  *         type: number
  *       image:
+ *         type: string
+ *       parceiro:
+ *         type: string
+ *       descricao:
  *         type: string
  *       estadoOrigem:
  *         type: string
@@ -42,6 +48,8 @@
  *          "preco": 2000,
  *          "duracao": 15,
  *          "image": "https://img.ibxk.com.br/2018/9/programas/15870025155352397.png",
+ *          "parceiro": "Alpha",
+ *          "descricao": "Alpha",
  *          "estadoOrigem": "São Paulo",
  *          "estadoDestino": "Rio de Janeiro",
  *          "dataInicioVigencia": "2022-04-12T17:37:03.892Z",
@@ -54,6 +62,7 @@ export interface IOutputListarViagem {
     preco: number;
     duracao: number;
     image: string;
+    parceiro: string;
     descricao: string;
     estadoOrigem: string;
     estadoDestino: string;
