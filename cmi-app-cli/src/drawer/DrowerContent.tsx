@@ -97,17 +97,7 @@ function DrawerContent(props) {
                     label="Termo de Uso"
                     onPress={goToTermoDeUso}
                 />
-                <DrawerItem
-                    icon={({color, size}) => (
-                        <Icon
-                            name="exit-to-app"
-                            color={color}
-                            size={size}
-                        />
-                    )}
-                    label="Sign out"
-                    onPress={signOutUser}
-                />
+
                 <DrawerItem
                     icon={({color, size}) => (
                         <Icon
@@ -119,7 +109,17 @@ function DrawerContent(props) {
                     label="Deletar Conta"
                     onPress={deleteProfile}
                 />
-
+                <DrawerItem
+                    icon={({color, size}) => (
+                        <Icon
+                            name="exit-to-app"
+                            color={color}
+                            size={size}
+                        />
+                    )}
+                    label="Sair"
+                    onPress={signOutUser}
+                />
             </View>
         </DrawerContentScrollView>
     );
