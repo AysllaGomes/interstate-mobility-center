@@ -18,7 +18,6 @@ interface LoginScreenProps {
 
 const UseTermScreen = (props: LoginScreenProps, route) => {
     const {emailUsuario} = props.route.params;
-    const goHome = () => props.navigation.navigate("Home") && assinarTermoDeUso()
     const [toggleCheckBox, setToggleCheckBox] = useState(false)
     const [termoUso, setTermoUso] = useState("")
 
@@ -49,7 +48,9 @@ const UseTermScreen = (props: LoginScreenProps, route) => {
 
     const buscarIDUsuarioPorEmail = async () => {
         try {
-            let res = await axios.post(HOST_API_USUARIO + "/usuario/detalhar", {"email": emailUsuario})
+            let res = await axios.get(HOST_API_USUARIO + "/usuario/detalhar", {headers: {
+                    "email": emailUsuario
+                }})
             return res.data._id
         } catch (error) {
             return error.response
@@ -62,15 +63,37 @@ const UseTermScreen = (props: LoginScreenProps, route) => {
         model: Device.modelName,
         brand: Device.brand
     }
-
-    const assinarTermoDeUso = async () => {
-        let idUsuario = await buscarIDUsuarioPorEmail();
+    const verificaTermoDeUso = async (id) => {
         try {
-            await axios.post(HOST_API_USUARIO + "/usuario/assinaturaTermoDeUso", {"idUsuario": idUsuario}, {headers: deviceInfo})
+            let res = await axios.post(HOST_API_USUARIO + "/usuario/consultaAssinaturaTermoUsuario", {"idUsuario": id})
+            return res.data.assinado;
         } catch (error) {
             return error.response
         }
     }
+
+    const assinarTermoDeUso = async () => {
+        const idUsuario = await buscarIDUsuarioPorEmail();
+        const sitaucaoVigenciaTermoUso = await verificaTermoDeUso(idUsuario)
+
+        if(!sitaucaoVigenciaTermoUso) {
+            try {
+                await axios.post(HOST_API_USUARIO + "/usuario/assinaturaTermoDeUso", {"idUsuario": idUsuario}, {
+                    headers: {
+                        Brand: deviceInfo.brand,
+                        Model: deviceInfo.model,
+                        OS: deviceInfo.os,
+                        "OS-Version": deviceInfo["os-version"]
+                    }})
+                props.navigation.navigate("Home")
+            } catch (error) {
+                console.error("Erro assinar termo de uso", error)
+            }
+        }else {
+            props.navigation.navigate("Home")
+        }
+    }
+
     return (
         <Root>
             <SafeAreaView>
@@ -90,10 +113,9 @@ const UseTermScreen = (props: LoginScreenProps, route) => {
                             <Text style={styles.text} onPress={() => setToggleCheckBox(!toggleCheckBox)}>Concorda com o termo?</Text>
                         </View>
 
-                            <Button disabled={!toggleCheckBox} style={{...styles.button, ...{opacity: buttonOpacity}}}
-                                    onPress={() => assinarTermoDeUso() && goHome()}><Text
-                                style={styles.buttonText}>Concordar</Text></Button>
-
+                        <Button disabled={!toggleCheckBox} style={{...styles.button, ...{opacity: buttonOpacity}}}
+                                onPress={assinarTermoDeUso}><Text
+                            style={styles.buttonText}>Concordar</Text></Button>
 
                     </View>
                 </ScrollView>
@@ -106,7 +128,7 @@ export default UseTermScreen;
 const styles = StyleSheet.create({
     container: {
         marginTop: 30,
-        marginBottom: 10
+        marginBottom: 80
     },
     title: {
         fontFamily: theme.fontFamily.fontFamily,
@@ -118,7 +140,6 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: theme.colors.primary,
         margin: 10,
-        marginBottom: 50,
         paddingTop: 5,
         paddingBottom: 5,
     },
