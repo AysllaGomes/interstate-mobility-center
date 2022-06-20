@@ -80,7 +80,7 @@ export class TermoDeUsoService {
       await TermoDeUso.findOneAndUpdate(filtro, {
         estadoTermoDeUso: EstadoTermoDeUsoEnum.ENCERRADO,
         tsDeExpiracaoVigencia: new Date(),
-      });
+      }).clone();
     }
 
     return !!termoDeUso;

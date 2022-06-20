@@ -173,12 +173,18 @@ export class UsuarioService {
     try {
       logger.debug("Atualizando os dados do passageiro com a propriedade Termo de Uso...");
 
-      return UsuarioModel.findOneAndUpdate(
+      const usuario = UsuarioModel.findOneAndUpdate(
         { _id: idUsuario },
         { termosDeUso: termoDeUso },
         { upsert: true },
         (error, document) => document,
-      );
+      ).clone();
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // @ts-ignore
+      if (usuario) { return usuario; }
+
+      throw new ErroSQL(...ERRO_AO_ATUALIZAR_TERMO_DE_USO_USUARIO);
     } catch (error) {
       logger.error(`
         ERRO no MS "${environment.app.name}", método "salvaTermoDeUso".
